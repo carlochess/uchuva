@@ -16,8 +16,6 @@ to HTCondor (Dagman), Slurm, OpenLava (LSF), Torque (PBS) and OAR. Is designed t
 
 If you want to try it out as quickly as possible, please install MongoDB, ensure that you have the right compilers installed (for OSX, XCode4 will work, for Ubuntu, the build-essential and libssl-dev packages) and then use Docker:
 
-![](https://raw.githubusercontent.com/carlochess/uchuva/master/doc/home.png)
-
 ### Docker
 Using Docker to test this project is the better choise you can make. Please, install Docker engine
 
@@ -151,6 +149,7 @@ You can read my bacherlor thesis cloning the submodule doctesis
 ```
 git submodule foreach git pull origin master
 ```
+![](https://raw.githubusercontent.com/carlochess/uchuva/master/doc/home.png)
 
 ## Development 
 El prototípo esta programado en Nodejs 6.X (Javascript V8).
