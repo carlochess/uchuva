@@ -20,6 +20,20 @@ module.exports = function(app){
   router.post('/run', isAuthenticated, function(req, res) {
       if (req.body.body)
           req.body = req.body.body;
+
+      req.checkBody('proyecto', 'Invalid project id').notEmpty().isMongoId();
+      req.checkBody('nodes', 'Invalid nodes').optional().isArrayOfNodes();
+      req.checkBody('edges', 'Invalid edges').optional().isArrayOfEdges();
+      //req.checkBody('imagen', 'Invalid image').optional().isAlphanumeric();
+      var errors = req.validationErrors();
+      if (errors) {
+          var asStr = errors.map(function(e){
+            return e.msg;
+          }).join(",");
+          res.send({error : 1, message : asStr});
+          return;
+      }
+      
       var envio = req.body;
       var proyecto = envio.proyecto;
 

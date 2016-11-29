@@ -32,26 +32,25 @@
     "socket.io": "^1.5.1",
     "superheroes": "^1.0.0",
     "tar-fs": "^1.12.0",
+    "validator": "^6.1.0",
     "winston": "^2.2.0"
   },
   "devDependencies": {
     "chai": "^3.5.0",
     "jslint": "^0.10.3",
     "mocha": "^3.0.2",
+    "nodemon": "^1.11.0",
     "proxyquire": "^1.7.10",
     "selenium-webdriver": "^3.0.1",
     "sinon": "^1.17.6",
     "supertest": "^2.0.1",
     "z-schema": "^3.18.1"
   },
-  "engines": {
-    "node": ">=5.0"
-  },
   "scripts": {
     "test": "./node_modules/.bin/mocha -R xunit test/ > test-reports.xml",
     "test-selenium": "./node_modules/.bin/mocha test/selenium/",
     "test-unit": "./node_modules/.bin/mocha test/unit/",
-    "format": "esformatter --config formatter.json -i 'routes/**/*.js' ",
+    "format": "./node_modules/.bin/esformatter --config formatter.json -i 'routes/**/*.js' ",
     "start": "node main.js",
     "devel": "./node_modules/.bin/nodemon --ignore 'data/*' main.js",
     "build-rpm": "speculate"

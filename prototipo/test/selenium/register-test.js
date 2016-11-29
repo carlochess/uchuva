@@ -24,7 +24,7 @@ test.describe('Failed registrations', function(done) {
   var invalidUsernames = "ar,,45/*/+91235,asdasdasdasdasdasd".split(",");
 
   invalidUsernames.forEach(function(username){
-    test.it('Unsuccess login name '+ username, function() {
+    test.it('Unsuccess register name '+ username, function() {
       driver.get("http://localhost:3000/register");
       var login = driver.findElement(selenium.By.id('username'));
       var password = driver.findElement(selenium.By.id('password'));
@@ -36,11 +36,11 @@ test.describe('Failed registrations', function(done) {
         return driver.findElements(selenium.By.css('div.alert.alert-danger')).then(function(result) {
           return result[0];
         });
-      },500);
+      },4000);
     });
   });
 
-  test.it('Unsuccess password', function() {
+  test.it('Unsuccess register password', function() {
     driver.get("http://localhost:3000/register");
     var login = driver.findElement(selenium.By.id('username'));
     var password = driver.findElement(selenium.By.id('password'));
@@ -52,7 +52,7 @@ test.describe('Failed registrations', function(done) {
       return driver.findElements(selenium.By.css('div.alert.alert-danger')).then(function(result) {
         return result[0];
       });
-    },500);
+    },2000);
   });
 
 });

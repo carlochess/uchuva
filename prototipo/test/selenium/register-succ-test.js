@@ -8,24 +8,23 @@ var timeOut = 15000;
 
 // java -jar selenium-server-standalone-2.45.0.jar
 
-test.before(function() {
+test.beforeEach(function() {
   this.timeout(timeOut);
   driver = new selenium.Builder().
       withCapabilities(selenium.Capabilities.chrome()).
-      //usingServer('http://localhost:4444/wd/hub').
       build();
+  driver.get("http://localhost:3000/register");
 });
 
-test.after(function() {
+test.afterEach(function() {
   driver.quit();
 });
 
-test.describe('Failed registrations', function(done) {
+test.describe('Sucess registrations', function(done) {
   var validUsernames = "arrr,admin45,455589,______".split(",");
 
-  invalidUsernames.forEach(function(username){
-    test.it('Unsuccess login name '+ username, function() {
-      driver.get("http://localhost:3000/register");
+  validUsernames.forEach(function(username){
+    test.it('Success register name '+ username, function() {
       var login = driver.findElement(selenium.By.id('username'));
       var password = driver.findElement(selenium.By.id('password'));
       var btn_login = driver.findElement(selenium.By.id('btn-login'));
@@ -33,25 +32,8 @@ test.describe('Failed registrations', function(done) {
       password.sendKeys("password");
       btn_login.click();
       driver.wait(function(){
-        return driver.findElements(selenium.By.css('div.alert.alert-danger')).then(function(result) {
-          return result[0];
-        });
-      },500);
+        return driver.findElement(selenium.By.id('welcome'));
+      },6000);
     });
-  });
-
-  test.it('Unsuccess password', function() {
-    driver.get("http://localhost:3000/register");
-    var login = driver.findElement(selenium.By.id('username'));
-    var password = driver.findElement(selenium.By.id('password'));
-    var btn_login = driver.findElement(selenium.By.id('btn-login'));
-    login.sendKeys("aa");
-    password.sendKeys("aa");
-    btn_login.click();
-    driver.wait(function(){
-      return driver.findElements(selenium.By.css('div.alert.alert-danger')).then(function(result) {
-        return result[0];
-      });
-    },500);
   });
 });

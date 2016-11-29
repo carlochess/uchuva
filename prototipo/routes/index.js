@@ -81,6 +81,7 @@ router.post('/register', function(req, res) {
                 });
               }
             });
+            return;
         }
         res.format({
           html: function() {

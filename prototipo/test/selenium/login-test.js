@@ -20,8 +20,8 @@ test.after(function() {
   driver.quit();
 });
 
-test.describe('Login as admin', function(done) {
-  test.it('Unsuccess login', function() {
+test.describe('Unsuccess Login', function(done) {
+  test.it('aa aa', function() {
     driver.get("http://localhost:3000/login");
     var login = driver.findElement(selenium.By.id('username'));
     var password = driver.findElement(selenium.By.id('password'));
@@ -33,6 +33,6 @@ test.describe('Login as admin', function(done) {
       return driver.findElements(selenium.By.css('div.alert.alert-danger')).then(function(result) {
         return result[0];
       });
-    },500);
+    },4000);
   });
 });

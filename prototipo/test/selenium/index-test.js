@@ -8,20 +8,6 @@ const timeOut = 15000;
 
 // java -jar selenium-server-standalone-2.45.0.jar
 
-/*
-test.beforeEach(function() {
-  this.timeout(timeOut);
-  driver = new selenium.Builder().
-      withCapabilities(selenium.Capabilities.chrome()).
-      build();
-  driver.get("https://decohere.herokuapp.com/planets");
-});
-
-test.afterEach(function() {
-  driver.quit();
-});
-*/
-
 test.before(function() {
   this.timeout(timeOut);
   driver = new selenium.Builder().

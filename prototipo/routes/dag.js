@@ -128,7 +128,7 @@ module.exports = function(app){
           var asStr = errors.map(function(e){
             return e.msg;
           }).join(",");
-          res.send({code : 1, message : asStr});
+          res.send({error : 1, message : asStr});
           return;
       }
 
@@ -142,14 +142,16 @@ module.exports = function(app){
           _id: proyecto,
           userid: userId
       };
+      console.log(where);
       Dag.findOneAndUpdate(where, {
           nodes: nodes,
           edges: edges,
           imagen: imagen
       }, function(err, d) {
           if (err || !d) {
+              logger.error("Error saving dag "+err+", user: "+userId);
               res.send({
-                error: 1,
+                error: 2,
                 message: err
               });
               return;
@@ -188,7 +190,13 @@ module.exports = function(app){
       }
       var idBuild = req.query.id;
       var userId = req.user._id;
-      eliminarDag(idBuild, userId, function(error) {
+      console.log(":()")
+      eliminarDag(idBuild, userId, function(error, dag) {
+        var errcode = 0;
+        if(error || !dag){
+          errcode = 2;
+          error = error || "Dag no encontrado";
+        }
         res.format({
             html: function() {
               if(error){
@@ -197,7 +205,7 @@ module.exports = function(app){
               res.redirect("/user");
             },
             json: function() {
-                var errcode = error?1:0;
+                console.log(":()")
                 res.json({
                     code: errcode
                 });
