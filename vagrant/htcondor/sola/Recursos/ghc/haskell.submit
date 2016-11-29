@@ -1,0 +1,11 @@
+universe                = docker
+docker_image            = docker.io/haskell
+executable              = ghc
+arguments               = -e 'print (2+2)'
+should_transfer_files   = YES
+when_to_transfer_output = ON_EXIT
+output                  = out.$(Process)
+error                   = err.$(Process)
+log                     = log.$(Process)
+request_memory          = 10M
+queue 1

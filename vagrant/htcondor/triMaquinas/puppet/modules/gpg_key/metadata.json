@@ -1,0 +1,57 @@
+{
+  "author": "treydock",
+  "summary": "GPG key module",
+  "project_page": "http://github.com/treydock/puppet-gpg_key",
+  "types": [
+    {
+      "doc": "Manages GPG keys.",
+      "providers": [
+        {
+          "doc": "* Required binaries: `gpg`, `rpm`.\n* Default for `osfamily` == `redhat`.",
+          "name": "rpm"
+        }
+      ],
+      "properties": [
+        {
+          "doc": "The basic property that the resource should be in.\n\nValid values are `present`, `absent`. ",
+          "name": "ensure"
+        }
+      ],
+      "parameters": [
+        {
+          "doc": "The file Puppet will ensure is imported.\n\n",
+          "name": "path"
+        }
+      ],
+      "name": "gpg_key"
+    }
+  ],
+  "description": "Custom type and provider to manage GPG keys",
+  "version": "0.0.3",
+  "name": "treydock-gpg_key",
+  "source": "git://github.com/treydock/puppet-gpg_key.git",
+  "license": "Apache License, Version 2.0",
+  "dependencies": [
+
+  ],
+  "checksums": {
+    "spec/unit/puppet/provider/gpg_key/rpm_spec.rb": "4934d98aaef65feb5fce370932801dc0",
+    "spec/acceptance/nodesets/default.yml": "2730fdaf56ab44f92d4307988655d442",
+    "Rakefile": "52028bcd088d8c24e6a35791d5b61e7f",
+    "CHANGELOG.md": "ab202db81ea859e40c000dbe1ff72771",
+    "lib/puppet/type/gpg_key.rb": "467ea9efc9247cc51fda71bc297376e6",
+    "spec/spec_helper.rb": "e0a48f4d5214b0efaf829c2cc9a7e0bf",
+    "spec/fixtures/RPM-GPG-KEY-EPEL-6": "d865e6b948a74cb03bc3401c0b01b785",
+    "spec/acceptance/nodesets/fedora-18-x64.yml": "aaf1f1466e6534dea6d9a07f3ce04e9f",
+    "Gemfile.lock": "5bf0b0985ebb59b7a58647e8f1da59e3",
+    "spec/acceptance/nodesets/centos-59-x64.yml": "5a59a5f58ede1cee2c853e6f7c71554a",
+    "lib/puppet/provider/gpg_key/rpm.rb": "328e28076de2a9795329330f8b7c6894",
+    "Gemfile": "a65098df56e08cb0acda7d8a5e964d57",
+    "spec/acceptance/nodesets/centos-65-x64.yml": "2730fdaf56ab44f92d4307988655d442",
+    "README.md": "bd599800a528545df4c2efc9f1c02999",
+    "spec/acceptance/01_gpg_key_spec.rb": "a8a27308b0fd2987f47395b3a6cc268b",
+    "spec/unit/puppet/type/gpg_key_spec.rb": "e9c34df2b12cb15125e9836852e5662a",
+    "spec/spec_helper_acceptance.rb": "8d2a88e34bf5d55ebb541b9f87072483",
+    "Modulefile": "dda8517330714e6bc9bfa3d3ecb29b9a"
+  }
+}

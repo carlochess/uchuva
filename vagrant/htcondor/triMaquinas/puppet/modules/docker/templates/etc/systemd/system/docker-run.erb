@@ -1,0 +1,47 @@
+<%-
+	@after = ["docker.service"] +
+		@sanitised_after_array.map{ |s| "#{@service_prefix}#{s}.service"} +
+		@sanitised_depends_array.map{ |s| "#{@service_prefix}#{s}.service"} +
+		@depend_services_array.map{|s| "#{s}.service"}
+	@wants = @sanitised_after_array.map{ |a| "#{@service_prefix}#{a}.service"}
+	@requires = ["docker.service"] +
+		@sanitised_depends_array.map{ |d| "#{@service_prefix}#{d}.service"} +
+		@depend_services_array.map{|s| "#{s}.service"}
+-%>
+# This file is managed by Puppet and local changes
+# may be overwritten
+
+[Unit]
+Description=Daemon for <%= @title %>
+After=<%= @after.uniq.join(" ") %>
+Wants=<%= @wants.uniq.join(" ") %>
+Requires=<%= @requires.uniq.join(" ") %>
+
+[Service]
+Restart=on-failure
+StartLimitInterval=20
+StartLimitBurst=5
+TimeoutStartSec=0
+Environment="HOME=/root"
+<%- if @before_start %>ExecStartPre=-<%= @before_start %>
+<% end -%>
+ExecStartPre=-/usr/bin/<%= @docker_command %> kill <%= @sanitised_title %>
+<%- if @remove_container_on_start %>ExecStartPre=-/usr/bin/<%= @docker_command %> rm <% if @remove_volume_on_start %>-v<% end %> <%= @sanitised_title %>
+<% end -%>
+<% @extra_systemd_parameters.each do |key, value| -%><%= key %>=<%= value %>
+<% end -%>
+<%- if @pull_on_start %>ExecStartPre=-/usr/bin/<%= @docker_command %> pull <%= @image %>
+<% end -%>
+ExecStart=/usr/bin/<%= @docker_command %> run \
+        <%= @docker_run_flags %> \
+        --name <%= @sanitised_title %> \
+        <%= @image %> \
+        <% if @command %> <%= @command %><% end %>
+<%- if @before_stop %>ExecStop=-<%= @before_stop %>
+<% end -%>
+ExecStop=-/usr/bin/<%= @docker_command %> kill <%= @sanitised_title %>
+<%- if @remove_container_on_stop %>ExecStop=-/usr/bin/<%= @docker_command %> rm <% if @remove_volume_on_stop %>-v<% end %> <%= @sanitised_title %>
+<% end -%>
+
+[Install]
+WantedBy=multi-user.target

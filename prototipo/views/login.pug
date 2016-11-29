@@ -1,0 +1,21 @@
+extends layout
+
+block content
+  .container
+    h1 Login
+    if mensajes
+      div
+        each item in mensajes
+          div.alert.alert-danger= item
+    br
+    form(role='form', action="/login",method="post", style='max-width: 300px;')
+      .form-group
+          input.form-control(type='text', name="username", placeholder='Ingrese su username', id='username')
+      .form-group
+        input.form-control(type='password', name="password", placeholder='Password', id='password')
+      a(href='/')
+        button.btn.btn-default(type="button") Cancel
+      button.btn.btn-primary(type='submit', id="btn-login") Submit
+    br
+    a(href='/register')
+      button.btn.btn-success(type="button") Register

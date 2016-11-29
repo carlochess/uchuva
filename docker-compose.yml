@@ -1,0 +1,63 @@
+version: '2'
+
+services:
+  uchuva:
+    build:
+      ./prototipo
+    restart: 
+      always
+    volumes:
+        - /app
+    ports:
+      - "80:3000"
+    environment:
+      SHARE: /app
+      CONDOR_URL: http://htcondor:8080/
+      CONDOR_JOB_OWNER: uchuva
+#      DATABASE_URI: "mongodb://mongo/uchuva"
+      BMANAGER: 3
+
+  mongo:
+    image: mongo
+    expose:
+      - "27017"
+
+  htcondor:
+    build:
+      ./docker/htcondor
+    expose:
+      - "8080"
+    volumes_from:
+      - uchuva
+
+### docker run -d -h docker -p 10022:22 --name openlava carlochess/openlava
+  openlava:
+    build:
+      ./docker/openlava
+    hostname: docker
+    volumes_from:
+      - uchuva
+    expose:
+      - "22"
+
+### docker run -d -h docker.example.com -p 10022:22 --privileged --name torque agaveapi/torque
+  torque:
+    image:
+      agaveapi/torque
+    volumes_from:
+        - uchuva
+    hostname: docker.example.com
+    expose:
+      - "22"
+    privileged: true
+
+#### Recordar el sed del /etc/hosts
+#### docker run -h docker.example.com -p 10022:22 --rm --name slurm agaveapi/slurm
+  slurm:
+    image:
+      agaveapi/slurm
+    volumes_from:
+      - uchuva
+    hostname: docker.example.com
+    expose:
+      - "22"

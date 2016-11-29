@@ -1,0 +1,46 @@
+000 (104.000.000) 09/11 16:08:56 Job submitted from host: <10.0.2.15:8080?addrs=10.0.2.15-8080>
+...
+001 (104.000.000) 09/11 16:08:57 Job executing on host: <10.0.2.15:8742?addrs=10.0.2.15-8742>
+...
+006 (104.000.000) 09/11 16:08:58 Image size of job updated: 7
+	0  -  MemoryUsage of job (MB)
+	0  -  ResidentSetSize of job (KB)
+...
+005 (104.000.000) 09/11 16:08:59 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	51  -  Run Bytes Sent By Job
+	7178  -  Run Bytes Received By Job
+	51  -  Total Bytes Sent By Job
+	7178  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated
+	   Cpus                 :                 1         1
+	   Disk (KB)            :       15       10  14729068
+	   Memory (MB)          :        0       10       489
+...
+000 (105.000.000) 09/11 16:09:16 Job submitted from host: <10.0.2.15:8080?addrs=10.0.2.15-8080>
+...
+001 (105.000.000) 09/11 16:23:20 Job executing on host: <10.0.2.15:8742?addrs=10.0.2.15-8742>
+...
+006 (105.000.000) 09/11 16:23:20 Image size of job updated: 7
+	0  -  MemoryUsage of job (MB)
+	0  -  ResidentSetSize of job (KB)
+...
+005 (105.000.000) 09/11 16:23:21 Job terminated.
+	(1) Normal termination (return value 0)
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Run Local Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Remote Usage
+		Usr 0 00:00:00, Sys 0 00:00:00  -  Total Local Usage
+	51  -  Run Bytes Sent By Job
+	7178  -  Run Bytes Received By Job
+	51  -  Total Bytes Sent By Job
+	7178  -  Total Bytes Received By Job
+	Partitionable Resources :    Usage  Request Allocated
+	   Cpus                 :                 1         1
+	   Disk (KB)            :       15       10  14728792
+	   Memory (MB)          :        0       10       489
+...

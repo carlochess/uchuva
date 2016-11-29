@@ -1,0 +1,14 @@
+universe                = docker
+docker_image            = docker.io/haskell
+executable              = ghc
+arguments               = --make Main
+should_transfer_files   = YES
+transfer_output_files   = Main
+transfer_input_files    = Main.hs,Tokens.hs,Grammar.hs
+transfer_output_files   = Main
+when_to_transfer_output = ON_EXIT
+output                  = out.$(Process)
+error                   = err.$(Process)
+log                     = log.$(Process)
+request_memory          = 10M
+queue 1

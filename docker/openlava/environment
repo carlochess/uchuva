@@ -1,0 +1,6 @@
+LSF_ENVDIR=/opt/openlava-4.0/etc
+PATH=$PATH:/opt/openlava-4.0/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/bin
+LSF_SERVERDIR=/opt/openlava-4.0/sbin
+LSF_LIBDIR=/opt/openlava-4.0/lib
+LSF_BINDIR=/opt/openlava-4.0/bin
+MANPATH=$MANPATH:/opt/openlava-4.0/share/man

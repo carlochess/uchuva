@@ -1,0 +1,23 @@
+########################################################
+##
+## hello_r 
+##
+## Simple condor job description file
+##
+########################################################
+
+executable = ets_example.R 
+universe = vanilla
+output = ets_example.out
+error =  ets_example.err
+log =    ets_example.log
+
+initialdir = run_1
+queue
+
+initialdir = run_2
+queue
+
+initialdir = run_3
+queue
+

@@ -1,0 +1,38 @@
+extends layout
+
+block content
+
+  .container-fluid
+  .row
+    .col-sm-3.col-md-2
+       ul.list-group
+          li.list-group-item
+            a(href='/crearDag') Nuevo Dag
+          li.list-group-item
+            a(href='/filemanager') Manejador de archivos
+          <!--li.list-group-item
+            a#open Consola-->
+
+    .main(class="col-sm-9 col-md-10")
+      if mensajes.length
+        div
+          each item in mensajes.length ? mensajes : []
+            div.alert.alert-danger= mensajes
+        br
+      if dags.length
+        .row
+        each val in dags.length ? dags : []
+
+          .col-sm-6.col-md-4
+            .thumbnail
+              img(src=val.imagen, width=500, height=400)
+              .caption
+                h3
+                  a(href="/editar?id="+val._id)= val.nombre
+                p= val.date
+                p
+                  a.btn.btn-primary(href="/editar?id="+val._id, role='button') Editar
+                  a.btn.btn-default(href="/builds?id="+val._id, role='button') Ejecuciones
+                  a.btn.btn-danger(href="/eliminarDag?id="+val._id, role='button') Eliminar
+      else
+        p ¡No tienes proyectos aun!.

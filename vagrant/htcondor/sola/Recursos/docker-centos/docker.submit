@@ -1,0 +1,11 @@
+universe                = docker
+docker_image            = docker.io/centos
+executable              = /bin/sleep
+arguments               = 5
+should_transfer_files   = YES
+when_to_transfer_output = ON_EXIT
+output                  = out.$(Process)
+error                   = err.$(Process)
+log                     = log.$(Process)
+request_memory          = 10M
+queue 5

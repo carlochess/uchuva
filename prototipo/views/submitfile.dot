@@ -1,0 +1,17 @@
+universe = {{= it.config.universe.trim() }}
+{{? it.config.useDocker }}docker_image = {{= it.config.image.trim() }}{{?}}
+executable = {{= it.config.location.trim() }}
+arguments = {{= it.config.argumento.trim() }}
+{{? it.filese.length > 0 || it.filess.length > 0 }}
+should_transfer_files = YES
+when_to_transfer_output = ON_EXIT
+{{?}}
+{{? it.filese.length > 0 }}transfer_input_files =  {{= it.filese.join(", ")}} {{?}}
+{{? it.filess.length > 0 }}transfer_output_files = {{= it.filess.join(", ")}} {{?}}
+# output = $(cluster).$(process).out
+# error = $(cluster).$(process).err
+# log = $(cluster).$(process).log
+output = {{=it.nodoNombre}}.out
+error = {{=it.nodoNombre}}.err
+log = {{=it.nodoNombre}}.log
+queue {{= it.config.queue }}

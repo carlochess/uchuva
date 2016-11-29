@@ -1,0 +1,24 @@
+nav.navbar.navbar-inverse
+  .container-fluid
+    .navbar-header
+      button.navbar-toggle.collapsed(type='button', data-toggle='collapse', data-target='#navbar', aria-expanded='false', aria-controls='navbar')
+        span.sr-only Toggle
+        span.icon-bar
+        span.icon-bar
+        span.icon-bar
+      if (!user)
+        a.navbar-brand.hidden-xs(href='/') Uchuva
+      else
+        a.navbar-brand.hidden-xs(href='/user') Uchuva
+    #navbar.navbar-collapse.collapse
+      .navbar-form.navbar-right
+        if (user)
+            input.form-control.input-sm(type='text', ng-show='config.searchForm', placeholder="Buscar...", ng-model='$parent.query')
+            button#dropDownMenuLang.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-expanded='true') Eres #{user.username}
+            ul.dropdown-menu(role='menu', aria-labelledby='dropDownMenuLang')
+              li(role='presentation')
+                a(role='menuitem', tabindex='-1', href='/user') Home
+              li(role='presentation')
+                a(role='menuitem', tabindex='-1', href='/developers') Desarrolladores
+              li(role='presentation')
+                a(role='menuitem', tabindex='-1', href='/logout') Logout

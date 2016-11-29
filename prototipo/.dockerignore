@@ -1,0 +1,7 @@
+node_modules/
+data/
+logs/*
+test/
+default
+build
+test-reports.xml

@@ -1,0 +1,9 @@
+#BSUB-q normal                  # Job queue
+#BSUB-J myfirstjob              # name of the job
+#BSUB -o lava-%J.out
+#BSUB -e lava-%J.err
+#BSUB -n 2
+
+hostname
+pwd
+ls -laF

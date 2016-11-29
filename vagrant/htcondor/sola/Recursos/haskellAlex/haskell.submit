@@ -1,0 +1,13 @@
+universe                = docker
+docker_image            = docker.io/haskell
+executable              = alex
+arguments               = Tokens.x -o Main.hs
+should_transfer_files   = YES
+transfer_input_files    = Tokens.x
+transfer_output_files   = Main.hs
+when_to_transfer_output = ON_EXIT
+output                  = out.$(Process)
+error                   = err.$(Process)
+log                     = log.$(Process)
+request_memory          = 10M
+queue 1

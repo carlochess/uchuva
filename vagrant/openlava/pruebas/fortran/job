@@ -1,0 +1,22 @@
+#BSUB-q normal                  # Job queue
+#BSUB-o job.output              # output is sent to file job.output
+#BSUB-e job-%J.err
+#BSUB-J fortran                 # name of the job
+#BSUB-c 30                      # Time limit in minutes
+
+# My instructions
+# Changing to the directory where my program is
+#cd
+cd /vagrant/pruebas/fortran
+mkdir output
+
+# Compilation of the program in Fortran 90 (use f77 for Fortran 77)
+gfortran -O3 -o run outputdata.f90
+#f90 -O3 -fastsse -o run program.f
+
+# And we run it; output is redirected to the file 'data/output'
+./run > output/data
+
+# Show the size of the outputfile, and remove the executable
+cat output/data
+rm run

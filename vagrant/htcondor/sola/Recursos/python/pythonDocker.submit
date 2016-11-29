@@ -1,0 +1,12 @@
+universe                = docker
+docker_image            = docker.io/elyase/staticpython
+executable              = python
+arguments               = main.py
+should_transfer_files   = YES
+transfer_input_files   = main.py
+when_to_transfer_output = ON_EXIT
+output                  = out.$(Process)
+error                   = err.$(Process)
+log                     = log.$(Process)
+request_memory          = 10M
+queue 1

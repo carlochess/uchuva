@@ -1,0 +1,21 @@
+doctype html
+html
+  body
+    title tty.js
+    link(rel='stylesheet', href='style.css')
+    link(rel='stylesheet', href='user.css')
+    h1 tty.js
+    #help
+      p Click the titlebar to drag.
+      p Double-click titlebar to maximize.
+      p Click the lower-right corner to resize.
+      p Click the tilde to open a new tab.
+      p Click the tilde with a modifier to close the window.
+    button#open Open Terminal
+    button#lights Light Switch
+    script(src='socket.io/socket.io.js')
+    script(src='term.js')
+    script(src='options.js')
+    script(src='tty.js')
+    script(src='user.js')
+

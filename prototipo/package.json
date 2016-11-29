@@ -1,0 +1,65 @@
+{
+  "name": "uchuva",
+  "version": "0.0.1",
+  "description": "Un modulo para el envio de workflows a diferentes load managers",
+  "main": "main.js",
+  "dependencies": {
+    "async": "^2.0.0-rc.2",
+    "body-parser": "^1.15.0",
+    "connect-ensure-login": "^0.1.1",
+    "connect-flash": "^0.1.1",
+    "connect-mongo": "^1.1.0",
+    "cookie-parser": "^1.4.1",
+    "dot": "^1.0.3",
+    "express": "^4.13.4",
+    "express-session": "^1.13.0",
+    "express-validator": "^2.21.0",
+    "fs-extra": "^0.30.0",
+    "mongoose": "^4.4.12",
+    "morgan": "^1.7.0",
+    "multer": "^1.1.0",
+    "passport": "^0.3.2",
+    "passport-local": "^1.0.0",
+    "passport-local-mongoose": "^4.0.0",
+    "passport.socketio": "^3.7.0",
+    "pkginfo": "^0.4.0",
+    "pug": "^2.0.0-alpha3",
+    "rimraf": "^2.5.2",
+    "serve-favicon": "^2.3.0",
+    "simple-ssh": "^0.9.0",
+    "soap": "^0.13.0",
+    "soap-htcondor": "^1.0.0",
+    "socket.io": "^1.5.1",
+    "superheroes": "^1.0.0",
+    "tar-fs": "^1.12.0",
+    "winston": "^2.2.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "jslint": "^0.10.3",
+    "mocha": "^3.0.2",
+    "proxyquire": "^1.7.10",
+    "selenium-webdriver": "^3.0.1",
+    "sinon": "^1.17.6",
+    "supertest": "^2.0.1",
+    "z-schema": "^3.18.1"
+  },
+  "engines": {
+    "node": ">=5.0"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/mocha -R xunit test/ > test-reports.xml",
+    "test-selenium": "./node_modules/.bin/mocha test/selenium/",
+    "test-unit": "./node_modules/.bin/mocha test/unit/",
+    "format": "esformatter --config formatter.json -i 'routes/**/*.js' ",
+    "start": "node main.js",
+    "devel": "./node_modules/.bin/nodemon --ignore 'data/*' main.js",
+    "build-rpm": "speculate"
+  },
+  "keywords": [
+    "workflows",
+    "htcondor"
+  ],
+  "author": "Carlos Roman",
+  "license": "ISC"
+}

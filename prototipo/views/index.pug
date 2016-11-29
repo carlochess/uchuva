@@ -1,0 +1,52 @@
+doctype html
+head
+  meta(charset='utf-8')
+  meta(http-equiv='X-UA-Compatible', content='IE=edge')
+  meta(name='viewport', content='width=device-width, initial-scale=1')
+  meta(name='description', content='Un interesante front end para varios workloads')
+  meta(name='author', content='Carlos')
+  title Uchuva
+  link(href='http://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css', rel='stylesheet', media='screen')
+  link(href='jumbotron-narrow.css', rel='stylesheet')
+  script(src='https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js')
+  script(src='https://oss.maxcdn.com/respond/1.4.2/respond.min.js')
+.container
+  .header.clearfix
+    nav
+      ul.nav.nav-pills.pull-right
+        if (user)
+           li.active(role='presentation')
+             a(href='/user') Entrar
+        else
+           li(role='presentation')
+             a(href='/register') Registro
+           li(role='presentation')
+             a(href='/login') Login
+    h3.text-muted Uchuva
+  .jumbotron
+    h1#titulo Uchuva
+    p.lead
+      | Un portal cientifico creado para facilitar el uso y aprendizaje de aplicaciones como Cat, Cp, Mv, entre otras
+    p
+      a.btn.btn-lg.btn-success(href='/register', role='button') Registrate
+  .row.marketing
+    .col-lg-6
+      h4 Workloaders
+      p
+        | Integración con HTCondor, Slurm, Torque y Openlava
+      h4 Apps
+      p
+        | Numerosas aplicaciones pueden ser configuradas usando un formulario
+      h4 SSH
+      p Conexión SSH para sitios remotos
+    .col-lg-6
+      h4 Archivo
+      p
+        | Todos los archivos en un solo lugar
+      h4 Terminal
+      p
+        | Tienes a tu disposición una terminal virtual
+      h4 Workflow
+      p Modela tus experimentos usando grafos
+  footer.footer
+    p © 2016.

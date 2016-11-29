@@ -1,0 +1,5 @@
+Job Alex alex.submit
+Job Happy happy.submit
+Job Final final.submit
+PARENT Alex Happy CHILD Final
+#SCRIPT PRE FINAL mover.sh

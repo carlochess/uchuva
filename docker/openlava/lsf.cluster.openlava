@@ -1,0 +1,12 @@
+Begin   ClusterAdmins
+Administrators = openlava
+End    ClusterAdmins
+
+Begin   Host
+HOSTNAME          model          type  server  r1m  RESOURCES
+docker              !              !     1       -       -
+End     Host
+
+Begin ResourceMap
+RESOURCENAME  LOCATION
+End ResourceMap

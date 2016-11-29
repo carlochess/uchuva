@@ -1,0 +1,32 @@
+extends layout
+
+block content
+  .container-fluid
+  .row
+    .col-sm-3.col-md-2
+       ul.list-group
+          li.list-group-item
+            a(href='/user') Atrás
+          li.list-group-item
+            a(href='/crearDag') Nuevo Dag
+          li.list-group-item
+            a(href='/filemanager') Manejador de archivos
+          li.list-group-item
+            a(href='/consola') Consola
+
+    .main(class="col-sm-9 col-md-10")
+        .row
+        if dags.length 
+            each val in dags
+              .col-sm-6.col-md-4
+                .thumbnail
+                  img(src=val.imagen, width=500, height=400)
+                  .caption
+                    h3 
+                      a(href="/editar?id="+val.proyecto)= val.nombre
+                    p= val.date
+                    p
+                      a.btn.btn-default(href="/build?id="+val.nombre, role='button') Ver
+                      a.btn.btn-danger(href="/eliminarDag?id="+val.proyecto, role='button') Eliminar
+        else
+            p Este Workflow no tiene ejecuciones pendientes.

@@ -1,0 +1,8 @@
+#!/bin/bash
+#BSUB -q normal             # queue
+#BSUB -W 00:06              # tiempo (hrs:mins)
+#BSUB -o {{= it.dagdir}}/{{= it.nodo.directorio}}/{{= it.nodo.nombre}}.out    # out
+#BSUB -e {{= it.dagdir}}/{{= it.nodo.directorio}}/{{= it.nodo.nombre}}.err    # err
+#BSUB -J {{= it.nodo.directorio}}_{{= it.nodo.nombre}} # nombre
+{{? it.nodo.dependencia.length > 0 }}#BSUB -w {{= it.nodo.dependencia.join("&&")}}{{?}} # dependencia
+{{= it.config.location.trim() }} {{= it.config.argumento.trim() }}

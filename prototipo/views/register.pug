@@ -1,0 +1,16 @@
+extends layout
+
+block content
+  .container
+    h1 Registro
+    if(error)
+      div.alert.alert-danger #{error}
+    br
+    form(role='form', action="/register",method="post", style='max-width: 300px;')
+      .form-group
+          input.form-control(type='text', name="username", placeholder='Nombre de usuario', id='username')
+      .form-group
+        input.form-control(type='password', name="password", placeholder='Password', id='password')
+      a(href='/')
+        button.btn.btn-default(type="button") Salir
+      button.btn.btn-primary(type='submit', id="btn-login") Registrarse

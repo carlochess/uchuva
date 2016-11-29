@@ -1,0 +1,12 @@
+universe                = docker
+docker_image            = docker.io/haskell
+executable              = runhaskell
+arguments               = main.hs
+should_transfer_files   = YES
+transfer_input_files   = main.hs
+when_to_transfer_output = ON_EXIT
+output                  = out.$(Process)
+error                   = err.$(Process)
+log                     = log.$(Process)
+request_memory          = 10M
+queue 1

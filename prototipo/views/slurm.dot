@@ -1,0 +1,8 @@
+#!/bin/bash
+#SBATCH -p debug       # queue
+#SBATCH -t 00:06  # tiempo
+#SBATCH -o {{= it.dagdir}}/{{= it.nodo.directorio}}/{{= it.nodo.nombre}}.out    # out
+#SBATCH -e {{= it.dagdir}}/{{= it.nodo.directorio}}/{{= it.nodo.nombre}}.err    # err
+#SBATCH --job-name={{= it.nodo.directorio}}_{{= it.nodo.nombre}}   # tiempo
+{{? it.nodo.dependencia.length > 0 }}#SBATCH --dependency=afterok:{{= it.nodo.dependencia.join(":")}}{{?}}
+{{= it.config.location.trim() }} {{= it.config.argumento.trim() }}

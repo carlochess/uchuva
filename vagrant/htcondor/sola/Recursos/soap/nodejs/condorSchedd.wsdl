@@ -1,0 +1,1109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions name="condorSchedd"
+ targetNamespace="urn:condor"
+ xmlns:tns="urn:condor"
+ xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+ xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns:condor="urn:condor"
+ xmlns:SOAP="http://schemas.xmlsoap.org/wsdl/soap/"
+ xmlns:MIME="http://schemas.xmlsoap.org/wsdl/mime/"
+ xmlns:DIME="http://schemas.xmlsoap.org/ws/2002/04/dime/wsdl/"
+ xmlns:WSDL="http://schemas.xmlsoap.org/wsdl/"
+ xmlns="http://schemas.xmlsoap.org/wsdl/">
+
+<types>
+
+ <schema targetNamespace="urn:condor"
+  xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/"
+  xmlns:SOAP-ENC="http://schemas.xmlsoap.org/soap/encoding/"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+  xmlns:condor="urn:condor"
+  xmlns="http://www.w3.org/2001/XMLSchema"
+  elementFormDefault="unqualified"
+  attributeFormDefault="unqualified">
+  <import namespace="http://schemas.xmlsoap.org/soap/encoding/"/>
+  <simpleType name="Requirement">
+   <restriction base="xsd:string">
+   </restriction>
+  </simpleType>
+  <simpleType name="StatusCode">
+   <restriction base="xsd:string">
+    <enumeration value="SUCCESS"/><!-- enum const = 0 -->
+    <enumeration value="FAIL"/><!-- enum const = 1 -->
+    <enumeration value="INVALIDTRANSACTION"/><!-- enum const = 2 -->
+    <enumeration value="UNKNOWNCLUSTER"/><!-- enum const = 3 -->
+    <enumeration value="UNKNOWNJOB"/><!-- enum const = 4 -->
+    <enumeration value="UNKNOWNFILE"/><!-- enum const = 5 -->
+    <enumeration value="INCOMPLETE"/><!-- enum const = 6 -->
+    <enumeration value="INVALIDOFFSET"/><!-- enum const = 7 -->
+    <enumeration value="ALREADYEXISTS"/><!-- enum const = 8 -->
+   </restriction>
+  </simpleType>
+  <simpleType name="ClassAdAttrType">
+   <restriction base="xsd:string">
+    <enumeration value="INTEGER-ATTR"/><!-- enum const = 110 -->
+    <enumeration value="FLOAT-ATTR"/><!-- enum const = 102 -->
+    <enumeration value="STRING-ATTR"/><!-- enum const = 115 -->
+    <enumeration value="EXPRESSION-ATTR"/><!-- enum const = 120 -->
+    <enumeration value="BOOLEAN-ATTR"/><!-- enum const = 98 -->
+    <enumeration value="UNDEFINED-ATTR"/><!-- enum const = 117 -->
+    <enumeration value="ERROR-ATTR"/><!-- enum const = 101 -->
+   </restriction>
+  </simpleType>
+  <simpleType name="HashType">
+   <restriction base="xsd:string">
+    <enumeration value="NOHASH"/><!-- enum const = 0 -->
+    <enumeration value="MD5HASH"/><!-- enum const = 1 -->
+   </restriction>
+  </simpleType>
+  <simpleType name="UniverseType">
+   <restriction base="xsd:string">
+    <enumeration value="STANDARD"/><!-- enum const = 1 -->
+    <enumeration value="VANILLA"/><!-- enum const = 5 -->
+    <enumeration value="SCHEDULER"/><!-- enum const = 7 -->
+    <enumeration value="MPI"/><!-- enum const = 8 -->
+    <enumeration value="GRID"/><!-- enum const = 9 -->
+    <enumeration value="JAVA"/><!-- enum const = 10 -->
+    <enumeration value="PARALLEL"/><!-- enum const = 11 -->
+    <enumeration value="LOCAL"/><!-- enum const = 12 -->
+    <enumeration value="VM"/><!-- enum const = 13 -->
+   </restriction>
+  </simpleType>
+  <complexType name="Status">
+   <sequence>
+     <element name="code" type="condor:StatusCode" minOccurs="1" maxOccurs="1"/>
+     <element name="message" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="next" type="condor:Status" minOccurs="0" maxOccurs="1" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="ClassAdStructAttr">
+   <sequence>
+     <element name="name" type="xsd:string" minOccurs="1" maxOccurs="1" nillable="false"/>
+     <element name="type" type="condor:ClassAdAttrType" minOccurs="1" maxOccurs="1"/>
+     <element name="value" type="xsd:string" minOccurs="1" maxOccurs="1" nillable="false"/>
+   </sequence>
+  </complexType>
+  <complexType name="ClassAdStruct">
+   <sequence>
+    <element name="item" type="condor:ClassAdStructAttr" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="ClassAdStructArray">
+   <sequence>
+    <element name="item" type="condor:ClassAdStruct" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="ClassAdStructAndStatus">
+   <sequence>
+     <element name="status" type="condor:Status" minOccurs="1" maxOccurs="1"/>
+     <element name="classAd" type="condor:ClassAdStruct" minOccurs="0" maxOccurs="1" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="ClassAdStructArrayAndStatus">
+   <sequence>
+     <element name="status" type="condor:Status" minOccurs="1" maxOccurs="1"/>
+     <element name="classAdArray" type="condor:ClassAdStructArray" minOccurs="0" maxOccurs="1" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="StringAndStatus">
+   <sequence>
+     <element name="status" type="condor:Status" minOccurs="1" maxOccurs="1"/>
+     <element name="message" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="Transaction">
+   <sequence>
+     <element name="id" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+     <element name="duration" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+  <complexType name="Requirements">
+   <sequence>
+    <element name="item" type="condor:Requirement" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="RequirementsAndStatus">
+   <sequence>
+     <element name="status" type="condor:Status" minOccurs="1" maxOccurs="1"/>
+     <element name="requirements" type="condor:Requirements" minOccurs="0" maxOccurs="1" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="TransactionAndStatus">
+   <sequence>
+     <element name="status" type="condor:Status" minOccurs="1" maxOccurs="1"/>
+     <element name="transaction" type="condor:Transaction" minOccurs="0" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+  <complexType name="IntAndStatus">
+   <sequence>
+     <element name="status" type="condor:Status" minOccurs="1" maxOccurs="1"/>
+     <element name="integer" type="xsd:int" minOccurs="0" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+  <complexType name="Base64DataAndStatus">
+   <sequence>
+     <element name="status" type="condor:Status" minOccurs="1" maxOccurs="1"/>
+     <element name="data" type="xsd:base64Binary" minOccurs="0" maxOccurs="1" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="FileInfo">
+   <sequence>
+     <element name="name" type="xsd:string" minOccurs="1" maxOccurs="1" nillable="false"/>
+     <element name="size" type="xsd:long" minOccurs="1" maxOccurs="1"/>
+   </sequence>
+  </complexType>
+  <complexType name="FileInfoArray">
+   <sequence>
+    <element name="item" type="condor:FileInfo" minOccurs="0" maxOccurs="unbounded" nillable="true"/>
+   </sequence>
+  </complexType>
+  <complexType name="FileInfoArrayAndStatus">
+   <sequence>
+     <element name="status" type="condor:Status" minOccurs="1" maxOccurs="1"/>
+     <element name="info" type="condor:FileInfoArray" minOccurs="0" maxOccurs="1" nillable="true"/>
+   </sequence>
+  </complexType>
+  <!-- operation request element -->
+  <element name="getVersionString">
+   <complexType>
+    <sequence>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="getVersionStringResponse">
+   <complexType>
+    <sequence>
+     <element name="response" type="condor:StringAndStatus" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="getPlatformString">
+   <complexType>
+    <sequence>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="getPlatformStringResponse">
+   <complexType>
+    <sequence>
+     <element name="response" type="condor:StringAndStatus" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="beginTransaction">
+   <complexType>
+    <sequence>
+     <element name="duration" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="beginTransactionResponse">
+   <complexType>
+    <sequence>
+     <element name="response" type="condor:TransactionAndStatus" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="commitTransaction">
+   <complexType>
+    <sequence>
+     <element name="transaction" type="condor:Transaction" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="commitTransactionResponse">
+   <complexType>
+    <sequence>
+     <element name="response" type="condor:Status" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="abortTransaction">
+   <complexType>
+    <sequence>
+     <element name="transaction" type="condor:Transaction" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="abortTransactionResponse">
+   <complexType>
+    <sequence>
+     <element name="response" type="condor:Status" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="extendTransaction">
+   <complexType>
+    <sequence>
+     <element name="transaction" type="condor:Transaction" minOccurs="1" maxOccurs="1"/>
+     <element name="duration" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="extendTransactionResponse">
+   <complexType>
+    <sequence>
+     <element name="response" type="condor:TransactionAndStatus" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="newCluster">
+   <complexType>
+    <sequence>
+     <element name="transaction" type="condor:Transaction" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="newClusterResponse">
+   <complexType>
+    <sequence>
+     <element name="response" type="condor:IntAndStatus" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="removeCluster">
+   <complexType>
+    <sequence>
+     <element name="transaction" type="condor:Transaction" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="clusterId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="reason" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="removeClusterResponse">
+   <complexType>
+    <sequence>
+     <element name="response" type="condor:Status" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="newJob">
+   <complexType>
+    <sequence>
+     <element name="transaction" type="condor:Transaction" minOccurs="1" maxOccurs="1"/>
+     <element name="clusterId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="newJobResponse">
+   <complexType>
+    <sequence>
+     <element name="response" type="condor:IntAndStatus" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="removeJob">
+   <complexType>
+    <sequence>
+     <element name="transaction" type="condor:Transaction" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="clusterId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="jobId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="reason" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="force-removal" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="removeJobResponse">
+   <complexType>
+    <sequence>
+     <element name="response" type="condor:Status" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="holdJob">
+   <complexType>
+    <sequence>
+     <element name="transaction" type="condor:Transaction" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="clusterId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="jobId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="reason" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="email-user" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+     <element name="email-admin" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+     <element name="system-hold" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="holdJobResponse">
+   <complexType>
+    <sequence>
+     <element name="response" type="condor:Status" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="releaseJob">
+   <complexType>
+    <sequence>
+     <element name="transaction" type="condor:Transaction" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="clusterId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="jobId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="reason" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="email-user" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+     <element name="email-admin" type="xsd:boolean" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="releaseJobResponse">
+   <complexType>
+    <sequence>
+     <element name="response" type="condor:Status" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="submit">
+   <complexType>
+    <sequence>
+     <element name="transaction" type="condor:Transaction" minOccurs="1" maxOccurs="1"/>
+     <element name="clusterId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="jobId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="jobAd" type="condor:ClassAdStruct" minOccurs="0" maxOccurs="1" nillable="true"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="submitResponse">
+   <complexType>
+    <sequence>
+     <element name="response" type="condor:RequirementsAndStatus" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="getJobAds">
+   <complexType>
+    <sequence>
+     <element name="transaction" type="condor:Transaction" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="constraint" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="getJobAdsResponse">
+   <complexType>
+    <sequence>
+     <element name="response" type="condor:ClassAdStructArrayAndStatus" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="getJobAd">
+   <complexType>
+    <sequence>
+     <element name="transaction" type="condor:Transaction" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="clusterId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="jobId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="getJobAdResponse">
+   <complexType>
+    <sequence>
+     <element name="response" type="condor:ClassAdStructAndStatus" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="declareFile">
+   <complexType>
+    <sequence>
+     <element name="transaction" type="condor:Transaction" minOccurs="1" maxOccurs="1"/>
+     <element name="clusterId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="jobId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="name" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="size" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="hashType" type="condor:HashType" minOccurs="1" maxOccurs="1"/>
+     <element name="hash" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="declareFileResponse">
+   <complexType>
+    <sequence>
+     <element name="response" type="condor:Status" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="sendFile">
+   <complexType>
+    <sequence>
+     <element name="transaction" type="condor:Transaction" minOccurs="1" maxOccurs="1"/>
+     <element name="clusterId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="jobId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="name" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="offset" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="data" type="xsd:base64Binary" minOccurs="0" maxOccurs="1" nillable="true"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="sendFileResponse">
+   <complexType>
+    <sequence>
+     <element name="response" type="condor:Status" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="getFile">
+   <complexType>
+    <sequence>
+     <element name="transaction" type="condor:Transaction" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="clusterId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="jobId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="name" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="offset" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="length" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="getFileResponse">
+   <complexType>
+    <sequence>
+     <element name="response" type="condor:Base64DataAndStatus" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="closeSpool">
+   <complexType>
+    <sequence>
+     <element name="transaction" type="condor:Transaction" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="clusterId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="jobId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="closeSpoolResponse">
+   <complexType>
+    <sequence>
+     <element name="response" type="condor:Status" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="listSpool">
+   <complexType>
+    <sequence>
+     <element name="transaction" type="condor:Transaction" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="clusterId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="jobId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="listSpoolResponse">
+   <complexType>
+    <sequence>
+     <element name="response" type="condor:FileInfoArrayAndStatus" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="requestReschedule">
+   <complexType>
+    <sequence>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="requestRescheduleResponse">
+   <complexType>
+    <sequence>
+     <element name="response" type="condor:Status" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="discoverJobRequirements">
+   <complexType>
+    <sequence>
+     <element name="jobAd" type="condor:ClassAdStruct" minOccurs="0" maxOccurs="1" nillable="true"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="discoverJobRequirementsResponse">
+   <complexType>
+    <sequence>
+     <element name="response" type="condor:RequirementsAndStatus" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation request element -->
+  <element name="createJobTemplate">
+   <complexType>
+    <sequence>
+     <element name="clusterId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="jobId" type="xsd:int" minOccurs="1" maxOccurs="1"/>
+     <element name="owner" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="type" type="condor:UniverseType" minOccurs="1" maxOccurs="1"/>
+     <element name="cmd" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="args" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+     <element name="requirements" type="xsd:string" minOccurs="0" maxOccurs="1" nillable="true"/>
+    </sequence>
+   </complexType>
+  </element>
+  <!-- operation response element -->
+  <element name="createJobTemplateResponse">
+   <complexType>
+    <sequence>
+     <element name="response" type="condor:ClassAdStructAndStatus" minOccurs="1" maxOccurs="1"/>
+    </sequence>
+   </complexType>
+  </element>
+ </schema>
+
+</types>
+
+<message name="getVersionString">
+ <part name="parameters" element="condor:getVersionString"/>
+</message>
+
+<message name="getVersionStringResponse">
+ <part name="parameters" element="condor:getVersionStringResponse"/>
+</message>
+
+<message name="getPlatformString">
+ <part name="parameters" element="condor:getPlatformString"/>
+</message>
+
+<message name="getPlatformStringResponse">
+ <part name="parameters" element="condor:getPlatformStringResponse"/>
+</message>
+
+<message name="beginTransaction">
+ <part name="parameters" element="condor:beginTransaction"/>
+</message>
+
+<message name="beginTransactionResponse">
+ <part name="parameters" element="condor:beginTransactionResponse"/>
+</message>
+
+<message name="commitTransaction">
+ <part name="parameters" element="condor:commitTransaction"/>
+</message>
+
+<message name="commitTransactionResponse">
+ <part name="parameters" element="condor:commitTransactionResponse"/>
+</message>
+
+<message name="abortTransaction">
+ <part name="parameters" element="condor:abortTransaction"/>
+</message>
+
+<message name="abortTransactionResponse">
+ <part name="parameters" element="condor:abortTransactionResponse"/>
+</message>
+
+<message name="extendTransaction">
+ <part name="parameters" element="condor:extendTransaction"/>
+</message>
+
+<message name="extendTransactionResponse">
+ <part name="parameters" element="condor:extendTransactionResponse"/>
+</message>
+
+<message name="newCluster">
+ <part name="parameters" element="condor:newCluster"/>
+</message>
+
+<message name="newClusterResponse">
+ <part name="parameters" element="condor:newClusterResponse"/>
+</message>
+
+<message name="removeCluster">
+ <part name="parameters" element="condor:removeCluster"/>
+</message>
+
+<message name="removeClusterResponse">
+ <part name="parameters" element="condor:removeClusterResponse"/>
+</message>
+
+<message name="newJob">
+ <part name="parameters" element="condor:newJob"/>
+</message>
+
+<message name="newJobResponse">
+ <part name="parameters" element="condor:newJobResponse"/>
+</message>
+
+<message name="removeJob">
+ <part name="parameters" element="condor:removeJob"/>
+</message>
+
+<message name="removeJobResponse">
+ <part name="parameters" element="condor:removeJobResponse"/>
+</message>
+
+<message name="holdJob">
+ <part name="parameters" element="condor:holdJob"/>
+</message>
+
+<message name="holdJobResponse">
+ <part name="parameters" element="condor:holdJobResponse"/>
+</message>
+
+<message name="releaseJob">
+ <part name="parameters" element="condor:releaseJob"/>
+</message>
+
+<message name="releaseJobResponse">
+ <part name="parameters" element="condor:releaseJobResponse"/>
+</message>
+
+<message name="submit">
+ <part name="parameters" element="condor:submit"/>
+</message>
+
+<message name="submitResponse">
+ <part name="parameters" element="condor:submitResponse"/>
+</message>
+
+<message name="getJobAds">
+ <part name="parameters" element="condor:getJobAds"/>
+</message>
+
+<message name="getJobAdsResponse">
+ <part name="parameters" element="condor:getJobAdsResponse"/>
+</message>
+
+<message name="getJobAd">
+ <part name="parameters" element="condor:getJobAd"/>
+</message>
+
+<message name="getJobAdResponse">
+ <part name="parameters" element="condor:getJobAdResponse"/>
+</message>
+
+<message name="declareFile">
+ <part name="parameters" element="condor:declareFile"/>
+</message>
+
+<message name="declareFileResponse">
+ <part name="parameters" element="condor:declareFileResponse"/>
+</message>
+
+<message name="sendFile">
+ <part name="parameters" element="condor:sendFile"/>
+</message>
+
+<message name="sendFileResponse">
+ <part name="parameters" element="condor:sendFileResponse"/>
+</message>
+
+<message name="getFile">
+ <part name="parameters" element="condor:getFile"/>
+</message>
+
+<message name="getFileResponse">
+ <part name="parameters" element="condor:getFileResponse"/>
+</message>
+
+<message name="closeSpool">
+ <part name="parameters" element="condor:closeSpool"/>
+</message>
+
+<message name="closeSpoolResponse">
+ <part name="parameters" element="condor:closeSpoolResponse"/>
+</message>
+
+<message name="listSpool">
+ <part name="parameters" element="condor:listSpool"/>
+</message>
+
+<message name="listSpoolResponse">
+ <part name="parameters" element="condor:listSpoolResponse"/>
+</message>
+
+<message name="requestReschedule">
+ <part name="parameters" element="condor:requestReschedule"/>
+</message>
+
+<message name="requestRescheduleResponse">
+ <part name="parameters" element="condor:requestRescheduleResponse"/>
+</message>
+
+<message name="discoverJobRequirements">
+ <part name="parameters" element="condor:discoverJobRequirements"/>
+</message>
+
+<message name="discoverJobRequirementsResponse">
+ <part name="parameters" element="condor:discoverJobRequirementsResponse"/>
+</message>
+
+<message name="createJobTemplate">
+ <part name="parameters" element="condor:createJobTemplate"/>
+</message>
+
+<message name="createJobTemplateResponse">
+ <part name="parameters" element="condor:createJobTemplateResponse"/>
+</message>
+
+<portType name="condorScheddPortType">
+ <operation name="getVersionString">
+  <documentation>Service definition of function condor__getVersionString</documentation>
+  <input message="tns:getVersionString"/>
+  <output message="tns:getVersionStringResponse"/>
+ </operation>
+ <operation name="getPlatformString">
+  <documentation>Service definition of function condor__getPlatformString</documentation>
+  <input message="tns:getPlatformString"/>
+  <output message="tns:getPlatformStringResponse"/>
+ </operation>
+ <operation name="beginTransaction">
+  <documentation>Service definition of function condor__beginTransaction</documentation>
+  <input message="tns:beginTransaction"/>
+  <output message="tns:beginTransactionResponse"/>
+ </operation>
+ <operation name="commitTransaction">
+  <documentation>Service definition of function condor__commitTransaction</documentation>
+  <input message="tns:commitTransaction"/>
+  <output message="tns:commitTransactionResponse"/>
+ </operation>
+ <operation name="abortTransaction">
+  <documentation>Service definition of function condor__abortTransaction</documentation>
+  <input message="tns:abortTransaction"/>
+  <output message="tns:abortTransactionResponse"/>
+ </operation>
+ <operation name="extendTransaction">
+  <documentation>Service definition of function condor__extendTransaction</documentation>
+  <input message="tns:extendTransaction"/>
+  <output message="tns:extendTransactionResponse"/>
+ </operation>
+ <operation name="newCluster">
+  <documentation>Service definition of function condor__newCluster</documentation>
+  <input message="tns:newCluster"/>
+  <output message="tns:newClusterResponse"/>
+ </operation>
+ <operation name="removeCluster">
+  <documentation>Service definition of function condor__removeCluster</documentation>
+  <input message="tns:removeCluster"/>
+  <output message="tns:removeClusterResponse"/>
+ </operation>
+ <operation name="newJob">
+  <documentation>Service definition of function condor__newJob</documentation>
+  <input message="tns:newJob"/>
+  <output message="tns:newJobResponse"/>
+ </operation>
+ <operation name="removeJob">
+  <documentation>Service definition of function condor__removeJob</documentation>
+  <input message="tns:removeJob"/>
+  <output message="tns:removeJobResponse"/>
+ </operation>
+ <operation name="holdJob">
+  <documentation>Service definition of function condor__holdJob</documentation>
+  <input message="tns:holdJob"/>
+  <output message="tns:holdJobResponse"/>
+ </operation>
+ <operation name="releaseJob">
+  <documentation>Service definition of function condor__releaseJob</documentation>
+  <input message="tns:releaseJob"/>
+  <output message="tns:releaseJobResponse"/>
+ </operation>
+ <operation name="submit">
+  <documentation>Service definition of function condor__submit</documentation>
+  <input message="tns:submit"/>
+  <output message="tns:submitResponse"/>
+ </operation>
+ <operation name="getJobAds">
+  <documentation>Service definition of function condor__getJobAds</documentation>
+  <input message="tns:getJobAds"/>
+  <output message="tns:getJobAdsResponse"/>
+ </operation>
+ <operation name="getJobAd">
+  <documentation>Service definition of function condor__getJobAd</documentation>
+  <input message="tns:getJobAd"/>
+  <output message="tns:getJobAdResponse"/>
+ </operation>
+ <operation name="declareFile">
+  <documentation>Service definition of function condor__declareFile</documentation>
+  <input message="tns:declareFile"/>
+  <output message="tns:declareFileResponse"/>
+ </operation>
+ <operation name="sendFile">
+  <documentation>Service definition of function condor__sendFile</documentation>
+  <input message="tns:sendFile"/>
+  <output message="tns:sendFileResponse"/>
+ </operation>
+ <operation name="getFile">
+  <documentation>Service definition of function condor__getFile</documentation>
+  <input message="tns:getFile"/>
+  <output message="tns:getFileResponse"/>
+ </operation>
+ <operation name="closeSpool">
+  <documentation>Service definition of function condor__closeSpool</documentation>
+  <input message="tns:closeSpool"/>
+  <output message="tns:closeSpoolResponse"/>
+ </operation>
+ <operation name="listSpool">
+  <documentation>Service definition of function condor__listSpool</documentation>
+  <input message="tns:listSpool"/>
+  <output message="tns:listSpoolResponse"/>
+ </operation>
+ <operation name="requestReschedule">
+  <documentation>Service definition of function condor__requestReschedule</documentation>
+  <input message="tns:requestReschedule"/>
+  <output message="tns:requestRescheduleResponse"/>
+ </operation>
+ <operation name="discoverJobRequirements">
+  <documentation>Service definition of function condor__discoverJobRequirements</documentation>
+  <input message="tns:discoverJobRequirements"/>
+  <output message="tns:discoverJobRequirementsResponse"/>
+ </operation>
+ <operation name="createJobTemplate">
+  <documentation>Service definition of function condor__createJobTemplate</documentation>
+  <input message="tns:createJobTemplate"/>
+  <output message="tns:createJobTemplateResponse"/>
+ </operation>
+</portType>
+
+<binding name="condorSchedd" type="tns:condorScheddPortType">
+ <SOAP:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+ <operation name="getVersionString">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+ <operation name="getPlatformString">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+ <operation name="beginTransaction">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+ <operation name="commitTransaction">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+ <operation name="abortTransaction">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+ <operation name="extendTransaction">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+ <operation name="newCluster">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+ <operation name="removeCluster">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+ <operation name="newJob">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+ <operation name="removeJob">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+ <operation name="holdJob">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+ <operation name="releaseJob">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+ <operation name="submit">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+ <operation name="getJobAds">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+ <operation name="getJobAd">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+ <operation name="declareFile">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+ <operation name="sendFile">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+ <operation name="getFile">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+ <operation name="closeSpool">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+ <operation name="listSpool">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+ <operation name="requestReschedule">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+ <operation name="discoverJobRequirements">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+ <operation name="createJobTemplate">
+  <SOAP:operation soapAction=""/>
+  <input>
+     <SOAP:body parts="parameters" use="literal"/>
+  </input>
+  <output>
+     <SOAP:body parts="parameters" use="literal"/>
+  </output>
+ </operation>
+</binding>
+
+<service name="condorSchedd">
+ <documentation>gSOAP 2.7.10 generated service definition</documentation>
+ <port name="condorSchedd" binding="tns:condorSchedd">
+  <SOAP:address location="http://localhost:80"/>
+ </port>
+</service>
+
+</definitions>

@@ -1,0 +1,61 @@
+html(ng-app='FileManagerApp')
+  head
+    title Manejador de archivos
+  body
+    angular-filemanager
+    script(src='angular-filemanager/bower_components/angular/angular.min.js')
+    script(src='angular-filemanager/bower_components/angular-translate/angular-translate.min.js')
+    script(src='angular-filemanager/bower_components/jquery/dist/jquery.min.js')
+    script(src='angular-filemanager/bower_components/bootstrap/dist/js/bootstrap.min.js')
+    link(rel='stylesheet', href='angular-filemanager/bower_components/bootswatch/paper/bootstrap.min.css')
+    //
+      angular-filemanager
+      <link rel="stylesheet" href="bower_components/angular-filemanager/dist/angular-filemanager.min.css">
+      <script src="bower_components/angular-filemanager/dist/angular-filemanager.min.js"></script>
+    // Uncomment if you need to use raw source code
+    script(src='angular-filemanager/src/js/app.js')
+    script(src='angular-filemanager/src/js/directives/directives.js')
+    script(src='angular-filemanager/src/js/filters/filters.js')
+    script(src='angular-filemanager/src/js/providers/config.js')
+    script(src='angular-filemanager/src/js/entities/chmod.js')
+    script(src='angular-filemanager/src/js/entities/item.js')
+    script(src='angular-filemanager/src/js/services/apihandler.js')
+    script(src='angular-filemanager/src/js/services/apimiddleware.js')
+    script(src='angular-filemanager/src/js/services/filenavigator.js')
+    script(src='angular-filemanager/src/js/providers/translations.js')
+    script(src='angular-filemanager/src/js/controllers/main.js')
+    script(src='angular-filemanager/src/js/controllers/selector-controller.js')
+    link(href='angular-filemanager/src/css/animations.css', rel='stylesheet')
+    link(href='angular-filemanager/src/css/dialogs.css', rel='stylesheet')
+    link(href='angular-filemanager/src/css/main.css', rel='stylesheet')
+    script(type='text/javascript').
+      elementos = []
+      //example to override angular-filemanager default config
+      angular.module('FileManagerApp').config(['fileManagerConfigProvider', function (config) {
+      var defaults = config.$get();
+      config.set({
+      appName: 'Nada de Nada',
+      allowedActions: angular.extend(defaults.allowedActions, {
+      copy: false, // <--- MMM
+      changePermissions: false,
+      compress: false,
+      compressChooseName: false,
+      extract: false, // <--- MMM
+      //downloadMultiple: false, // <--- MMM
+      }),
+      multipleDownloadFileName: 'Comprimido.rar',
+      downloadMultipleUrl: 'descargarMultiple',
+      defaultLang: "es",
+      listUrl: "/listar",
+      getContentUrl:"/listar",
+      createFolderUrl:"/crearCarpeta",
+      uploadUrl:"/crearArchivos",
+      renameUrl:"/editarArchivo",
+      moveUrl: '/editarArchivo',
+      removeUrl: '/eliminarArchivo',
+      editUrl: '/editarArchivo',
+      downloadFileUrl: '/descargarArchivo',
+      getContentUrl: '/contenidoArchivo',
+      tplPath: 'angular-filemanager/src/templates'
+      });
+      }]);

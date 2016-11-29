@@ -1,0 +1,83 @@
+sudo passwd root
+sudo ufw disable
+echo "deb [arch=amd64] http://research.cs.wisc.edu/htcondor/ubuntu/stable/ trusty contrib" | sudo tee -a /etc/apt/sources.list
+echo "deb [arch=amd64] http://research.cs.wisc.edu/htcondor/ubuntu/development/ trusty contrib" | sudo tee -a /etc/apt/sources.list
+wget -qO - http://research.cs.wisc.edu/htcondor/ubuntu/HTCondor-Release.gpg.key | sudo apt-key add -
+sudo apt-get update
+sudo apt-get install -y condor nano docker.io
+curl -o- https://raw.githubusercontent.com/creationix/nvm/v0.31.0/install.sh | bash
+source .bashrc
+nvm install 6.0
+nvm use 6.0
+sudo nano /etc/condor/config.d/condor_config.local
+
+---
+DOCKER = /usr/bin/docker
+ENABLE_SOAP = TRUE
+ALLOW_SOAP = *
+QUEUE_ALL_USERS_TRUSTED = TRUE
+SCHEDD_ARGS = -p 8080
+ALLOW_READ = *                        
+ALLOW_WRITE = * 
+HOSTALLOW_READ = *
+HOSTALLOW_WRITE = *
+ALLOW_NEGOTIATOR = *
+ALLOW_ADMINISTRATOR = *
+COLLECTOR_DEBUG = D_FULLDEBUG
+NEGOTIATOR_DEBUG = D_FULLDEBUG
+MATCH_DEBUG = D_FULLDEBUG
+SCHEDD_DEBUG = D_FULLDEBUG
+START = TRUE
+TRUST_UID_DOMAIN = TRUE
+SOAP_LEAVE_IN_QUEUE = ((JobStatus==4) && ((ServerTime - CompletionDate) < (60 * 60 * 24)))
+#ENABLE_WEB_SERVER = TRUE
+#WEB_ROOT_DIR=/usr/share/condor/webservice/
+USE_SHARED_PORT=FALSE
+# SHADOW
+---
+
+sudo groupadd docker
+sudo gpasswd -a ${USER} docker
+sudo gpasswd -a condor docker
+newgrp docker
+sudo service docker restart
+sudo service condor restart
+
+ps -ef | grep condor
+condor_reconfig
+condor_status -l | grep -i docker
+condor_status -const HasDocker
+condor_status -schedd -constraint "HasSOAPInterface=?=TRUE"
+
+docker pull haskell
+docker run -p 27017:27017 --name some-mongo -d mongo
+
+docker images
+
+
+
+docker pull elyase/staticpython
+docker pull haskell
+docker pull openfoamplus/of_v30plus_rhel66
+docker pull gaetan/dockercraft
+# https://hub.docker.com/_/busybox/
+docker pull busybox
+
+docker run -t -i -d -p 25565:25565 \
+-v /var/run/docker.sock:/var/run/docker.sock \
+--name dockercraft \
+gaetan/dockercraft
+
+docker pull centos
+docker run -t -i centos /bin/cat /etc/hosts
+ó
+docker ps -a
+docker start <container-id>
+docker attach <container-id>
+
+
+///---
+
+docker run -t -i -d --name openfoami docker.io/openfoamplus/of_v30plus_rhel66
+docker save -o /home/carlosro/Desktop haskell
+docker load -i 

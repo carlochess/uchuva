@@ -1,0 +1,6 @@
+name    'djmmoss-r'
+version '0.0.1'
+source 'UNKNOWN'
+author 'djmmoss'
+license 'Apache License, Version 2.0'
+summary 'Install and manage R and its packages'

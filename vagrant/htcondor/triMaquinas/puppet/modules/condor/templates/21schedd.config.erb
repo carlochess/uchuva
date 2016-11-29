@@ -1,0 +1,36 @@
+# HTCondor configuration: schedd
+## When is this machine willing to start a job?
+START = FALSE
+## Maximum number of running jobs per CE
+MAX_JOBS_RUNNING = 10000
+## Job starts
+JOB_START_DELAY = 1
+JOB_START_COUNT = 3
+## Job stops
+JOB_STOP_DELAY = 1
+JOB_STOP_COUNT = 10
+## Limit uploads & downloads
+MAX_CONCURRENT_UPLOADS = 50
+MAX_CONCURRENT_DOWNLOADS = 50
+## Reduce disk IO - paranoid fsyncs are usully not needed
+ENABLE_USERLOG_FSYNC = False
+## Shadows
+SHADOW_RENICE_INCREMENT = 10
+## Copy proxy to WNs, don't delegate
+DELEGATE_JOB_GSI_CREDENTIALS = False
+## Advertise numbers of idle jobs weighted by required CPUs per job
+NEGOTIATOR_USE_WEIGHTED_DEMAND=True
+## Increase limit on number of processes spawned to handle queries
+SCHEDD_QUERY_WORKERS = 6
+## Logs
+MAX_HISTORY_LOG = 104857600
+MAX_HISTORY_ROTATIONS = 14
+ROTATE_HISTORY_DAILY = True
+MAX_SCHEDD_LOG = 104857600
+MAX_NUM_SCHEDD_LOG = 10
+MAX_SHADOW_LOG = 104857600
+MAX_NUM_SHADOW_LOG = 10
+MAX_MASTER_LOG = 104857600
+MAX_NUM_MASTER_LOG = 10
+ALLOW_ADVERTISE_SCHEDD = $(CONDOR_HOST),$(ALLOW_WRITE),10.10.10.2
+SEC_ADVERTISE_SCHEDD_AUTHENTICATION = OPTIONAL
