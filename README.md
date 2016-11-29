@@ -114,20 +114,31 @@ npm start
 ```
 #### Windows
 
-Download The [HTCondor.msi](https://research.cs.wisc.edu/htcondor/downloads/) currently stable release.
+Download The [HTCondor.msi](https://research.cs.wisc.edu/htcondor/downloads/) currently stable release. Also MongoDB, Nodejs and Git installers.
 
+Or using [Chocolatey](https://chocolatey.org/) package manager, download and install  nodejs, mongodb and git.
 ```
 choco install nodejs.install 
 choco install mongodb 
 choco install git 
 ```
-Open a terminal, clone Uchuva
+> Remember to start [MongoDB Service](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/):
+
+```
+md \data\db
+"C:\Program Files\MongoDB\Server\3.2\bin\mongod.exe" --dbpath c:\data\db
+ ```
+ 
+Open another terminal, clone Uchuva
 
 ```
 git clone https://github.com/carlochess/uchuva
 cd uchuva/prototipo
 npm install
+npm start
 ```
+
+And go to the [website](http://127.0.0.1:3000/)
 
 ## Test
 
