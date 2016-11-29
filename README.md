@@ -61,12 +61,12 @@ Optional Deps
   - Web browser
 
 #### DEB Linux
-Install using dpkg
+Install using [dpkg](https://github.com/carlochess/uchuva/releases)
 ```
 $ apt-get update
 $ apt-get install -y git curl sudo python build-essential g++
 $ curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
-$ sudo apt-get install -y nodejs
+$ sudo apt-get install -y nodejs mongodb
 $ sudo dpkg -i uchuva_0.0.1_all.deb
 $ sudo apt-get -f install
 ```
@@ -79,7 +79,7 @@ All the files for Uchuva install are listed here.
 /etc/default/uchuva  #contains all the environment variables with default values. These variable values can be changed as per requirement
 ```
 
-#### Linux
+#### Linux (32 and 64 bits)
 Update and install the essential packages
 
 ```
@@ -90,13 +90,13 @@ apt-get install -y git curl sudo python make build-essential g++
 Install [NodeJS 6.9](https://github.com/nodesource/distributions)
 ```
 curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
-sudo apt-get install -y nodejs
+sudo apt-get install -y nodejs mongodb
 ```
 
 Clone this repo and install the Node dependencies
 ```
-git clone thisrepo
-cd tesis/prototipo
+git clone https://github.com/carlochess/uchuva
+cd uchuva/prototipo
 npm install
 ```
 
