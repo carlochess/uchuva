@@ -12,11 +12,11 @@ to HTCondor (Dagman), Slurm, OpenLava (LSF), Torque (PBS) and OAR. Is designed t
  - Vagrant
  - Docker
 
-![](https://raw.githubusercontent.com/carlochess/uchuva/master/doc/home.png)
-
 ## Installing
 
 If you want to try it out as quickly as possible, please install MongoDB, ensure that you have the right compilers installed (for OSX, XCode4 will work, for Ubuntu, the build-essential and libssl-dev packages) and then use Docker:
+
+![](https://raw.githubusercontent.com/carlochess/uchuva/master/doc/home.png)
 
 ### Docker
 Using Docker to test this project is the better choise you can make. Please, install Docker engine
