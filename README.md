@@ -1,4 +1,6 @@
 # Uchuva - A Scientific web Portal
+> Currently, under heavy development, keep in touch :)
+
 Uchuva is a scientific web portal that allow users to create workflows and submit
 to HTCondor (Dagman), Slurm, OpenLava (LSF), Torque (PBS) and OAR. Is designed to be fast, flexible and simple.
 <img align="right" height="260" src="http://4.bp.blogspot.com/-NeOpxs6fQMQ/Tp4ON0TNywI/AAAAAAAAADc/WxEEbycCly4/s1600/aguaymanto.jpg">
@@ -11,6 +13,10 @@ to HTCondor (Dagman), Slurm, OpenLava (LSF), Torque (PBS) and OAR. Is designed t
  - Rest Api with Swagger
  - Vagrant
  - Docker
+ - Tested using mocha/chai: unit testing, regression, integration and aceptance test (selenium)
+ - Easy to monitor with ELK stack (logger)
+
+> For more information please visit the [wiki](https://github.com/carlochess/uchuva/wiki)
 
 ## Installing
 
@@ -108,14 +114,20 @@ npm start
 ```
 #### Windows
 
-Download [HTCondor.msi](), [MongoDB.msi](), [NodeJS.msi](), [MongoDB.msi]()
+Download The [HTCondor.msi](https://research.cs.wisc.edu/htcondor/downloads/) currently stable release.
+
+```
 choco install nodejs.install 
 choco install mongodb 
 choco install git 
+```
+Open a terminal, clone Uchuva
 
-choco install docker 
-choco install docker-machine 
-
+```
+git clone https://github.com/carlochess/uchuva
+cd uchuva/prototipo
+npm install
+```
 
 ## Test
 
@@ -145,10 +157,7 @@ puts "Number of dags", result.length
 ```
 
 ## Documentation
-You can read my bacherlor thesis cloning the submodule doctesis
-```
-git submodule foreach git pull origin master
-```
+You can read my bacherlor thesis (Spanish) in the `doc/` folder
 ![](https://raw.githubusercontent.com/carlochess/uchuva/master/doc/home.png)
 
 ## Development 
@@ -160,8 +169,10 @@ Pegasus, Swift parallel scripting language, Dagman, Taverna, Apache airavata, Ga
 ## Disclaimer
  - Thanks to [Colorado Reed's](https://bl.ocks.org/cjrd/6863459) for creating the d3.graph.editor.
  - Also thanks to the creators of Angular file manager
- - Agave project for Docker images
- - 
+ - Agave project for Torque and Slurm Docker images
+ - Puppet for their HTCondor, Mongo, Docker, etc modules
+ - Swagger for the api generator
+ - TTY.js for such amazing web terminal
 
 ## Roadmap
  - Add a better text editor
