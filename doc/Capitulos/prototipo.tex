@@ -1,0 +1,239 @@
+\section{Prototipo}
+
+Durante el desarrollo de la tesis, se construyó un prototipo funcional de un  portal web en el que los usuarios previamente registrados pueden acceder y utilizar los recursos disponibles del cluster computacional. Dichos recursos son administrados a su vez por un programa como Torque, Openlava, Slurm o HTCondor. Este último es utilizado en conjunto con el meta agendador Dagman.\\
+
+Un usuario puede usar uno o varios programas previamente instalados y configurados en el sistema, por ejemplo R, creando Jobs. Para simplificar la creación y administración de varios jobs, el portal permite la creación de un DAG donde cada nodo representa un job. Ya que se trata de programas batch o por lotes, el usuario puede configurar los parámetros de entrada para cada programa llenando un formulario. La aplicación se encargará de comunicarse con el administrador y de realizar un monitoreo constante del mismo.\\
+
+El portal consultar bajo demanda los estado de los nodos del Dag y el estado en general del mismo. Tambien permite que el administrador pueda agregar nuevos programas instalando plugins al portal como se mencionó en la sección anterior.\\
+
+\subsection{NodeJS}
+Crear un portal web implica usar herramientas que entiendan e interpreten el protocolo de aplicación HTTP. En el desarrollo de la tesis se uso Express.js un framework web sencillo que proporciona un conjunto sólido de características para las aplicaciones web, tales como middlewares, métodos para recibir y enviar peticiones y respuestas HTTP, entre otras. Esta escrito en NodeJS, un entorno en tiempo de ejecución basado en el lenguaje EMACScript (o Javascript), orientado a eventos, asíncrono, el cual usa el motor de interpretación V8, usado también en el navegador Google Chrome. NodeJS permite crear una aplicación que sirve de intermediario entre el usuario y los recursos (HTCondor, bases de datos, sistemas de ficheros).\\
+
+La aplicación puede ser configurada usando variables de entorno, trae consigo algunos test unitarios y centraliza la mayoria de acciones en un archivo de log.
+% Hablar de Logs, variables de entorno, test generados de mocha y chai
+
+\subsection{MongoDB y Mongoose}
+Para la persistencia de datos se usó una base de datos no-sql orientada a documentos llamada MongoDB, esta permitia almacenar los workflows de una manera mas simple que usando una... schemaless. Ademas es fácil escalar los servicios y almacenar archivos en ella. Para integrarla con el prototipo usó un ORM llamado Mongoose.
+
+\subsection{Editor gráfico de Workflows}
+El portal web desarrollado en la tesis ofrece, entre sus servicios, una interfaz gráfica \cite{digraph} para el modelado de workflows, escrita usando la librería D3 para javascript que permite desarrollar el concepto de visualización de datos combinando poderosos componentes visuales y la manipulación del DOM desde una aproximación orientada a los datos. Dichos datos son una descripción del grafo dirigido que el usuario modela y su representación es la acostumbrada: nodos como círculos y aristas como flechas.\\
+
+Ya que los workflow para esta tesis se tratan de un grafos acíclicos dirigidos, se valida la inexistencia de ciclos  en el grafo usando la implementación del algoritmo de Kahn. A pesar de que la intención inicial del anterior algoritmo es la de ordenar topológicamente (ordenamiento lineal de vértices tal que para cada arista dirigida uv, el nodo u viene antes que el nodo v en el ordenamiento), nos valemos del hecho en el que un grafo no puede ser ordenado si contiene ciclos.
+
+\begin{figure}
+\begin{lstlisting}
+L <- Lista vacia que contendra todos los nodos ordenados
+S <- Conjunto de todos los nodos sin aristas incidentes
+while S no este vacia do
+    quite un nodo n de S
+    agregue n a la cola de L
+    for each nodo m con una arista e desde n a m do
+        remueva la arista e del grafo
+        if m no tiene aristas incidentes then
+            inserte m en S
+if el grafo tiene aristas then
+    return el grafo contiene al menos un ciclo
+else
+    return el grafo esta libre de ciclos
+\end{lstlisting}
+\caption{Algoritmo de Kahn}
+\end{figure}
+
+\subsection{AVFS - Another virtual file system}
+El portal también permite que un usuario almacene archivos y carpetas en el sistema, ademas expone operaciones concernientes al manejo y administración de archivos como si se tratara de un sistema virtual de ficheros. La interfaz está implementada en Angular.js \cite{filemanager}.
+
+\begin{itemize}
+\item Listar archivos
+\item Crear carpeta
+\item Agregar archivo
+\item Agregar archivos
+\item Renombrar archivo
+\item Mover archivo
+\item Editar el contenido del archivo
+\item Eliminar archivo
+\item Descargar archivo
+\item Descargar archivos
+\item Ver el contenido del archivo
+\end{itemize}
+
+El sistema de ficheros se integra con el portal no solo permitiendo estas operaciones sino ademas usando dichos ficheros cuando se envia el workflow al sistema de tareas. Antes de enviar un grafo directo, Se copian recursivamente, a la carpeta de ejecución, todas las carpetas y ficheros que el usuario haya indicado como entrada.
+
+\subsection{Comunicación con los workload managers}
+Se exploraron numerosas alternativas de comunicación entre el portal web y los workmanager entre las cuales se encuentran: los bindings para Python de HTCondor, la API Distributed Resource Management Application o DRMAA, la cual ofrece una API generalizada a los sistemas administradores de recursos distribuidos (DRMSs por sus siglas en inglés). Esta es quizás una de las más interesantes interfaces de acceso a los recursos de un grid puesto a que fue propuesta en foro Global Grid facilitando la integración entre aplicaciones y DRMSs, SOAP y las acostumbradas llamadas al sistema: exec y fork.
+
+\subsubsection{SOAP y HTCondor}
+
+HTCondor expone varias APIS\cite{CondorAPI} para que sean consumidos por otras aplicaciones, entre ellas Webservice RPC SOAP \cite{SOAPBox:2000}. En esta reune servicios de consulta de información de jobs, creación de jobs, eliminación de jobs. La existencia de un webservice SOAP en HTCondor muestra un grado elevado de interoperabilidad con software de terceros. \\
+
+Un Webservice es una interfaz programática disponible a través de la web. Su uso se ha incrementado con la masificación del internet y las mejoras en las redes de computadoras. Existen dos tipos principales de webservices, aquellos basados en JSON denominados REST y aquellos basados en XML llamados SOAP. \\
+
+SOAP es un protocolo basado en xml usado ampliamente en webservices aunque cada vez en desuso, pensado para ambientes descentralizados y distribuidos independientes de la plataforma en la que se use. No tiene estados y se usa una sola vía entre el destinatario y el remitente. Soap, al ser un protocolo de mensajes, puede ser transportado a través de los protocolos HTTP, SMTP, FTP. Existen dos tipos de solicitudes SOAP, las primeras guardan cierto parecido con los Remote Procedure Call o RPC de los IPC, en este caso, una función disponible en el servidor que usa SOAP es llamada desde el cliente como si se tratara de una función local. Las segundas tienen como finalidad la solicitud de documentos. \\
+
+XML-RPC es una implementación simple de RPC, permite usar tipos de variables básicos, tipos definidos por el usuario así como estructuras y arreglos, mientras que SOAP-RPC permite además de las características descritas anteriormente, múltiples referencias dentro del documento y la definición de tipos de datos creados por el usuario a través de esquemas XML. SOAP-RPC usa “named parameters”, es decir, que los parámetros dados a una función pueden estar en desorden pero deben ser etiquetados, mientras que en XML-RPC el orden es fundamental.\\
+
+Los webservices pueden tornarse complejos a medida que los tipos de datos definidos por el usuario se vuelvan numerosos o formen a su vez parte de otros datos compuestos, es decir, que las estructuras contengan su vez otras estructuras. Por ello, una solución a este problema está en la generación de un documento denominado Web Service Description Language, el cual reúne un resumen de los servicios expuestos por el sistema en una interfaz XML permitiendo su fácil lectura ya sea por una máquina o un humano. Los WSDL también son útiles como insumos para generar clientes stub en cualquier lenguaje de programación, los cuales generan una biblioteca que puede ser usada para cualquier fin.\\
+
+HTCondor tambien dispone de estos WSDL, en resumen las funciones son: 
+
+\begin{itemize}
+\item Enviar Jobs
+\item Tomar el output de un Job
+\item Remover, detener y reanudar Jobs
+\item Consultar el estado de la máquina
+\item Consultar el estado del Job
+\end{itemize}
+
+Estas funcionalidades estan deshabilitadas por defecto en la instalación de HTCondor pero pueden ser habilitadas agregando al archivo de configuración
+
+\begin{lstlisting}
+ENABLE_SOAP = TRUE
+\end{lstlisting}
+
+Los archivos WSDL (condorCollector.wsdl y condorSchedd.wsdl) son ofrecidos por el programa de varias formas, la más común es encontrandolos en el directorio de instalación por defecto, otra más cómoda es ofreciendolos por medio del servidor web que HTCondor trae por defecto. Teniendo el esquema, la mayoria de operaciones tiene se realiza siguiendo un esquema de transacciones, por ejemplo, para enviar un job se expresa en el siguien pseudocódigo:
+
+\begin{figure}
+\begin{lstlisting}
+Iniciar la transaccion
+Crear un cluster de Jobs (por si se quieren agrupar varios)
+Crear un job
+Enviar archivos (si los hay)
+Describir el job
+Hacer un commit de la transaccion
+\end{lstlisting}
+\caption{Algoritmo para el envio de un job}
+\end{figure}
+
+\subsubsection{Invocación local y remota}
+Los agendadores de recursos son invocados a través de la llamadas al sistema "fork" y "exec", las cuales se encargan de crear un proceso hijo y cargar un ejecutable respectivamente. \\
+
+Tambien el prototipo cuenta con la posibilidad de realizar el proceso anterior pero de manera remota utilizando SSH.
+
+\subsection{Archivos de descripción de jobs}
+Los archivos que describen los jobs son generados usando plantillas. Estos van de acuerdo al administrador de tareas al que se le quiera enviar y describen atributos como el programa a ejecutar, los argumentos de dicho comando, los archivos de output, error y log, entre otros.
+
+\subsubsection{HTCondor}
+Los archivos de entrada de HTCondor se caracterizan por tener en cada línea una propiedad y un valor separados por un igual. Tienen una particularidad y es ue hay distintos tipos de Jobs, estos son nombrados "universos", así, si el proceso es un contenedor de Docker, entonces se indica de esa forma. Si por el contrario es un proceso habitual, se puede usar el universo "Vanilla".
+
+\begin{figure}
+\begin{lstlisting}
+universe                 = docker
+docker_image             = docker.io/haskell
+executable               = alex
+arguments                = Tokens.x
+should_transfer_files    = YES
+transfer_input_files     = Tokens.x
+transfer_output_files    = Tokens.hs
+when_to_transfer_output  = ON_EXIT
+output                   = out.(Process) %% TODO: AGREGAR EL SIMBOLO
+error                    = err.$(Process)
+log                      = log.$(Process)
+request_memory           = 10M
+queue
+\end{lstlisting}
+\caption{Docker submitfile}
+\end{figure}
+
+Ya que en la tesis tratamos Workflows y Dags, también existe un formato para un archivo en el cual se describe dicho DAG, en él se describe el conjunto de jobs (como referencias a jobs.submit) junto con dependencias que hay entre si.\\
+
+\begin{figure}
+\begin{lstlisting}
+Job Alex alex.submit
+Job Happy happy.submit
+Job Final final.submit
+PARENT Alex Happy CHILD Final
+\end{lstlisting}
+\caption{HTCondor Dagfile}
+\end{figure}
+
+Teniendo este archivo (dagman.dag), se puede usar el comando condor\_submit\_dag, para que HTCondor ejecute Dagman como un Job mas en el universo "schedduler". Dagman a su vez se encarga de determinar el orden en el que los Jobs se envian a HTCondor.
+
+\subsubsection{Batch file}
+Haciendo uso de la característica denominada “Dependencia entre jobs”, se pueden crear DAGs en OpenLava, Torque y Slurm.
+
+\begin{figure}
+\begin{lstlisting}
+#!/bin/bash
+#PBS -q batch
+#PBS -l walltime=24:00:00
+#PBS -o dir/nodo_10.out
+#PBS -e dir/nodo_10.err
+#PBS -N nodo_10
+#PBS -W depend=afterok:nodo_8:nodo_9
+/bin/cat /etc/hosts
+\end{lstlisting}
+\caption{Batch job}
+\end{figure}
+
+\subsection{Monitoreo de estado de un workflow}
+HTCondor permite consultar información sobre el estado de un job consumiendo una API SOAP, el monitoreo puede hacerse minuto a minuto o bajo demanda. Desafortunadamente, ya que en la tesis trabajamos con Dagman, si se consume la api soap para tal propósito solo lograriamos saber el estado del grafo en general mas no de sus nodos en particular, por fortuna podemos indicarle a Dagman que escriba periódicamente en un archivo de texto plano sobre el estado de todos los nodos, el estado del grafo en general y la próxima vez que se vaya a actualizar dicho archivo. El formato del archivo consiste básicamente en varias ClassAds que expresan como el nombre del archivo indica, el estado del workflow. Los nodos en un grafo al igual que el grafo en general pueden tomar uno de los siete estados: “Unexpanded”,“Idle”, “Running”, “Removed”, “Completed”, “Held”, “Error”.
+
+Para OpenLava, Torque y SLURM, el monitoreo del workflow se puede realizar monitoreando todos los nodos que lo componen. Puede hacerse revisando activamente los archivos de log, error o output.
+%https://research.cs.wisc.edu/htcondor/manual/v8.2.9/2_10DAGMan_Applications.html
+
+\subsection{Docker}
+HTCondor también permite ejecutar Jobs en un universo denominado Docker, una tecnología de virtualización basada en el aislamiento de procesos. HTCondor usa el ejecutable de Docker para instanciar una imagen y poner en marcha un contenedor. Tiene como ventaja tener un espacio de computación aislado (quizás no tanto como una máquina virtual). Estos Jobs también pueden hacer parte de un DAG. El administrador del sitio puede fácilmente instalar y desinstalar los programas (vistos como imágenes). \\
+
+%http://www.clei.org/cleiej/papers/v12i3p2.pdf
+Para un usuario, usar Docker, desdibuja el límite sobre los programas que pueden ser ejecutados en el cluster porque pueden ser fácilmente obtenidos y ejecutados desde un repositorio de imagenes.\\
+
+%> Justificación: http://nucleotid.es/
+%> Paper justificación: https://arxiv.org/pdf/1410.0846.pdf
+
+\subsection{CI/CD}
+\begin{itemize}
+\item CDel, CDep, docker, deb y npm
+\item CI, integration and accept test
+\item Jenkins, jenkinsfile
+\item Pipeline, groovy
+\item Dockercompose
+\item SonarQ
+\end{itemize}
+
+\subsection{Logging}
+Winston, Elastic Search, Kibana, Logstash
+
+\subsection{API REST}
+La tesis desacopla la funcionalidad respecto presentación ofreciendo una API REST a los desarrolladores para que en cualquier lenguaje de programación puedan usar la aplicación. Se documenta la api usando Swagger \cite{Swagger}, una plataforma que permite generar el código fuente tanto de clientes como servidores en numerosos lenguajes de programación. \\
+
+La API representa el contrato (o interfaz estandar) entre la aplicación y el programador. La api permite:
+
+\begin{itemize}
+\item Permite el manejo del cluster a través de una API Unificada
+\item Agrega la posibilidad de construir una mejor interfaz gráfica
+\item Integra cualquier programa con el cluster
+\item Permite el Almacenamiento de archivos
+\item Permite la integración con dispositivos móviles
+\end{itemize}
+
+%https://github.com/abdulrahmanazab/sdag
+
+%\subsection{Prueba con un lenguaje}
+%Alex, Happy, Haskell
+
+%\subsection{Terminal}
+%Una pseudo terminal (pty) es un par de falsos dispositivos de linux, donde a uno de ellos se le denomina “esclavo” porque emula la terminal de texto real y donde el otro se denomina “master”, el cual provee las facilidades con las cuales el proceso de emulación de la terminal controla al esclavo. Ambos están conectados en un canal bidireccional, esto quiere decir que cualquier información escrita del lado del master es enviada al output del esclavo y viceversa. \\
+
+%http://rachid.koucha.free.fr/tech_corner/pty_pdip.html
+%http://www.linusakesson.net/programming/tty/
+
+%En los sistemas operativos basados en Unix, un usuario tiene un identificador único llamado UID (userID) que va desde 0 hasta 65535, ya que el usuario pertenece a un grupo, este grupo también tiene un identificador numérico denominado GID. Por lo tanto, cada proceso en el sistema operativo tiene asociado el identificador de usuario que lo inició, permitiendo así gestionar los permisos de acceso y ejecución en el sistema.\\
+
+%Una vez el proceso inicial termina. /etc/rc.local, empeza el proceso llamado getty, este se encarga de completar el proceso de login solicitando el login y luego su password. Dados estos datos, getty verificará en los archivos /etc/passwd y /etc/shadow si esta información es correcta. Si lo es, el proceso de autentificación terminará, de lo contrario (y si es el tercer intento fallido en un periodo de 1 min) entonces deshabilitara la consola por 10 segundos. \\
+
+%El proceso getty debe leer de las propiedades del usuario su “username”, UID, GID, home directory, user shell y agregarlas a las variables del sistema USER, UID, GID, HOME, SHELL. \\
+
+%Lee en secuencia los siguientes ficheros:
+%\begin{itemize}
+%\item /etc/motd
+%\item /etc/procfile
+%\item ~/bashrc
+
+\subsection{Vagrant y Puppet}
+Realizar las pruebas durante el desarrollo de la aplicación en el cluster físico conlleva a riesgos graves sobre la integridad de los jobs que se están ejecutando, por tanto se crea un ambiente simulado o una réplica del mismo. La creación del ambiente bien podría hacerse de forma manual y dicha operación le corresponde al administrador de sistemas pero resulta más cómodo usar herramientas automáticas que permitan crear y destruir fácilmente dichos ambientes. \\
+
+Unir los dos conceptos (desarrollo de software y administración de sistemas) da lugar a una nueva corriente llamada DevOps en la cual se automatiza el proceso de entrega de software y cambios en la infraestructura. Tiene como finalidad la construcción, la ejecución de pruebas y la publicación de software de una manera más rápida y más confiable. Para tal propósito se crean herramientas que ponen en práctica dicha corriente y que se clasifican en siete categorías: code (Desarrollo de código y revisión con herramientas de integración continua), build (Construcción de código con herramientas de control de versiones), test (, package, release, configure (configuración de la infraestructura tales como servidores), y monitor (monitoreo de la infraestructura y su desempeño). La tesis usa Puppet para la gestión de la configuración de servidores, este ofrece un DSL declarativo basado en Ruby como lenguaje de programación en el cual se expresan los estados deseados y los recursos del sistema a configurar. \\
+
+En la tesis se crearon máquinas virtuales que hacían las veces de nodos del cluster usando Vagrant, un software para la creación de ambientes virtual de desarrollo (máquinas virtuales, contenedores, etc) el cual, a su vez, hace uso de KVM, VMWARE y Virtualbox para máquinas virtuales, y LXC al igual que Docker para contenedores. La gestión de la configuración y el aprovisionamiento de dichas máquinas es realizado usando Puppet, lo cual disminuye sustancialmente los tiempos en la puesta en marcha de nuevos nodos, entre otros beneficios. \\
+
+Para facilitar aun mas el desarrollo se construyó un ambiente de trabajo basado en imagenes y contenedores de Docker.
+

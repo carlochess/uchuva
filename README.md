@@ -1,5 +1,4 @@
 # Uchuva - A Scientific web Portal
-========================================
 Uchuva is a scientific web portal that allow users to create workflows and submit
 to HTCondor (Dagman), Slurm, OpenLava (LSF), Torque (PBS) and OAR. Is designed to be fast, flexible and simple.
 <img align="right" height="260" src="http://4.bp.blogspot.com/-NeOpxs6fQMQ/Tp4ON0TNywI/AAAAAAAAADc/WxEEbycCly4/s1600/aguaymanto.jpg">
@@ -12,6 +11,8 @@ to HTCondor (Dagman), Slurm, OpenLava (LSF), Torque (PBS) and OAR. Is designed t
  - Rest Api with Swagger
  - Vagrant
  - Docker
+
+![](https://raw.githubusercontent.com/carlochess/uchuva/master/doc/home.png)
 
 ## Installing
 
@@ -158,7 +159,10 @@ El prototípo esta programado en Nodejs 6.X (Javascript V8).
 Pegasus, Swift parallel scripting language, Dagman, Taverna, Apache airavata, Galaxy, OnlineHPC, Kepler
 
 ## Disclaimer
-Thanks to [Colorado Reed's](https://bl.ocks.org/cjrd/6863459) for creating such a great tool. Also thanks to the creators of Angular file manager
+ - Thanks to [Colorado Reed's](https://bl.ocks.org/cjrd/6863459) for creating the d3.graph.editor.
+ - Also thanks to the creators of Angular file manager
+ - Agave project for Docker images
+ - 
 
 ## Roadmap
  - Add a better text editor

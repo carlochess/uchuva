@@ -1,0 +1,52 @@
+\section{Arquitectura de la aplicación}
+La idea principal en la que se basa la arquitectura orientada a servicios \footnote{Resulta ser una coincidencia fortuita el hecho de que el objetivo específico de esta tesis hiciera referencia a una "Arquitectura orientada a servicios" puesto a que en ingeniería de software y precisamente en arquitecturas de software ya existe un estilo de programación con dicho nombre. A pesar de esto, la arquitectura de esta aplicación se asemeja mas a la de una aplicación monolítica de dos capas que a una arquitectura SOA.} consiste en descomponer la lógica de negocio de la aplicación en pequeñas unidades funcionales. Estas pequeñas unidades son denominadas servicios.\\
+
+Usando una definición mas amplia, un servicio puede referirse a un sistema que ofrece funcionalidades a través de una interfaz estandar. Estas deben ademas de tener características multi-propósito, deben poder ser categorizados, poseer una alta capacidad de reutilización y de abstracción, un bajo acoplamiento, una alta capacidad de composición y autonomía.\\
+
+Esta aplicación sigue una arquitectura monolítica, construida como una unidad de servicios y constituida en tres partes principales: una interfaz de usuario, una base de datos y un servidor web encargado de recibir las solicitudes HTTP, ejecutar la lógica del dominio, interactuar con la base de datos y rellenar formularios HTML o bien enviarle al usuario respuestas tipo JSON. Esta última parte un solo proceso del que si se quiere escabilidad horizontal, se deberán ejecutar multiples instancias detras de un balanceador de carga.
+
+Los servicios ofrecidos por la aplicación giran a su vez en torno a los servicios ofrecidos por los administradores de tareas. Así, los servicios en común de estos agendadores pueden ser agrupados en tres grupos (Administración de los jobs, Administración de los recursos y Administración de los datos) y ofrecidos por la aplicación creada durante este trabajo de grado. Se ofrece ademas un servicio para la administración de workflows y una API REST para facilitar la interoperabilidad con otras aplicaciones. \\
+
+\subsection{Administración de los jobs}
+Los jobs resultan ser el corazón de estos administradores de tareas, por ello, listo las funciones mas importantes que ofrecen para su manejo.
+
+\subsubsection{Creación de jobs con atributos básicos}
+La aplicación debe contar con mecanismos para la creación y modelación de jobs en donde se especifica el programa a ejecutar, los argumentos, el destino del streams (output, log, error).
+
+\subsubsection{Creación de jobs con atributos avanzados}
+También debe permir que un usuario avanzado o con necesidades específicas le indique al administrador de tareas las características con las que un job o un conjunto de jobs van a ejecutarse, tales como memoria necesaria, reserva de recursos, licencias de softwar, restricciones entre muchas otras.
+
+\subsubsection{Monitoreo de jobs}
+La aplicación de permir conocer el estado de un Job desde que entra a la cola de tareas, mientras se encuentra en ejecución y hasta que termina, para que un usuario pueda tomar decisiones.
+
+\subsubsection{Manejo del estado del jobs}
+Conforme a la información entregada por el monitor de jobs, un usuario puede puede llevar a cabo acciones tales como la migración, eliminación, reanudación o pausa de un job.
+
+\subsubsection{Historial de jobs}
+Luego del envio del Job, la aplicación mantiene un registro sobre todos los jobs creados, sus estados, el tiempo que dedico en cada estado, el identificador de la máquina donde se ejecutó, etc.
+
+\subsubsection{Dependencias entre los jobs}
+La aplicación debe permitirle al usuario indicar las dependencias entre los elementos de un conjunto de jobs para que el administrador de tareas pueda ejecutarlas de una manera ordenada.
+
+\subsubsection{Manejo de múltiples jobs}
+La aplicación ofrece mecanismos para crear colecciones de jobs que comparten características similares.
+
+\subsection{Administración de los recursos}
+Es frecuente que administrador de tareas de un cluster apoye su operación en recursos como servidores de NFS, FTP, SSH, o autenticación a través de Kerberos entre otros.
+
+\subsubsection{Monitoreo de los recursos}
+Todos estos servicios deberan ser monitoreados para conocer el estado del cluster y la razón de sus posibles fallos.
+
+\subsubsection{Cola(s)/Particion(es)}
+Las particiones o colas son conjuntos de tareas que estan próximos a ejecutarse porque se encuentran esperado el cumplimento de las condiciones indicadas por el usuario. Conocer su contendio es en realidad saber qué jobs estan pendientes por ejecutar.
+
+\subsubsection{Nodos de procesamiento}
+El estado del cluster depende del estado sus nodos.
+
+\subsubsection{Autenticación y Autorización}
+Se debe conocer el usuarios que esta usando el cluster pero ademas se debe restringir los recursos de acuerdo a los permisos que posea.
+
+\subsection{Administración de los datos}
+La administración de los datos es una parte importante en un cluster puesto a que... el manejo del input/output se puede realizar usando NFS vs Condor transfer. Las transferencias externas a través de FTP o HTTP.
+
+Tambien cuenta con una API REST, un modulo para una consola, integración con VNC,

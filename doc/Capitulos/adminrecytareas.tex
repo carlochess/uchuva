@@ -1,0 +1,75 @@
+\section{Administradores de recursos y tareas}
+
+\subsection{Computación distribuida}
+La computación distribuida es un modelo de computación que busca resolver problemas de computación masiva haciendo uso de unidades autónomas de procesamiento organizados en clusters y unidos en una infraestructura de telecomunicaciones. Un cluster es un conjunto de computadoras unidas entre sí, que tienen la finalidad de trabajar como una sola. \\
+
+La computación distribuida es evaluada y usada (en lugar de la computación centralizada) de acuerdo a seis requerimientos no funcionales, los cuales se convierten en sus objetivos:
+
+\begin{itemize}
+\item Accesibilidad: Permitir que el usuario tenga acceso a los recursos computacionales de una manera cómoda
+\item Transparencia: Ocultar la representación de la información y por tanto de la ubicación de los nodos en el cluster de manera tal que el usuario no necesite saber de manera explícita si la información se ha movido de un nodo a otro, ha sido replicado o esté siendo compartido.
+\item Abierta: Extender y modificar fácilmente el sistema para fomentar la integración de componentes existentes o bien la interoperabilidad entre otros sistemas distribuidos.
+\item Escalable: Aumentar su poder computacional a medida que aumente el número de trabajos a realizar sin perder calidad y las propiedades iniciales.
+\item Robusto: Permitir un correcto funcionamiento de la aplicación a pesar de los fallos.
+\end{itemize}
+
+Existen distintos tipos de sistemas distribuidos y estos son clasificados, por ejemplo, según la heterogeneidad de los dispositivos que los componen. \\
+
+\subsection{Agendadores de recursos}
+Aprovechando las ventajas de la computación distribuida, un programa puede ejecutarse en múltiples nodos de forma paralela. Para tal fin, se han creado múltiples programas denominados administradores de tareas, estos ofrecen además mecanismos para el encolamiento de tareas o jobs, políticas de agendamiento de tareas, esquemas de prioridad para usuarios, monitoreo de recursos y administración de los recursos (sockets, memoria principal, memoria secundaria, etc) de un cluster. Entre ellos se encuentran OpenLava, Slurm, Torque y HTCondor. Los tres primeros comparten características en común pero por ejemplo, OpenLava integra tanto el manejador de recursos como el agendador de jobs en un mismo proceso, mientras que Torque separa estos dos procesos en "Torque resource manager" para el manejo de recursos y en moab o maui como agendadores de jobs .\\
+
+Estos softwares también son denominados sistemas batch porque controlan la ejecución desatendida de programas batch. Otras denominaciones pueden ser Administradores de recursos, Administradores de recursos distribuidos, sistemas de administración de carga o agendadores de jobs.\\
+
+Slurm por su parte exige el uso de sistema de ficheros compartido entre los nodos, característica que reduce enormemente la complejidad de enviar y recibir archivos entre nodos. Todos cuatro ofrecen servicios como Jobs con dependencias, Arreglo de jobs, Jobs interactivos, ejecución de jobs en Docker, reservas de recursos, puntos de control y hacen un seguimiento del uso según el usuario.\\
+
+La razón por la cual estos tres administradores de recursos tienen características en común se encuentra en su filosofía High Performance Computing, la cual busca que un job consuma todos los recursos disponibles asegurando su rápida ejecución, contraria a la filosofía que busca HTCondor, donde cumple y facilita las tareas HTC, es decir, asegurar que multiples instancias de una misma tarea van a ser ejecutadas indepentientemente en un tiempo prudencial.\\
+
+En suma, la arquitectura de estos sistemas de lotes están conformados por cuatro componentes:
+\begin{itemize}
+\item Uno o varios nodos designados masters: ejecutan un proceso que se encarga de tomar las decisiones y coordinar los procesos.
+\item Nodos de computación: los cuales reportan sus recursos computacionales y sobre los cuales se ejecutan las tareas.
+\item Recursos: Brindan funciones como persistencia de ficheros, de datos o simplemente se encargan de recibir las descripciones de las tareas.
+\end{itemize}
+
+\subsection{OpenLava}
+Openlava \cite{OpenlavaArch} es un fork open source de LSF 4.0, un manejador de colas de trabajo creado por IBM. Tiene dos formas de trabajo una interactiva y otra batch. La interactiva es administrada por dos programas llamados LIM y RES. Lim significa “Openlava load information manager” y es aquel encargado de recolectar toda la información y el estado del nodo de  computación (memoria disponible, memoria usada, cpu disponible, etc), se organiza de manera jerárquica a lo largo de los nodos del cluster indicando que la cabeza es el manager de sus inferiores jerárquicos así, si la cabeza falla, su sucesor se convierte en el nuevo manager, permitiendo mayor fiabilidad. RES por su parte significa “Openlava Remote execution server” y su labor se centra en la ejecución propiamente de los jobs o tareas del usuario, ofreciendo la misma funcionalidad SSH o su antecesor RSH (también crea una pty).  \\
+
+Por otro lado, la forma batch ejecuta los jobs de una cola de tareas que no necesitan la intervención del usuario. Se divide en dos componentes principales:
+
+\begin{itemize}
+\item sbatchd, el cual aplica las politicas de agendamiento, recibe los jobs y se encarga de repartirlos a los mbatchd.
+\item mbatchd, el cual recibe los jobs, los ejecuta y monitorea reportando esta información al sbatchd.
+\end{itemize}
+
+Estos servicios se encuentran escritos sobre las llamadas al sistema de Unix y la libreria estandar de C. OpenLava organiza sus nodos de acuerdo a a colas de jobs.
+
+\subsection{Slurm}
+Es un sistema para la ejecución de tareas Batch, open source y ampliamente usado en numerosos clusters computacionales a lo largo del mundo. Sus funcionalidades pueden ser extendidas incorporando plugins.\\
+
+Sus iniciales indican “Simple linux utility for resource management”, se define como “el puente entre un computador paralelo y la ejecución de jobs paralelos”, esto debido a que un cluster puede ser visto como un solo computador y la ejecución de una misma tareas varias veces puede ser independiente entre cada instancia.\\
+
+Slurm está compuesto por SlurmCtld (slurm central control), Slurmd (compute node daemon) y Slurmdbd, un componente para la persistencia de datos. Pero debido a su arquitectura modular, tambien puede también ser usado junto con el meta-agendador Maui, Moab, o LSF (padre de OpenLava).\\
+
+Slurm separa sus nodos de acuerdo a particiones, es escalable y puede apagar los nodos que no está usando.
+
+\subsection{Torque}
+Torque nace como un fork open source de PBS, es otro sistema de cola de lotes. Un cluster está compuesto por uno o varios servidores denominados master que ejecutan "pbs\_server" y "pbs\_sched" o Maui, este interactúa con el server para tomar decisiones según una política definida para asignar jobs a nodos. El agendador más básico es una cola FIFO pero puede definirse un mejor scheduler como moabi o moab. múltiples nodos de computación que ejecutan "pbs\_mom". Permite hacer checkpointing y recuperación de procesos a través de un paquete llamado BLCR. Torque separa sus nodos de acuerdo a colas, puede ser usado en grid añadiendo gLite u otros middlewares para tal fin.
+
+\subsection{HTCondor}
+En los años 70 se tuvo conocimiento de lo efectivo y económico que era usar colecciones de pequeños dispositivos de cómputo (o clusters) en lugar de costosos supercomputadores para realizar computaciones intensivas\cite{Chandy:1985:DSD:214451.214456} \cite{Needham:1979:SAC:800215.806573}. A pesar de su efectividad, estas organizaciones de dispositivos presentan problemas como la corrupción de datos al viajar por la red o retardos en la misma, por ello era necesario minimizar estas desventajas usando soluciones basadas en hardware o en software.\\
+
+HTCondor surge como un sistema de alto rendimiento para la computación distribuida de lotes, fue creado en la universidad de Wisconsin como un sistema gestor para el uso de programas en un ambiente grid y por tanto de una solución a los problemas de la computación distribuida \cite{Tannenbaum:2001:CDJ:509876.509893}. Provee un gestor de Jobs, una política de agendamiento, un esquema de prioridades, un monitor de recursos y manejador de recursos. \\
+
+En el nombre “HTCondor”, las letras HTC hacen referencia a High Throughput Computing es decir, a la administración en grid de jobs que requieran de un poder computacional tolerante a fallos sobre largos periodos de tiempo, en los que se maximice el número de tareas ejecutándose por hora y sobre el que se minimice el tiempo entre el envío y la finalización de Jobs. A los jobs ejecutados por HTCondor se les denomina también “Batch job” porque su ejecución puede ser finalizada sin la intervención e interacción con un humano durante el proceso, también porque los Jobs toman un conjunto de archivos de datos agrupados en “batches” y cada batch es procesado como una unidad. Se trata esta de la forma de computación más primitiva, donde un solo proceso ocupaba todos los recursos del computador.\\
+
+Este sistema lideró un crecimiento en las comunidades de computación y, para la actualidad, las enriquece con discusiones sobre la planificación y el agendamiento ‘jobs’.\\
+
+La unidad básica de HTCondor se denomina ‘Job’, este puede ser representado como un archivo donde se le indica a HTCondor el programa a ejecutar, los parámetros de entrada para dicho programa, el número de veces que debe ejecutarse y las condiciones en las que se debe ejecutar, etc. En suma, un Job es un programa cuya ejecución (un proceso) es manejada por HTCondor. Los jobs son enviados por los usuarios, HTCondor elige dónde y cuándo ejecutar dichos jobs de acuerdo a una política definida, para inmediatamente monitorear su progreso y suministrar información sobre la ejecución al usuario.
+Inicialmente la política de HTCondor consiste en asignar Jobs a recursos de manera arbitraria usando un esquema fijo de computadoras. Esta política funcionaba bien para grids homogéneas y pequeñas pero, con la heterogeneidad que suponía varias red de grids interconectadas, esta política fue flexibilizada y cambiada a un esquema libre de asignación de tareas usando ClassAds o classified Advertisements \cite{Tannenbaum:2001:CDJ:509876.509893}. En la nueva política se distinguen algunos oferentes de recursos, unos agentes encargados de demandar recursos para ejecutar Jobs y un matchmaker, el cual se encarga de reunir oferentes y agentes para realizar la ejecución del Job. Una vez el Job es aceptado por el recurso, el agente crea un proceso que se encarga de ofrecer los detalles necesarios para ejecutarlo mientras que el recurso se encarga de crear un sandbox o ambiente seguro de ejecución para el job.\\
+
+El propósito central de la computación distribuida es el de permitirle a una comunidad de usuarios llevar a cabo la ejecución de Jobs en un pool de recursos. Debido a que el número de Jobs a ejecutarse superan el número de recursos disponibles para su ejecución, alguien o algo debe decidir cómo asignar los recursos a los Jobs (o viceversa), este proceso es denominado scheduling o agendamiento. Por otro lado, el proceso de adquisición de recursos por parte de los usuarios es denominado planeación. HTCondor usa el matchmaking para que estos dos procesos trabajen conjuntamente buscando un fin común.\\
+
+Los agentes y los recursos promocionan sus características y requerimientos en un concepto denominado ClassAds (classified advertisements o avisos clasificados), similar a los que se encuentran en los periódicos. Luego, un matchmaker revisa los ClassAds y crea parejas que satisfacen las restricciones y las preferencias de las partes. Por último, el matchmaker informa a las partes. La responsabilidad del matcher finaliza en este paso. Luego hay un contacto directo entre entre el agente y el recurso para posiblemente negociar otros términos y cooperar en la ejecución del Job (envío de archivos disponibles en los clientes, por ejemplo). Cuando se envían los Jobs a HTCondor, estos son almacenados en una pila para que el administrador de recursos decida cuando y donde ejecutarlos.
+
+\subsubsection{Problem solver}
+Se denomina “problem solver” a la estructura que es construida sobre el agente de HTCondor para la ejecución de jobs de manera fiable. Este oculta los posibles fallos que puedan ocurrir en un sistema distribuido haciéndose cargo de los errores. A la final, un problem solver es un Job de HTCondor que se encarga de los detalles específicos como el orden de envío de tareas y la selección de las mismas. Existen dos problem solvers que vienen junto con HTCondor\cite{wforescience:2007}: master-worker y directed acyclic graph manager (Dagman). En esta tesis se usará el segundo.

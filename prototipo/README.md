@@ -1,6 +1,4 @@
-# Uchuva - Source code
-========================================
-
+# Source code
 If you want to install 
 
 ```

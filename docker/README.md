@@ -1,5 +1,4 @@
 # Docker
-========================================
 Docker is an open-source project that automates the deployment of Linux applications inside software containers.
 
 ### Docker
