@@ -2,6 +2,7 @@
 ========================================
 Uchuva is a scientific web portal that allow users to create workflows and submit
 to HTCondor (Dagman), Slurm, OpenLava (LSF), Torque (PBS) and OAR. Is designed to be fast, flexible and simple.
+<img align="right" height="260" src="http://4.bp.blogspot.com/-NeOpxs6fQMQ/Tp4ON0TNywI/AAAAAAAAADc/WxEEbycCly4/s1600/aguaymanto.jpg">
 
 ## Features
  - A visual editor for workflows
