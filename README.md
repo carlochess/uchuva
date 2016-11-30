@@ -85,7 +85,7 @@ All the files for Uchuva install are listed here.
 /etc/default/uchuva  #contains all the environment variables with default values. These variable values can be changed as per requirement
 ```
 
-#### Linux (32 and 64 bits)
+#### Ubuntu Linux (32 and 64 bits)
 Update and install the essential packages
 
 ```
@@ -112,11 +112,15 @@ Start uchuva
 ```
 npm start
 ```
+
+> [Centos 7](https://github.com/carlochess/uchuva/blob/master/vagrant/htcondor/sola/Instrucciones/centos7)
+
 #### Windows
 
-Download The [HTCondor.msi](https://research.cs.wisc.edu/htcondor/downloads/) currently stable release. Also MongoDB, Nodejs and Git installers.
+Download The [HTCondor.msi](https://research.cs.wisc.edu/htcondor/downloads/) currently stable release. 
+Then you have two choises: manually download and install MongoDB, Nodejs and Git installers 
 
-Or using [Chocolatey](https://chocolatey.org/) package manager, download and install  nodejs, mongodb and git.
+Or using [Chocolatey](https://chocolatey.org/) package manager, automatically download and install  nodejs, mongodb and git.
 ```
 choco install nodejs.install 
 choco install mongodb 
