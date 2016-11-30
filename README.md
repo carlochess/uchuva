@@ -1,4 +1,4 @@
-# Uchuva - A Scientific web Portal
+# Uchuva - A Scientific web Portal [![Build Status](https://travis-ci.org/carlochess/uchuva.svg?branch=master)](https://travis-ci.org/carlochess/uchuva)
 > Currently, under heavy development, keep in touch :)
 
 Uchuva is a scientific web portal that allow users to create workflows and submit
