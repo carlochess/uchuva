@@ -144,6 +144,13 @@ npm start
 
 And go to the [website](http://127.0.0.1:3000/)
 
+### NPM package
+> Isn't working right now
+You can install uchuva using a node package manager (npm or yarn)
+```
+$ npm install -g uchuva
+```
+
 ## Test
 
 ```
