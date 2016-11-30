@@ -1,9 +1,10 @@
 language: node_js
-before_script: 
-	- cd prototipo
-	- npm install
 node_js:
   - 6.9
+before_script: cd prototipo
+before_install:
+	- "npm install"
+
 
 #  - "0.6"
 # services: mongodb
