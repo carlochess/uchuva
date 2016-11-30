@@ -1,8 +1,8 @@
 language: node_js
 node_js:
   - 6.9
-before_script: cd prototipo
-before_install:
+before_script: 
+  - cd prototipo
   - "npm install"
 
 #  - "0.6"
