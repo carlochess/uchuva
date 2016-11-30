@@ -47,9 +47,9 @@
     "z-schema": "^3.18.1"
   },
   "scripts": {
-    "test": "./node_modules/.bin/mocha -R xunit test/ > test-reports.xml",
+    "test": "./node_modules/.bin/mocha test/unit/",
     "test-selenium": "./node_modules/.bin/mocha test/selenium/",
-    "test-unit": "./node_modules/.bin/mocha test/unit/",
+    "test-unit": "./node_modules/.bin/mocha -R xunit test/ > test-reports.xml",
     "format": "./node_modules/.bin/esformatter --config formatter.json -i 'routes/**/*.js' ",
     "start": "node main.js",
     "devel": "./node_modules/.bin/nodemon --ignore 'data/*' main.js",

@@ -1,0 +1,13 @@
+language: node_js
+before_script: cd prototipo
+node_js:
+  - 6.9
+
+#  - "0.6"
+# services: mongodb
+# default script - npm test
+#env:
+#  - CXX=g++-4.8
+#before_install:
+#- sudo apt-get update -qq
+#- sudo apt-get install -qq [packages list]
