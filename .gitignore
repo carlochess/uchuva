@@ -1,4 +1,5 @@
 node_modules
+prototipo/test-*-reports.xml
 *.aux
 *.glo
 *.idx
