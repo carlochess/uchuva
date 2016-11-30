@@ -191,6 +191,15 @@ Pegasus, Swift parallel scripting language, Dagman, Taverna, Apache airavata, Ga
 ## Why does my project is call by a super heroe name?
 Because i believe that your project would save too many lives and therefore the planet :)
 
+## Issues 
+
+Please report any issues using [Github](https://github.com/carlochess/uchuva/issues) issue tracker.
+ - Do include a detailed description of the problem.
+ - Do include a link to a gist with any interesting stack traces/logs (you may also attach these directly to the bug report).
+ - Do include a reduced test case. 
+ - Use the issue tracker to submit basic help requests.
+ - Do not post empty "I see this too" or "Any updates?" comments. These provide no additional information and clutter the log.
+ 
 ## Disclaimer
  - Thanks to [Colorado Reed's](https://bl.ocks.org/cjrd/6863459) for creating the d3.graph.editor.
  - Also thanks to the creators of Angular file manager
