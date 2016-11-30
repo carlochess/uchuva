@@ -1,4 +1,6 @@
 # Uchuva - A Scientific web Portal
+> Currently, under heavy development, keep in touch :)
+
 Uchuva is a scientific web portal that allow users to create workflows and submit
 to HTCondor (Dagman), Slurm, OpenLava (LSF), Torque (PBS) and OAR. Is designed to be fast, flexible and simple.
 <img align="right" height="260" src="http://4.bp.blogspot.com/-NeOpxs6fQMQ/Tp4ON0TNywI/AAAAAAAAADc/WxEEbycCly4/s1600/aguaymanto.jpg">
@@ -11,6 +13,10 @@ to HTCondor (Dagman), Slurm, OpenLava (LSF), Torque (PBS) and OAR. Is designed t
  - Rest Api with Swagger
  - Vagrant
  - Docker
+ - Tested using mocha/chai: unit testing, regression, integration and aceptance test (selenium)
+ - Easy to monitor with ELK stack (logger)
+
+> For more information please visit the [wiki](https://github.com/carlochess/uchuva/wiki)
 
 ## Installing
 
@@ -61,12 +67,12 @@ Optional Deps
   - Web browser
 
 #### DEB Linux
-Install using dpkg
+Install using [dpkg](https://github.com/carlochess/uchuva/releases)
 ```
 $ apt-get update
 $ apt-get install -y git curl sudo python build-essential g++
 $ curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
-$ sudo apt-get install -y nodejs
+$ sudo apt-get install -y nodejs mongodb
 $ sudo dpkg -i uchuva_0.0.1_all.deb
 $ sudo apt-get -f install
 ```
@@ -79,7 +85,7 @@ All the files for Uchuva install are listed here.
 /etc/default/uchuva  #contains all the environment variables with default values. These variable values can be changed as per requirement
 ```
 
-#### Linux
+#### Linux (32 and 64 bits)
 Update and install the essential packages
 
 ```
@@ -90,13 +96,13 @@ apt-get install -y git curl sudo python make build-essential g++
 Install [NodeJS 6.9](https://github.com/nodesource/distributions)
 ```
 curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
-sudo apt-get install -y nodejs
+sudo apt-get install -y nodejs mongodb
 ```
 
 Clone this repo and install the Node dependencies
 ```
-git clone thisrepo
-cd tesis/prototipo
+git clone https://github.com/carlochess/uchuva
+cd uchuva/prototipo
 npm install
 ```
 
@@ -108,14 +114,31 @@ npm start
 ```
 #### Windows
 
-Download [HTCondor.msi](), [MongoDB.msi](), [NodeJS.msi](), [MongoDB.msi]()
+Download The [HTCondor.msi](https://research.cs.wisc.edu/htcondor/downloads/) currently stable release. Also MongoDB, Nodejs and Git installers.
+
+Or using [Chocolatey](https://chocolatey.org/) package manager, download and install  nodejs, mongodb and git.
+```
 choco install nodejs.install 
 choco install mongodb 
 choco install git 
+```
+> Remember to start [MongoDB Service](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-windows/):
 
-choco install docker 
-choco install docker-machine 
+```
+md \data\db
+"C:\Program Files\MongoDB\Server\3.2\bin\mongod.exe" --dbpath c:\data\db
+ ```
+ 
+Open another terminal, clone Uchuva
 
+```
+git clone https://github.com/carlochess/uchuva
+cd uchuva/prototipo
+npm install
+npm start
+```
+
+And go to the [website](http://127.0.0.1:3000/)
 
 ## Test
 
@@ -145,10 +168,7 @@ puts "Number of dags", result.length
 ```
 
 ## Documentation
-You can read my bacherlor thesis cloning the submodule doctesis
-```
-git submodule foreach git pull origin master
-```
+You can read my bacherlor thesis (Spanish) in the `doc/` folder
 ![](https://raw.githubusercontent.com/carlochess/uchuva/master/doc/home.png)
 
 ## Development 
@@ -160,8 +180,10 @@ Pegasus, Swift parallel scripting language, Dagman, Taverna, Apache airavata, Ga
 ## Disclaimer
  - Thanks to [Colorado Reed's](https://bl.ocks.org/cjrd/6863459) for creating the d3.graph.editor.
  - Also thanks to the creators of Angular file manager
- - Agave project for Docker images
- - 
+ - Agave project for Torque and Slurm Docker images
+ - Puppet for their HTCondor, Mongo, Docker, etc modules
+ - Swagger for the api generator
+ - TTY.js for such amazing web terminal
 
 ## Roadmap
  - Add a better text editor
