@@ -1,11 +1,11 @@
 var path = require('path');
-var logger = require('../utils/logger.js');
-var controladorArchivos = require('../utils/file.js');
-var File = require('../models/file.js');
+var logger = require('../../utils/logger.js');
+var controladorArchivos = require('../../utils/file.js');
+var File = require('../../models/file.js');
 var mongoose = require('mongoose');
 var async = require('async');
 var fs = require('fs');
-var config = require('../config.js');
+var config = require('../../config.js');
 
 var noEsta = function(obj, arr) {
     for (var i = 0; i < arr.length; i++) {

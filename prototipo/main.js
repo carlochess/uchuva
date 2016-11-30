@@ -77,16 +77,20 @@ passport.use(new LocalAPIKeyStrategy(
 ));
 
 var routesUsers = require('./routes/index');
-var routesFiles = require('./routes/file');
+require('./routes/vfs/file-delete')(app);
+require('./routes/vfs/file-download')(app);
+require('./routes/vfs/file-edit')(app);
+require('./routes/vfs/file-list')(app);
+require('./routes/vfs/file')(app);
 var routesConsola = require('./routes/consola')(app);
 var routesDags = require('./routes/dag')(app);
 var routesProgramas = require('./routes/programas')(app);
 var routesBuilds = require('./routes/builds.js')(app);
-var routesSubmits = require('./routes/submit.js')(app);
+var routesSubmits = require('./routes/run/submit.js')(app);
 var routesRuns = require('./routes/run.js')(app);
 
 app.use('/', routesUsers);
-app.use('/', routesFiles);
+//app.use('/', routesFiles);
 //app.use('/', routesConsola);
 //app.use('/', routesProgramas);
 //app.use('/', routesDags);

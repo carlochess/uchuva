@@ -1,18 +1,18 @@
 var fs = require('fs');
 var express = require('express');
 var passport = require('passport');
-var router = express.Router();
 var soap = require('soap');
 var path = require('path');
-var logger = require('../utils/logger.js');
-var controladorArchivos = require('../utils/file.js');
 var mongoose = require('mongoose');
-var config = require('../config.js');
-var DagExe = require('../models/dagExe.js');
 var datos = require("./moverdatos");
 var htcondor = require("./htcondor");
 var loadmanagers = require("./loadmanagers");
-var isAuthenticated = require('../utils/login.js');
+var logger = require('../../utils/logger.js');
+var controladorArchivos = require('../../utils/file.js');
+var config = require('../../config.js');
+var isAuthenticated = require('../../utils/login.js');
+var DagExe = require('../../models/dagExe.js');
+var router = express.Router();
 
 module.exports = function(app){
   app.use('/', router);
@@ -33,19 +33,19 @@ module.exports = function(app){
           res.send({error : 1, message : asStr});
           return;
       }
-      
+
       var envio = req.body;
       var proyecto = envio.proyecto;
 
       controladorArchivos.crearDirectorio(config.DAG_DIR, function(err,nombreDir) {
           if (err) {
-              res.send("Error creando carpeta");
+              res.send({error : 2, message : "Error creando carpeta"});
               return;
           }
 
           datos.trasteo(envio, nombreDir, function(err) {
               if (err) {
-                  res.send("Error archivos");
+                  res.send({error : 3, message : "Error trasteo archivos"});
                   return;
               }
               if (config.BMANAGER === 0)
@@ -57,7 +57,7 @@ module.exports = function(app){
           function notificarBlaBla(err, nodes) {
               if (err) {
                   logger.info(err);
-                  res.send("Error");
+                  res.send({error : 4, message : "Error"});
                   return;
               }
               logger.info("Guardando");
@@ -74,7 +74,7 @@ module.exports = function(app){
               });
               dag.save(function(err) {
                   if (err) {
-                      res.send("error");
+                      res.send({error : 5, message : "Error guardando"});
                       logger.info(err);
                       return;
                   }

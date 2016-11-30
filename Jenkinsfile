@@ -10,30 +10,32 @@ node {
 		sh 'node -v'
 		sh 'npm prune'
 		sh 'npm install'
-		sh 'npm test'
-                //sh 'npm run test-selenium'
+		sh 'npm test' // unit test
+                // sh 'npm run test-selenium'
+                // sh 'npm run test-jmeter'
+                // sh 'npm run test-integration'
                 junit 'test-reports.xml'
             }
 		   
-       stage 'Build Docker' 
+       stage 'Build Docker Images' 
             sh '/usr/local/bin/docker-compose up -d'
             sh 'docker save tesis_uchuva > uchuva.tar'
             archiveArtifacts artifacts: 'uchuva.tar', fingerprint: true
        
-       stage 'Build Npm' 
+       stage 'Build NPM package' 
 	    dir('prototipo'){
     	        sh 'npm pack'
     	    }
     	    archiveArtifacts artifacts: 'prototipo/uchuva-*.tgz', fingerprint: true
        
-       stage 'Deploy' 
+       stage 'Build DEB-RPM' 
             echo 'Push to Repo'
             dir('prototipo'){
 	        sh './build'
 	     // sh 'npm run rpm'
 	    }
 	    archiveArtifacts artifacts: 'vagrant/deb/*.deb', fingerprint: true
-		   
+       // stage 'Run client APIs'		   
        stage 'Cleanup' 
             echo 'prune and cleanup'
             sh 'rm node_modules -rf'

@@ -1,10 +1,10 @@
 var HTCondor = require("soap-htcondor");
-var logger = require('../utils/logger.js');
-var controladorArchivos = require('../utils/file.js');
 var async = require('async');
-var config = require('../config.js');
 var fs = require('fs');
 var path = require('path');
+var logger = require('../../utils/logger.js');
+var controladorArchivos = require('../../utils/file.js');
+var config = require('../../config.js');
 
 function nodeAClassAd(nodo, dagDir, filese, filess, cm) {
     var res = "";
@@ -25,7 +25,7 @@ function nodeAClassAd(nodo, dagDir, filese, filess, cm) {
 function submitJobs(dagl, cb) {
     var htcondor = new HTCondor({
         url: config.CONDOR_URL,
-        wsdl: path.join(__dirname, "..", "utils", "wsdl", "condorSchedd.wsdl")
+        wsdl: path.join(__dirname, "..","..", "utils", "wsdl", "condorSchedd.wsdl")
     });
     var dagJob = {
         dagLocation: dagl,

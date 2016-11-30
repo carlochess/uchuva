@@ -76,10 +76,10 @@ module.exports = function(app){
   // <id>.0.log
   // <id>.0.err
   router.post('/datanodedag', isAuthenticated, function(req, res) {
-      req.checkQuery('idEjecucion', 'Invalid id exe').notEmpty();
-      req.checkQuery('nodo.title', 'Invalid node title').notEmpty();
-      req.checkQuery('nodo._id', 'Invalid node_id').notEmpty();
-      req.checkQuery('tipo', 'Invalid type').notEmpty();
+      //req.checkQuery('idEjecucion', 'Invalid id exe').notEmpty();
+      //req.checkQuery('nodo.title', 'Invalid node title').notEmpty();
+      //req.checkQuery('nodo._id', 'Invalid node_id').notEmpty();
+      //req.checkQuery('tipo', 'Invalid type').notEmpty();
       var errors = req.validationErrors();
       if (errors) {
           var asStr = errors.map(function(e){

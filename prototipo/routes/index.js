@@ -7,6 +7,7 @@ var router = express.Router();
 var config = require('../config');
 var logger = require('../utils/logger.js');
 var isAuthenticated = require('../utils/login.js');
+var File = require('../models/file.js');
 
 router.get('/', function(req, res) {
     res.render('index', {
@@ -51,6 +52,26 @@ router.get('/register', function(req, res) {
     });
 });
 
+function fechaActual() {
+    return new Date()
+    .toISOString()
+    .replace(/T/, ' ')
+    .replace(/\..+/, '');
+}
+
+function createRootFolder(userId, cb){
+    var f = new File({
+        filename: "/",
+        originalname: "/",
+        destination: "/",
+        uploadDate: fechaActual(),
+        path: "/",
+        type: "dir",
+        owner: userId
+    });
+    f.save(cb);
+}
+
 router.post('/register', function(req, res) {
     if (req.user) {
         res.redirect('/user');
@@ -83,18 +104,37 @@ router.post('/register', function(req, res) {
             });
             return;
         }
-        res.format({
-          html: function() {
-            passport.authenticate('local')(req, res, function() {
-                res.redirect('/user');
-            });
-          },
-          json: function() {
-            res.json({
-              username : account.username,
-              apikey : account.apikey
-            });
+        createRootFolder(account._id, function(err){
+          if (err) {
+              logger.error("Error trying to register: "+err);
+              res.format({
+                html: function() {
+                  res.render('register', {
+                      account: account,
+                      error: err
+                  });
+                },
+                json: function() {
+                  res.json({
+                    error: err
+                  });
+                }
+              });
+              return;
           }
+          res.format({
+            html: function() {
+              passport.authenticate('local')(req, res, function() {
+                  res.redirect('/user');
+              });
+            },
+            json: function() {
+              res.json({
+                username : account.username,
+                apikey : account.apikey
+              });
+            }
+          });
         });
     });
 });

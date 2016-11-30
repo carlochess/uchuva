@@ -1,13 +1,13 @@
 var fs = require('fs');
 var path = require('path');
-var logger = require('../utils/logger.js');
-var graphalg = require('../utils/graphalg.js');
 var exec = require('child_process').exec;
 var SSH = require('simple-ssh');
-var controladorArchivos = require('../utils/file.js');
 var async = require('async');
-var config = require('../config.js');
-var DagExe = require('../models/dagExe.js');
+var logger = require('../../utils/logger.js');
+var graphalg = require('../../utils/graphalg.js');
+var controladorArchivos = require('../../utils/file.js');
+var config = require('../../config.js');
+var DagExe = require('../../models/dagExe.js');
 
 function nodeAClassAd(nodo, dagDir, filese, filess, cm) {
     var res = "";
