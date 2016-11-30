@@ -1,5 +1,7 @@
 language: node_js
-before_script: cd prototipo
+before_script: 
+	- cd prototipo
+	- npm install
 node_js:
   - 6.9
 
