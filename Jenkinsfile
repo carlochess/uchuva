@@ -14,7 +14,7 @@ node {
                 // sh 'npm run test-selenium'
                 // sh 'npm run test-jmeter'
                 // sh 'npm run test-integration'
-                junit 'test-reports.xml'
+                // junit 'test-reports.xml'
                 // junit 'test-selenium-reports.xml'
                 // junit 'test-jmeter-reports.xml'
                 // junit 'test-integration-reports.xml'
