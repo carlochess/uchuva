@@ -1,5 +1,5 @@
 # Uchuva - A Scientific web Portal [![Build Status](https://travis-ci.org/carlochess/uchuva.svg?branch=master)](https://travis-ci.org/carlochess/uchuva)
-> Currently, under heavy development, keep in touch :)
+> Currently, under heavy development, keep in touch :). [DEMO](http://138.68.49.78:3000/)
 
 Uchuva is a scientific web portal that allow users to create workflows and submit
 to HTCondor (Dagman), Slurm, OpenLava (LSF), Torque (PBS) and OAR. Is designed to be fast, flexible and simple.
