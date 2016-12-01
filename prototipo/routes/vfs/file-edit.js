@@ -66,6 +66,17 @@ module.exports = function(app){
   }
 
   router.post("/editarArchivo",isAuthenticated, function(req, res, next) {
+      req.checkBody('item.id', 'Invalid cwd').optional().isMongoId();
+      //req.checkBody('content', 'Invalid content').optional().isMongoId();
+      //req.checkBody('newItemPath', 'Invalid newItemPath').optional().isMongoId();
+      //req.checkBody('items', 'Invalid items').optional().isArrayMongoId();
+      var errors = req.validationErrors();
+      if (errors) {
+          var asStr = errors.map(function(e){
+            return e.msg;
+          }).join(",");
+          return res.send(asStr);
+      }
       var mode = req.body.action;
       var userId = req.user._id;
       function cb(err, data){

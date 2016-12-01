@@ -47,29 +47,31 @@ customFormats(ZSchema);
 
 var validator = new ZSchema({});
 var supertest = require('supertest');
-var api = supertest('http://localhost:10010'); // supertest init;
+var conn = process.env.conn || "http://localhost:3000";
+var api = supertest(conn); // supertest init;
 
 chai.should();
 
-describe('/contenidoArchivo', function() {
+describe('/eliminarArchivo', function() {
   describe('post', function() {
-    it('should respond with 200 Content of the file', function(done) {
+    it('should respond with 200 Result of the operation', function(done) {
       /*eslint-disable*/
       var schema = {
         "type": "object",
         "properties": {
-          "result": {
-            "type": "string",
-            "description": "Content of the file"
+          "success": {
+            "type": "number",
+            "description": "Id of the file"
           }
         }
       };
 
       /*eslint-enable*/
-      api.post('/contenidoArchivo')
+      api.post('/eliminarArchivo')
       .set('Content-Type', 'application/json')
       .set({
-        'apikey': 'DATA GOES HERE'
+        'apikey': 'testuser',
+        'Accept' : 'application/json'
       })
       .send({
         item: 'DATA GOES HERE'
@@ -102,15 +104,16 @@ describe('/contenidoArchivo', function() {
       };
 
       /*eslint-enable*/
-      api.post('/contenidoArchivo')
+      api.post('/eliminarArchivo')
       .set('Content-Type', 'application/json')
       .set({
-        'apikey': 'DATA GOES HERE'
+        'apikey': 'testuser',
+        'Accept' : 'application/json'
       })
       .send({
         item: 'DATA GOES HERE'
       })
-      .expect('DEFAULT RESPONSE CODE HERE')
+      .expect(200)
       .end(function(err, res) {
         if (err) return done(err);
 

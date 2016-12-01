@@ -47,31 +47,58 @@ customFormats(ZSchema);
 
 var validator = new ZSchema({});
 var supertest = require('supertest');
-var api = supertest('http://localhost:10010'); // supertest init;
+var conn = process.env.conn || "http://localhost:3000";
+var api = supertest(conn); // supertest init;
 
 chai.should();
 
-describe('/descargarArchivo', function() {
-  describe('get', function() {
-    it('should respond with 200 Name and identifier of the...', function(done) {
+describe('/buscar', function() {
+  describe('post', function() {
+    it('should respond with 200 Files of the user', function(done) {
       /*eslint-disable*/
       var schema = {
-        "type": "file"
+        "type": "object",
+        "properties": {
+          "result": {
+            "type": "array",
+            "description": "array of files",
+            "items": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "rights": {
+                  "type": "string"
+                },
+                "date": {
+                  "type": "string"
+                },
+                "type": {
+                  "type": "string"
+                },
+                "id": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
       };
 
       /*eslint-enable*/
-      api.get('/descargarArchivo')
-      .query({
-path: 'DATA GOES HERE'
-      })
-      .set('Content-Type', 'application/json')
+      api.post('/buscar')
+      .set('Content-Type', 'application/x-www-form-urlencoded')
       .set({
-        'apikey': 'DATA GOES HERE'
+        'apikey': 'testuser',
+        'Accept' : 'application/json'
+      })
+      .send({
+          filename: 'crearArchivo-test.js'
       })
       .expect(200)
       .end(function(err, res) {
         if (err) return done(err);
-
         validator.validate(res.body, schema).should.be.true;
         done();
       });
@@ -96,15 +123,16 @@ path: 'DATA GOES HERE'
       };
 
       /*eslint-enable*/
-      api.get('/descargarArchivo')
-      .query({
-path: 'DATA GOES HERE'
-      })
-      .set('Content-Type', 'application/json')
+      api.post('/buscar')
+      .set('Content-Type', 'application/x-www-form-urlencoded')
       .set({
-        'apikey': 'DATA GOES HERE'
+        'apikey': 'testuser',
+        'Accept' : 'application/json'
       })
-      .expect('DEFAULT RESPONSE CODE HERE')
+      .send({
+          filename: 'DATA GOES HERE'
+      })
+      .expect(200)
       .end(function(err, res) {
         if (err) return done(err);
 

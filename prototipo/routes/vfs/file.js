@@ -73,6 +73,15 @@ module.exports = function(app){
     upload.single('file'),
     function(req, res, next) {
       getRootFolder(req.user._id, function(err, cwd){
+        req.checkBody('cwd', 'Invalid cwd').optional().isMongoId();
+        var errors = req.validationErrors();
+        if (errors) {
+            var asStr = errors.map(function(e){
+              return e.msg;
+            }).join(",");
+            res.send(errors);
+            return;
+        }
         if (req.body.cwd) {
           cwd = req.body.cwd;
         }
@@ -128,6 +137,14 @@ module.exports = function(app){
     upload.any(),
     function(req, res, next) {
       getRootFolder(req.user._id, function(err, cwd){
+        req.checkBody('cwd', 'Invalid cwd').optional().isMongoId();
+        var errors = req.validationErrors();
+        if (errors) {
+            var asStr = errors.map(function(e){
+              return e.msg;
+            }).join(",");
+            return res.send(asStr);
+        }
         if (req.body.cwd) {
             cwd = req.body.cwd;
         }
@@ -160,6 +177,14 @@ module.exports = function(app){
   }
 
   router.post("/contenidoArchivo", isAuthenticated, function(req, res, next) {
+      req.checkBody('item.id', 'Invalid cwd').notEmpty().isMongoId();
+      var errors = req.validationErrors();
+      if (errors) {
+          var asStr = errors.map(function(e){
+            return e.msg;
+          }).join(",");
+          return res.send(asStr);
+      }
       var item = req.body.item;
       if (req.body.item.id)
           item = req.body.item.id;
@@ -169,7 +194,7 @@ module.exports = function(app){
             logger.error("/contenidoArchivo "+err+", user: "+userId);
             return res.send(err);
           }
-          res.send(data);
+          res.send({result: data});
       });
   });
 
@@ -204,14 +229,23 @@ module.exports = function(app){
 
   router.post("/crearCarpeta", isAuthenticated, function(req, res, next) {
       getRootFolder(req.user._id, function(err, cwd){
-        var params = req.body;
         if (req.body.newPath) {
-            params = req.body.newPath;
+            req.body = req.body.newPath;
         }
-        var nombre = path.basename(params.path);
-        if (params.cwd)
-            cwd = params.cwd;
+        req.checkBody('cwd', 'Invalid cwd').optional().isMongoId();
+        req.checkBody('path', 'Invalid path').notEmpty().isAscii();
+        var errors = req.validationErrors();
+        if (errors) {
+            var asStr = errors.map(function(e){
+              return e.msg;
+            }).join(",");
+            return res.send(asStr);
+        }
+        var nombre = path.basename(req.body.path);
+        if (req.body.cwd)
+            cwd = req.body.cwd;
         var userId = req.user._id;
+
         crearCarpeta(cwd, nombre, userId,  function(err, folderId) {
             if (err) {
                 logger.error("/crearCarpeta "+err+", user: "+userId);

@@ -47,32 +47,38 @@ customFormats(ZSchema);
 
 var validator = new ZSchema({});
 var supertest = require('supertest');
-var api = supertest('http://localhost:10010'); // supertest init;
+var conn = process.env.conn || "http://localhost:3000";
+var api = supertest(conn); // supertest init;
 
 chai.should();
 
-describe('/eliminarArchivo', function() {
+describe('/crearCarpeta', function() {
   describe('post', function() {
-    it('should respond with 200 Result of the operation', function(done) {
+    it('should respond with 200 The result of the...', function(done) {
       /*eslint-disable*/
       var schema = {
         "type": "object",
         "properties": {
           "success": {
             "type": "number",
-            "description": "Id of the file"
+            "description": "result of create folder"
+          },
+          "id": {
+            "type": "string",
+            "description": "result of create folder"
           }
         }
       };
 
       /*eslint-enable*/
-      api.post('/eliminarArchivo')
+      api.post('/crearCarpeta')
       .set('Content-Type', 'application/json')
       .set({
-        'apikey': 'DATA GOES HERE'
+        'apikey': 'testuser',
+        'Accept' : 'application/json'
       })
       .send({
-        item: 'DATA GOES HERE'
+        newPath: 'DATA GOES HERE'
       })
       .expect(200)
       .end(function(err, res) {
@@ -102,15 +108,16 @@ describe('/eliminarArchivo', function() {
       };
 
       /*eslint-enable*/
-      api.post('/eliminarArchivo')
+      api.post('/crearCarpeta')
       .set('Content-Type', 'application/json')
       .set({
-        'apikey': 'DATA GOES HERE'
+        'apikey': 'testuser',
+        'Accept' : 'application/json'
       })
       .send({
-        item: 'DATA GOES HERE'
+        newPath: 'DATA GOES HERE'
       })
-      .expect('DEFAULT RESPONSE CODE HERE')
+      .expect(200)
       .end(function(err, res) {
         if (err) return done(err);
 

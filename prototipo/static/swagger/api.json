@@ -669,6 +669,50 @@
                 }
             }
         },
+        "/buscar": {
+            "post": {
+                "summary": "Search a file by filename",
+                "description": "The register endpoint search a file.\nThe response includes an array of coincidences\n",
+                "consumes": [
+                  "application/x-www-form-urlencoded"
+                ],
+                "parameters": [
+                    {
+                        "name": "filename",
+                        "in": "formData",
+                        "description": "File-name.",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "VFS"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Files of the user",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "result": {
+                                    "type": "array",
+                                    "description": "array of files",
+                                    "items": {
+                                      "$ref": "#/definitions/Fileview"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
+        },
         "/register": {
             "post": {
                 "summary": "Create a new user",

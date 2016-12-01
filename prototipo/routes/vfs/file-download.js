@@ -11,10 +11,23 @@ module.exports = function(app){
     app.use('/', router);
 
   router.get("/descargarArchivo", isAuthenticated, function(req, res, next) {
+      //req.checkQuery('path', 'Invalid path').notEmpty().isJSON();
+      req.checkQuery('path.id', 'Invalid path id').notEmpty();
+
+      var errors = req.validationErrors();
+      if (errors) {
+          var asStr = errors.map(function(e){
+            return e.msg;
+          }).join(",");
+
+          res.send({code : 1, message : asStr});
+          return;
+      }
       var item = req.query.path;
       if (item.id)
           item = item.id;
       var userid = req.user._id;
+
       if (item.indexOf("/") > -1) {
           var p = item.split(path.sep).filter(function(elem) {
               return elem !== "" && elem !== ".." && elem !== ".";

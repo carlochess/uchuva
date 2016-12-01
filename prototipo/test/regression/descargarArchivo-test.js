@@ -47,42 +47,37 @@ customFormats(ZSchema);
 
 var validator = new ZSchema({});
 var supertest = require('supertest');
-var api = supertest('http://localhost:10010'); // supertest init;
+var conn = process.env.conn || "http://localhost:3000";
+var api = supertest(conn); // supertest init;
 
 chai.should();
 
-describe('/crearCarpeta', function() {
-  describe('post', function() {
-    it('should respond with 200 The result of the...', function(done) {
+describe('/descargarArchivo', function() {
+  describe('get', function() {
+    it('should respond with 200 Name and identifier of the...', function(done) {
       /*eslint-disable*/
       var schema = {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "number",
-            "description": "result of create folder"
-          },
-          "id": {
-            "type": "string",
-            "description": "result of create folder"
-          }
-        }
+        "type": "file"
       };
 
       /*eslint-enable*/
-      api.post('/crearCarpeta')
+      api.get('/descargarArchivo')
+      .query({
+        path:{id : '583f3859e7fbf84407e46a84'}
+      })
       .set('Content-Type', 'application/json')
       .set({
-        'apikey': 'DATA GOES HERE'
-      })
-      .send({
-        newPath: 'DATA GOES HERE'
-      })
+        'apikey': 'testuser',
+        'Accept' : 'application/json'
+      })//
       .expect(200)
       .end(function(err, res) {
         if (err) return done(err);
+        chai.expect(res).to.have.property('header')
+        chai.expect(res["header"]).to.have.property('content-length');
+        chai.expect(res["header"]).to.have.property('content-disposition');
+        chai.expect(res["header"]).to.have.property('content-type');
 
-        validator.validate(res.body, schema).should.be.true;
         done();
       });
     });
@@ -106,18 +101,18 @@ describe('/crearCarpeta', function() {
       };
 
       /*eslint-enable*/
-      api.post('/crearCarpeta')
+      api.get('/descargarArchivo')
+      .query({
+path: 'DATA GOES HERE'
+      })
       .set('Content-Type', 'application/json')
       .set({
-        'apikey': 'DATA GOES HERE'
+        'apikey': 'testuser',
+        'Accept' : 'application/json'
       })
-      .send({
-        newPath: 'DATA GOES HERE'
-      })
-      .expect('DEFAULT RESPONSE CODE HERE')
+      .expect(200)
       .end(function(err, res) {
         if (err) return done(err);
-
         validator.validate(res.body, schema).should.be.true;
         done();
       });

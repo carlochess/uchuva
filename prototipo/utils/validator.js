@@ -1,5 +1,5 @@
 var validator = require('validator');
-
+// dataUri
 function isNode(node){
   return !validator.isAscii(node.title)
     && !validator.isAscii(node.title)

@@ -47,53 +47,36 @@ customFormats(ZSchema);
 
 var validator = new ZSchema({});
 var supertest = require('supertest');
-var api = supertest('http://localhost:10010'); // supertest init;
+var conn = process.env.conn || "http://localhost:3000";
+var api = supertest(conn); // supertest init;
 
 chai.should();
 
-describe('/listar', function() {
+describe('/crearArchivo', function() {
   describe('post', function() {
-    it('should respond with 200 Files of the user', function(done) {
+    it.skip('should respond with 200 Result of the operation', function(done) {
       /*eslint-disable*/
       var schema = {
         "type": "object",
         "properties": {
-          "result": {
-            "type": "array",
-            "description": "array of files",
-            "items": {
-              "type": "object",
-              "properties": {
-                "name": {
-                  "type": "string"
-                },
-                "rights": {
-                  "type": "string"
-                },
-                "date": {
-                  "type": "string"
-                },
-                "type": {
-                  "type": "string"
-                },
-                "id": {
-                  "type": "string"
-                }
-              }
-            }
+          "success": {
+            "type": "string",
+            "description": "Error number. None is 0"
           }
         }
       };
 
       /*eslint-enable*/
-      api.post('/listar')
-      .set('Content-Type', 'application/json')
+      api.post('/crearArchivo')
+      .set('Content-Type', 'multipart/form-data')
       .set({
-        'apikey': 'DATA GOES HERE'
+        'apikey': 'testuser',
+        'Accept' : 'application/json'
       })
       .send({
-        body: 'DATA GOES HERE'
+          cwd: 'DATA GOES HERE',
       })
+      .attach('file', __filename)
       .expect(200)
       .end(function(err, res) {
         if (err) return done(err);
@@ -103,7 +86,7 @@ describe('/listar', function() {
       });
     });
 
-    it('should respond with default Unexpected error', function(done) {
+    it.skip('should respond with default Unexpected error', function(done) {
       /*eslint-disable*/
       var schema = {
         "type": "object",
@@ -122,15 +105,17 @@ describe('/listar', function() {
       };
 
       /*eslint-enable*/
-      api.post('/listar')
-      .set('Content-Type', 'application/json')
+      api.post('/crearArchivo')
+      .set('Content-Type', 'multipart/form-data')
       .set({
-        'apikey': 'DATA GOES HERE'
+        'apikey': 'testuser',
+        'Accept' : 'application/json'
       })
       .send({
-        body: 'DATA GOES HERE'
+          cwd: 'DATA GOES HERE',
+          file: 'DATA GOES HERE'
       })
-      .expect('DEFAULT RESPONSE CODE HERE')
+      .expect(200)
       .end(function(err, res) {
         if (err) return done(err);
 

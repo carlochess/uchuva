@@ -38,3 +38,18 @@ test.describe('Title is uchuva', function() {
     });
   });
 });
+/*
+http://seleniumhq.github.io/selenium/docs/api/javascript/module/selenium-webdriver/lib/actions_exports_ActionSequence.html
+let link = yield driver.findElement(By.id('link'));
+      yield driver.actions()
+          .mouseMove(link)
+          .click()
+          .perform();
+driver.actions().
+  keyDown(Key.SHIFT).
+  click(element1).
+  click(element2).
+  dragAndDrop(element3, element4).
+  keyUp(Key.SHIFT).
+  perform();
+*/
