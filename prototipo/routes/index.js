@@ -104,7 +104,7 @@ router.post('/register', function(req, res) {
             });
             return;
         }
-        createRootFolder(account._id, function(err){
+        createRootFolder(account._id, function(err, folder){
           if (err) {
               logger.error("Error trying to register: "+err);
               res.format({
@@ -131,7 +131,8 @@ router.post('/register', function(req, res) {
             json: function() {
               res.json({
                 username : account.username,
-                apikey : account.apikey
+                apikey : account.apikey,
+                rootfolder : folder._id
               });
             }
           });

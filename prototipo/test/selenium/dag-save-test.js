@@ -20,8 +20,8 @@ test.after(function() {
   driver.quit();
 });
 
-test.describe('Unsuccess Login', function(done) {
-  test.it('aa aa', function() {
+test.describe('Save a dag', function(done) {
+  test.it('Save a simple node dag', function() {
     this.timeout(timeOut);
     driver.get("http://localhost:3000/login");
     var login = driver.findElement(selenium.By.id('username'));
@@ -30,6 +30,7 @@ test.describe('Unsuccess Login', function(done) {
     login.sendKeys("admin");
     password.sendKeys("admin");
     btn_login.click();
+    driver.sleep(1000);
     var createdag= driver.findElement(selenium.By.id('createdag'));
     createdag.click();
 
@@ -39,9 +40,19 @@ test.describe('Unsuccess Login', function(done) {
       click().
       keyUp(selenium.Key.SHIFT).
       perform();
-
+    driver.sleep(1000);
       var save_input= driver.findElement(selenium.By.id('save-input'));
       save_input.click();
-    driver.sleep(2000);
+    driver.sleep(1000);
+    driver.wait(function(){
+        return driver.findElements(
+          selenium.By.css('div.col-xs-11.col-sm-4.alert.alert-info.animated.fadeInDown')
+        ).then(function(result) {
+          result[0].getText().then(function(texto){
+            console.log(texto);
+          });
+          return result[0];
+        });
+    },4000);
   });
 });

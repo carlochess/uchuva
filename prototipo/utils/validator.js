@@ -11,6 +11,10 @@ function isEdge(edge){
   return false;
 }
 
+function isMongoId(str){
+  return !validator.isMongoId(str);
+}
+
 module.exports = {
  customValidators: {
     isArrayOfNodes: function(value) {
@@ -18,6 +22,9 @@ module.exports = {
     },
     isArrayOfEdges: function(value) {
         return Array.isArray(value) && value.filter(isEdge).length === 0;
+    },
+    isArrayOfMongoId: function(value) {
+        return Array.isArray(value) && value.filter(isMongoId).length === 0;
     }
  }
 };

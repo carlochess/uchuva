@@ -7,77 +7,99 @@ var fs = require('fs');
 var config = require('../../config');
 var isAuthenticated = require('../../utils/login.js');
 
-module.exports = function(app){
-  app.use('/', router);
+module.exports = function(app) {
+    app.use('/', router);
 
-  router.post("/eliminarArchivo", isAuthenticated, function(req, res, next) {
-    var items = req.body.items;
-    if (req.body.item)
-        items = [{
-            id: req.body.item
-        }];
-    var result = {
-        result: {
-            success: true,
-            error: null
-        }
-    };
-
-    var expectedLoadCount = items.length;
-    var loadCount = 0;
-
-    function remover(file) {
-        file.remove(function(err, f) {
-            if (err) return res.send(result);
-            if (file.type === "file") {
-                fs.exists(file.path, function(exists) {
-                    if (exists) {
-                        fs.unlinkSync(file.path);
-                    }
-                });
+    function remover(file, cb) {
+        fs.exists(file.path, function(exists) {
+            if (exists) {
+                fs.unlink(file.path, cb);
+                return
             }
-            if (++loadCount === expectedLoadCount) {
-                res.format({
-                    html: function() {
-                        res.send(result);
-                    },
-                    json: function() {
-                        res.json(result);
-                    }
-                });
-            }
+            cb();
+            //cb("File doesn't exists");
         });
     }
 
-    function eliminarArchivos(items) {
-        items.forEach(function(item) {
+    function recursiveDelete(arrFiles, cb) {
+        var ficheros = arrFiles; // ficheros must be a set (don't repeat elems)
+        async.whilst(function() {
+            return ficheros.length !== 0;
+        }, function(callback) {
+            var fichero = ficheros.shift();
+            if (fichero.type !== "file") {
+                File.find({
+                    parent: fichero._id.toString()
+                }, function(err, hijos) {
+                    if (err) {
+                        callback(err);
+                        return;
+                    }
+                    // check for repeated
+                    if (hijos) {
+                        ficheros = ficheros.concat(hijos);
+                    }
+                    fichero.remove(callback);
+                });
+            } else if (fichero.type === "file") {
+                remover(fichero, function(err) {
+                    if (err) {
+                        callback(err);
+                        return;
+                    }
+                    fichero.remove(callback);
+                });
+            }
+        }, cb);
+    }
 
-            File.find({
-                _id: item.id
-            }, function(err, files) {
-                if (err) return res.send(result);
-                if (!files || files.length != 1) {
-                    return;
-                }
-                var file = files[0];
-                var hijos = [];
+    router.post("/eliminarArchivo", isAuthenticated, function(req, res, next) {
+        /*req.checkBody('items', 'Invalid array of ids').optional().isArrayOfMongoId();
+        req.checkBody('item', 'Invalid id').optional().isMongoId();*/
+        var result = {
+            result: {
+                success: false,
+                error: null
+            }
+        };
+        /*var errors = req.validationErrors();
+        if (errors) {
+            var asStr = errors.map(function(e){
+              return e.msg;
+            }).join(",");
+            result.result.error = asStr;
+            res.send(result);
+            return;
+        }*/
+        var items = req.body.items;
+        var userid = req.user._id;
+        if (req.body.item)
+            items = [{
+                id: req.body.item
+            }];
 
-                if (file.type !== "file") {
-                    File.find({
-                        parent: file._id
-                    }, function(hijos) {
-                        if (hijos)
-                            expectedLoadCount += hijos.length;
-                        remover(file);
-                        if (hijos)
-                            eliminarArchivos(hijos);
-                    });
-                } else {
-                    remover(file);
+        File.find({
+            _id: {
+                $in: items.map(function(o) {
+                    return o.id;
+                })
+            },
+            owner: userid,
+            filename: { $ne: "/" }
+        }, function(err, files) {
+            if (err) {
+                result.result.error = err;
+                return res.send(result);
+            }
+            recursiveDelete(files, function(err) {
+                if (err) {
+                  result.result.error = err;
+                    return res.send(result);
                 }
+                result.result.success = true;
+                result.result.error = null;
+                res.send(result);
             });
         });
-    }
-    eliminarArchivos(items);
-  });
+    });
 };
