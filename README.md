@@ -53,6 +53,7 @@ Go to vagrant/{HTCondor/sola,OpenLava,Torque,Slurm} folder and run
 ```
 $ vagrant up
 ```
+> Visit the [wiki vagrant entry](https://github.com/carlochess/uchuva/wiki/Vagrant)
 ### Native
 You also can deploy Uchuva without Docker and Vagrant
 
@@ -133,6 +134,20 @@ md \data\db
 "C:\Program Files\MongoDB\Server\3.2\bin\mongod.exe" --dbpath c:\data\db
  ```
  
+Open another terminal, clone Uchuva
+
+```
+git clone https://github.com/carlochess/uchuva
+cd uchuva/prototipo
+npm install
+npm start
+```
+
+## Mac OS
+```
+brew update
+brew install node mongodb git
+```
 Open another terminal, clone Uchuva
 
 ```
