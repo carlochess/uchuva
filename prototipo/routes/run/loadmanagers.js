@@ -61,19 +61,22 @@ var enviarssh = function(i, cwd, cb) {
         user: 'testuser',
         key: config.SSHKEY,
         baseDir: cwd,
+    }).on('error', function(err){
+      cb(err);
     });
     var commands = ["condor_submit_dag", "bsub", "qsub", "sbatch"];
     if (config.BMANAGER == 1 || config.BMANAGER == 2) {
         comando = "cat " + i + " | " + commands[config.BMANAGER];
         ssh.exec(comando, {
             out: function(stdout) {
-                logger.info(stdout);
                 var regex = regexs[config.BMANAGER - 1];
                 var m = regex.exec(stdout);
-                cb(null, m[1]);
+                if(m && m.length > 1)
+                  cb(null, m[1]);
+                else
+                  cb("Unknow error");
             },
             err: function(stderr) {
-                console.log(stderr);
                 cb(stderr);
             }
         }).start();
@@ -81,13 +84,14 @@ var enviarssh = function(i, cwd, cb) {
         comando = commands[config.BMANAGER - 1] + i;
         ssh.exec(comando, {
             out: function(stdout) {
-                logger.info(stdout);
                 var regex = regexs[config.BMANAGER - 1];
                 var m = regex.exec(stdout);
-                cb(null, m[1]);
+                if(m && m.length > 1)
+                  cb(null, m[1]);
+                else
+                  cb("Unknow error");
             },
             err: function(stderr) {
-                console.log(stderr);
                 cb(stderr);
             },
         }).start();
@@ -106,7 +110,7 @@ var enviar = function(i, cwd, cb) {
         comando = "cat " + i + " | " + commands[config.BMANAGER - 1];
         otros = {
             cwd: cwd,
-            timeout: 25,
+            timeout: 5,
         };
         ejecutar(comando, otros, cb);
     //});
@@ -114,7 +118,7 @@ var enviar = function(i, cwd, cb) {
         comando = 'sbatch ' + i;
         otros = {
             cwd: cwd,
-            timeout: 25,
+            timeout: 5,
         };
         ejecutar(comando, otros, cb);
     }
@@ -122,19 +126,19 @@ var enviar = function(i, cwd, cb) {
         logger.info("Ejecutando", comando);
         exec(comando, otros, function(error, stdout, stderr) {
             if (error) {
-                logger.info("->e" + error);
-                cb({});
+                cb(error);
                 return;
             }
             if (stderr) {
-                logger.info("->e" + stderr);
-                cb({});
+                cb(stderr);
                 return;
             }
-            logger.info("->o" + stdout);
             var regex = regexs[config.BMANAGER - 1];
             var m = regex.exec(stdout);
-            cb(null, m[1]);
+            if(m && m.length > 1)
+              cb(null, m[1]);
+            else
+              cb("Unknow error");
         });
     }
 };
@@ -176,7 +180,7 @@ var submitToLoadManagers = function(envio, nombreDir, cbbbb) {
                     function(err, jobid) {
                         if (err) {
                             logger.info(err);
-                            callback({}, i + 1);
+                            callback(err, i + 1);
                             return;
                         }
                         logger.info(jobid);
