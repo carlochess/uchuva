@@ -36,7 +36,7 @@ module.exports = function(app){
               var directorio = path.join(config.DAG_DIR, p.slice(1).join(path.sep));
               fs.stat(directorio, function(err, stats) {
                   if (err) {
-                      res.send({code:-1});
+                      res.send({code:2, message: err+""});
                       return;
                   }
                   res.download(directorio, path.basename(item));
@@ -53,11 +53,11 @@ module.exports = function(app){
           }, function(err, file) {
               if (err){
                 logger.error("/descargarArchivo "+err+", user: "+userId);
-                return res.send({code:-1});
+                return res.send({code:1});
               }
               if (!file) {
                 logger.error("/descargarArchivo file not found, user: "+userId);
-                res.send({code:2});
+                res.send({code:3, message: err+""});
                 return;
               }
               res.download(file.path, file.originalname);

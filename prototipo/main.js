@@ -19,7 +19,7 @@ var config = require('./config.js');
 var MongoStore = require('connect-mongo')(session);
 
 var app = express();
-
+mongoose.Promise = require('bluebird');
 app.use(express.static(path.join(__dirname, './static/')));
 // parse application/json
 app.use(bodyParser.json({

@@ -46,16 +46,13 @@ module.exports = function(app) {
     app.use('/', router);
 
     router.post("/buscar", isAuthenticated, function(req, res, next) {
-        var result = {
-            result: []
-        };
         req.checkBody('filename', 'Invalid filename').notEmpty();
         var errors = req.validationErrors();
         if (errors) {
             var asStr = errors.map(function(e) {
                 return e.msg;
             }).join(",");
-            res.send(errors);
+            res.send({code:1, message: asStr});
             return;
         }
         var filename = req.body.filename;
@@ -63,11 +60,11 @@ module.exports = function(app) {
             originalname: filename,
             owner: req.user._id
         }, function(err, files) {
-            if (err) return res.send(result);
+            if (err) return res.send({code:2, message: err+""});
             files.forEach(function(f) {
                 result.result.push(front(f));
             });
-            res.send(result);
+            res.send({result: result});
         });
     });
 

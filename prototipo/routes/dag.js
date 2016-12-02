@@ -142,12 +142,11 @@ module.exports = function(app){
           _id: proyecto,
           userid: userId
       };
-      console.log(where);
       Dag.findOneAndUpdate(where, {
           nodes: nodes,
           edges: edges,
           imagen: imagen
-      }, function(err, d) {
+      }, {new : true}, function(err, d) {
           if (err || !d) {
               logger.error("Error saving dag "+err+", user: "+userId);
               res.send({
@@ -190,7 +189,6 @@ module.exports = function(app){
       }
       var idBuild = req.query.id;
       var userId = req.user._id;
-      console.log(":()")
       eliminarDag(idBuild, userId, function(error, dag) {
         var errcode = 0;
         if(error || !dag){
@@ -205,7 +203,6 @@ module.exports = function(app){
               res.redirect("/user");
             },
             json: function() {
-                console.log(":()")
                 res.json({
                     code: errcode
                 });

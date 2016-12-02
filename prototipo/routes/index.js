@@ -25,6 +25,7 @@ router.get('/user', isAuthenticated, function(req, res) {
     }, function(err, dags) {
         if(err){
           logger.error("Error trying to get dags: "+err);
+          dags=[];
         }
         res.format({
             html: function() {
@@ -98,7 +99,8 @@ router.post('/register', function(req, res) {
               },
               json: function() {
                 res.json({
-                  error: err
+                  code:1,
+                  message: err+""
                 });
               }
             });
@@ -116,7 +118,8 @@ router.post('/register', function(req, res) {
                 },
                 json: function() {
                   res.json({
-                    error: err
+                    code:2,
+                    message: err+""
                   });
                 }
               });

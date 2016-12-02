@@ -35,11 +35,15 @@ describe('GET /consola', function () {
     request = supertest(app);
   });
 
-  it.only('should respond with a 404 and a null', function (done) {
+  it.skip('should respond with a 404 and a null', function (done) {
     getUserStub.returns(null);
 
     request
       .get('/consola')
+      .set('Content-Type', 'application/json')
+      .set({
+        'Accept' : 'application/json'
+      })
       .expect(200, function (err, res) {
         expect(res.body).to.deep.equal({
           //"messsaje": "Hola"

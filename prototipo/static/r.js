@@ -45,7 +45,9 @@
       function rederizarArg(param) {
           var opciones = $("#opciones");
           render(param, document.getElementById("opciones"));
-          opciones.append('<li> <textarea id="argss" cols="10" rows="4">'+param.argumento+'</textarea></br>"');//
+          opciones.append('<li> <textarea id="argss" cols="10" rows="4">'+param.argumento+'</textarea></li></br>"');//
+
+          opciones.append('<li><input type="number" name="times" min="1" id="times"></li></br>"');//
 
           param.file && param.file.forEach(function(archivo,i){
             opciones.append("<li data-type="+archivo.type+" data-id="+i+"> " + archivo.filename +

@@ -79,7 +79,7 @@ module.exports = function(app) {
                     var asStr = errors.map(function(e) {
                         return e.msg;
                     }).join(",");
-                    res.send(errors);
+                    res.send({code: 1,message: asStr});
                     return;
                 }
                 if (req.body.cwd) {
@@ -91,7 +91,7 @@ module.exports = function(app) {
                 crearArchivo(cwd, file, userId, function(err, fileId) {
                     if (err) {
                         logger.error("/crearArchivo " + err + ", user: " + userId);
-                        res.send(err);
+                        res.send({code: 2,message: err+""});
                         return;
                     }
                     res.format({
@@ -189,7 +189,7 @@ module.exports = function(app) {
             var asStr = errors.map(function(e) {
                 return e.msg;
             }).join(",");
-            return res.send(asStr);
+            return res.send({code:1, message: asStr});
         }
         var item = req.body.item;
         if (req.body.item.id)
@@ -198,7 +198,7 @@ module.exports = function(app) {
         contenidoArchivo(item, userId, function(err, data) {
             if (err) {
                 logger.error("/contenidoArchivo " + err + ", user: " + userId);
-                return res.send(err);
+                return res.send({code:2, message: err+""});
             }
             res.send({
                 result: data
@@ -247,7 +247,7 @@ module.exports = function(app) {
                 var asStr = errors.map(function(e) {
                     return e.msg;
                 }).join(",");
-                return res.send(asStr);
+                return res.send({code:1, message: asStr});
             }
             var nombre = path.basename(req.body.path);
             if (req.body.cwd)
@@ -257,7 +257,7 @@ module.exports = function(app) {
             crearCarpeta(cwd, nombre, userId, function(err, folderId) {
                 if (err) {
                     logger.error("/crearCarpeta " + err + ", user: " + userId);
-                    return res.send(result);
+                    return res.send({code:2, message: err+""});
                 }
                 res.send({
                     success: 0,

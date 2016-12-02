@@ -13,7 +13,7 @@ buildapi = SwaggerClient::BuildApi.new
 vfsapi   = SwaggerClient::VFSApi.new
 userapi  = SwaggerClient::UserApi.new
 
-apikey = "testuser"
+apikey = "admin"
 
 archivo = {
   :id => "",
@@ -56,6 +56,7 @@ rescue SwaggerClient::ApiError => e
   begin
     result = dagapi.user_get(apikey)
     puts "Numero de dags", result.length
+=begin
     result = dagapi.crear_dag_get(apikey)
     p "He creado un dag llamado",result.nombre
     id = result.id
@@ -88,7 +89,8 @@ rescue SwaggerClient::ApiError => e
     result = vfsapi.crear_archivo_post(apikey, File.new(__FILE__))
     archivoCreado = result.success
     p archivoCreado
-#=begin
+=end
+=begin
     result = vfsapi.descargar_archivo_get(apikey, archivoCreado)
     p result
 
@@ -97,7 +99,7 @@ rescue SwaggerClient::ApiError => e
 
     result = vfsapi.eliminar_archivo_post(apikey, {:item => archivoCreado})
     p result
-#=end
+=end
 
     #sleep 120
     #["err","log","out"].each do |type|

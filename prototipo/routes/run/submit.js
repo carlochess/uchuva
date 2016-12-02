@@ -39,12 +39,14 @@ module.exports = function(app){
 
       controladorArchivos.crearDirectorio(config.DAG_DIR, function(err,nombreDir) {
           if (err) {
+              logger.error("/run Error creando carpeta ejecucion");
               res.send({error : 2, message : "Error creando carpeta"});
               return;
           }
 
           datos.trasteo(envio, nombreDir, function(err) {
               if (err) {
+                  logger.error("/run Moviendo los ficheros a "+nombreDir);
                   res.send({error : 3, message : "Error trasteo archivos"});
                   return;
               }
@@ -56,8 +58,8 @@ module.exports = function(app){
 
           function notificarBlaBla(err, nodes) {
               if (err) {
-                  logger.info(err);
-                  res.send({error : 4, message : "Error"});
+                  logger.error("/run ",err);
+                  res.send({error : 4, message : err});
                   return;
               }
               logger.info("Guardando");
@@ -74,9 +76,8 @@ module.exports = function(app){
               });
               dag.save(function(err) {
                   if (err) {
-                      res.send({error : 5, message : "Error guardando"});
-                      logger.info(err);
-                      return;
+                      logger.error("/run ",err);
+                      return res.send({error : 5, message : "Error guardando"});
                   }
                   res.format({
                       html: function() {
@@ -88,7 +89,7 @@ module.exports = function(app){
                           });
                       }
                   });
-                  logger.info("Directorio creado " + nombreDir);
+                  logger.info("/run Directorio creado " + nombreDir);
               });
           }
       });

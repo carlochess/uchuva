@@ -752,6 +752,10 @@
                                 "apikey": {
                                     "type": "string",
                                     "description": "Developers api key"
+                                },
+                                "rootfolder": {
+                                    "type": "string",
+                                    "description": "Id of the root folder"
                                 }
                             }
                         }

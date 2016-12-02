@@ -35,11 +35,15 @@ describe('GET /listarProgramas', function () {
     request = supertest(app);
   });
 
-  it.only('should respond with a 404 and a null', function (done) {
+  it('should respond with a 404 and a null', function (done) {
     getUserStub.returns(null);
 
     request
       .post('/listarProgramas')
+      .set('Content-Type', 'application/json')
+      .set({
+        'Accept' : 'application/json'
+      })
       .expect(200, function (err, res) {
         expect(res.body).to.include.members(["cat", "test", "rscript"]);
         done();

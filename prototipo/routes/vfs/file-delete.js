@@ -14,7 +14,7 @@ module.exports = function(app) {
         fs.exists(file.path, function(exists) {
             if (exists) {
                 fs.unlink(file.path, cb);
-                return
+                return;
             }
             cb();
             //cb("File doesn't exists");
@@ -56,19 +56,12 @@ module.exports = function(app) {
     router.post("/eliminarArchivo", isAuthenticated, function(req, res, next) {
         /*req.checkBody('items', 'Invalid array of ids').optional().isArrayOfMongoId();
         req.checkBody('item', 'Invalid id').optional().isMongoId();*/
-        var result = {
-            result: {
-                success: false,
-                error: null
-            }
-        };
         /*var errors = req.validationErrors();
         if (errors) {
             var asStr = errors.map(function(e){
               return e.msg;
             }).join(",");
-            result.result.error = asStr;
-            res.send(result);
+            return res.send({code:2, message: asStr+""});
             return;
         }*/
         var items = req.body.items;
@@ -88,17 +81,13 @@ module.exports = function(app) {
             filename: { $ne: "/" }
         }, function(err, files) {
             if (err) {
-                result.result.error = err;
-                return res.send(result);
+                return res.send({code:2, message: err+""});
             }
             recursiveDelete(files, function(err) {
                 if (err) {
-                  result.result.error = err;
-                    return res.send(result);
+                  return res.send({code:3, message: err+""});
                 }
-                result.result.success = true;
-                result.result.error = null;
-                res.send(result);
+                res.send({success : 0});
             });
         });
     });
