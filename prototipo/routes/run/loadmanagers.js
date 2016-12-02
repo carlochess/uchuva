@@ -81,7 +81,7 @@ var enviarssh = function(i, cwd, cb) {
             }
         }).start();
     } else {
-        comando = commands[config.BMANAGER - 1] + i;
+        comando = commands[config.BMANAGER] +" "+ i;
         ssh.exec(comando, {
             out: function(stdout) {
                 var regex = regexs[config.BMANAGER - 1];
@@ -124,7 +124,7 @@ var enviar = function(i, cwd, cb) {
     }
     function ejecutar(comando, otros, cb) {
         logger.info("Ejecutando", comando);
-        exec(comando, otros, function(error, stdout, stderr) {
+        var proc = exec(comando, otros, function(error, stdout, stderr) {
             if (error) {
                 cb(error);
                 return;
@@ -139,6 +139,9 @@ var enviar = function(i, cwd, cb) {
               cb(null, m[1]);
             else
               cb("Unknow error");
+        });
+        proc.on("error", function(err){
+          cb(err);
         });
     }
 };
@@ -175,7 +178,7 @@ var submitToLoadManagers = function(envio, nombreDir, cbbbb) {
                     return;
                 }
                 logger.info("Creado");
-                enviarssh(path.join(config.DAG_DIR, nombreDir, ordenado[i].nombre + ".bash"),
+                enviar(path.join(config.DAG_DIR, nombreDir, ordenado[i].nombre + ".bash"),
                     path.join(config.DAG_DIR, nombreDir),
                     function(err, jobid) {
                         if (err) {

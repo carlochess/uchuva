@@ -109,6 +109,7 @@ mongoose.connection.on('connected', function() {
 // If the connection throws an error
 mongoose.connection.on('error', function(err) {
     logger.error('Mongoose default connection error: ' + err);
+    process.exit(1);
 });
 
 // When the connection is disconnected
@@ -124,6 +125,7 @@ process.on('SIGINT', function () {
 });
 */
 app.use(function(err, req, res, next) {
+    logger.error('Unknown error: ' + err);
     res.status(err.status || 500);
     res.format({
       html: function() {

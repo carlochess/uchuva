@@ -43,7 +43,7 @@ var config = function(){
         DATABASE_URI : process.env.DATABASE_URI || 'mongodb://localhost/uchuva',
         IS_DEVELOPMENT : process.env.NODE_ENV !== 'production',
         IS_TESTING : true, //process.env.NODE_ENV === 'test',
-        BMANAGER : process.env.BMANAGER || 0,
+        BMANAGER : process.env.BMANAGER || 1,
         LOGDIR : logdir,
         DATA_DIR : share,
         DAG_DIR : dag,
