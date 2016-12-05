@@ -8,19 +8,18 @@ var expect = require('chai').expect;
 var express = require('express');
 
 describe('POST /buscar', function () {
-  var app, getUserStub, request, route;
+  var app, fileFindStub, request, route;
 
   beforeEach(function () {
     app = express();
+    fileFindStub = sinon.stub();
     route = proxyquire('../../routes/vfs/file-list.js', {
       '../../utils/login.js': function(req, res, next){
         req.user = {_id : "carlos"};
         return next();
       },
       "../../models/file.js": {
-        find: function(opts, cb){
-          cb("Ahhhh");
-        }
+        find: fileFindStub
       }
     });
     app.use(expressValidator());
@@ -48,7 +47,9 @@ describe('POST /buscar', function () {
       });
   });
 
-  it('should respond with 200 and the files', function (done) {
+  it('should respond with 200 and error db conn', function (done) {
+    fileFindStub.yields(new Error(), []);
+
     request
       .post('/buscar')
       .set('Content-Type', 'application/x-www-form-urlencoded')
@@ -60,11 +61,29 @@ describe('POST /buscar', function () {
       })
       .expect(200)
       .end(function (err, res) {
-        console.log(res.body)
         expect(res.body).to.deep.equal({
-         "code": 2,
-         "message": "Ahhhh"
+          "code": 2,
+          "message": "Error"
         });
+        done();
+      });
+  });
+
+  it('should respond with 200 and the files', function (done) {
+    fileFindStub.yields(null, []);
+
+    request
+      .post('/buscar')
+      .set('Content-Type', 'application/x-www-form-urlencoded')
+      .set({
+        'Accept' : 'application/json'
+      })
+      .send({
+          filename: 'crearArchivo-test.js'
+      })
+      .expect(200)
+      .end(function (err, res) {
+        expect(res.body).to.deep.equal({files :[]});
         done();
       });
   });

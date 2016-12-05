@@ -1,7 +1,7 @@
 #!/bin/bash
 LANG=${LENG:-ruby}
 rm -rf $LANG
-cp ~/Documentos/tesis/prototipo/static/swagger/api.json .
+cp ~/Documentos/uchuva/prototipo/static/swagger/api.json .
 docker run -it --rm -v $(pwd):/swagger-api/out \
     jimschubert/swagger-codegen-cli generate \
     -i /swagger-api/out/api.json \

@@ -61,10 +61,10 @@ module.exports = function(app) {
             owner: req.user._id
         }, function(err, files) {
             if (err) return res.send({code:2, message: err+""});
-            files.forEach(function(f) {
+            files && files.forEach(function(f) {
                 result.result.push(front(f));
             });
-            res.send({result: result});
+            res.send({files: files});
         });
     });
 
