@@ -82,10 +82,13 @@ module.exports = function(app){
             logger.error("/descargarArchivo "+err+", user: "+userId);
             return res.send(err);
           }
-          if (!files) {
+          if (!files || files.length ===0) {
             logger.error("/descargarArchivo file not found, user: "+userId);
             return res.send(err);
           }
+
+          // Filter file that doesn't exists
+
           res.setHeader('Content-disposition', 'attachment; filename=uchuva.tar');
           res.setHeader('Content-type', 'application/octet-stream');
 

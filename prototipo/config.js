@@ -1,6 +1,7 @@
 var path = require('path');
 var fs = require('fs');
 var doT = require("dot");
+var argv = require('minimist')(process.argv.slice(2));
 
 var plantillas = ["submitfile", "openlava", "torque", "slurm"];
 
@@ -28,14 +29,14 @@ var descfiles = {
   torque : arr[2],
   slurm : arr[3]
 };
-
-var share = process.env.SHARE || path.join(__dirname,'data');
-var dag = process.env.DAG_DIR || path.join(share,'run');
-var upload = process.env.UPLOAD_DIR || path.join(share,'uploads');
+// uchuva --share=/tmp/ --owner=uchuva --logdir=/var/log/uchuva
+var share = argv.share || process.env.SHARE || path.join(__dirname,'data');
+var dag = argv.dag || process.env.DAG_DIR || path.join(share,'run');
+var upload = argv.upload || process.env.UPLOAD_DIR || path.join(share,'uploads');
 var condorUrl = process.env.CONDOR_URL || 'http://localhost:8080/';
-var condorJobOwner = process.env.CONDOR_JOB_OWNER || process.env.USER || "carlos";
+var condorJobOwner = argv.owner || process.env.CONDOR_JOB_OWNER || process.env.USER || "carlos";
 var key = fs.readFileSync(path.join(__dirname,'keys','id_rsa'));
-var logdir = process.env.LOGDIR || './logs/';
+var logdir = argv.logdir ||process.env.LOGDIR || './logs/';
 var config = function(){
     return {
         SERVER_PORT : process.env.PORT || 3000,

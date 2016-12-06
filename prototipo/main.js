@@ -14,6 +14,7 @@ var mongoose = require('mongoose');
 var User = require('./models/user.js');
 var session = require('express-session');
 var config = require('./config.js');
+var compression = require('compression');
 //var tty = require('./tty/tty.js');
 //var proxyvnc = require('./utils/websockify.js');
 var MongoStore = require('connect-mongo')(session);
@@ -33,7 +34,7 @@ app.use(bodyParser.urlencoded({
 }));
 // validator
 app.use(expressValidator(validator));
-
+app.use(compression());
 app.set('view engine', 'pug');
 app.use(flash());
 //app.use(morgan('common', {stream: accessLogStream}))

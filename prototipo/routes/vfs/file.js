@@ -7,9 +7,35 @@ var router = express.Router();
 var fs = require('fs');
 var config = require('../../config');
 var logger = require('../../utils/logger.js');
+
 var upload = multer({
     dest: config.UPLOAD_DIR
 });
+/*
+var storage = require('multer-gridfs-storage')({
+   url: config.DATABASE_URI // 'mongodb://localhost:27017/database'
+});
+// Set multer storage engine to the newly created object
+var upload = multer({ storage: storage });
+*/
+/*
+var multerS3 = require('multer-s3')
+var s3 = new aws.S3({ ... })
+
+var upload = multer({
+  storage: multerS3({
+    s3: s3,
+    bucket: 'some-bucket',
+    metadata: function (req, file, cb) {
+      cb(null, {fieldName: file.fieldname});
+    },
+    key: function (req, file, cb) {
+      cb(null, Date.now().toString())
+    }
+  })
+})
+
+*/
 var isAuthenticated = require('../../utils/login.js');
 
 function fechaActual() {
