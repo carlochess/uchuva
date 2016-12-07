@@ -44,18 +44,19 @@
 
       function rederizarArg(param) {
           var opciones = $("#opciones");
-          render(param, document.getElementById("opciones"));
-          opciones.append('<li> <textarea id="argss" cols="10" rows="4">'+param.argumento+'</textarea></li></br>"');//
-
-          opciones.append('<li><input type="number" name="times" min="1" id="times" value="'+param.times+'"></li></br>"');//
-
+          if(param.raw){
+            opciones.append('<li> <textarea id="argss" cols="10" rows="4">'+param.argumento+'</textarea></li></br>"');//
+          }else{
+            render(param, document.getElementById("opciones"));
+          }
+          opciones.append('<button class="nada" id="raw">Raw</button>');
           param.file && param.file.forEach(function(archivo,i){
             opciones.append("<li data-type="+archivo.type+" data-id="+i+"> " + archivo.filename +
             (archivo.entrada? ' <span class="glyphicon glyphicon-menu-up" aria-hidden="true"></span>':
             ' <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>') +
             ' <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>' +" </li><br/>");
           });
-          opciones.append('<button class="nada" data-toggle="modal" data-target=".bs-example-modal-lg">Agregar Archivo</button>');/**/
+          opciones.append('<button class="nada" data-toggle="modal" data-target=".bs-example-modal-lg">Agregar Archivo</button>');
       }
 
       function rederizarFormulario(nodo, buscado) {
@@ -76,6 +77,7 @@
       }
 
       $('#menu').click(function(event) {
+          ev.stopPropagation();
           var $box = $(event.target),
               boxName = $box.attr('class'),
               box = {

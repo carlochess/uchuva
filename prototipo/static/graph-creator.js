@@ -947,4 +947,16 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
         }
     });
 
+    $('#opciones').on('click', '#raw', function(ev) {
+      ev.stopPropagation();
+      $("#opciones").empty();
+      if (!graph.state.selectedNode)
+          return;
+      var id = graph.state.selectedNode.id;
+      var nodo = graph.nodes[buscar(id)];
+      var value = "";//$("#plantillaPrograma").value;
+      nodo.configurado.raw = !nodo.configurado.raw;
+      rederizarFormulario(nodo, value);
+    });
+
 })(window.d3, window.saveAs, window.Blob);
