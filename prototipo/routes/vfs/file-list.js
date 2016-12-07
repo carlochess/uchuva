@@ -3,6 +3,7 @@ var async = require('async');
 var path = require('path');
 var DagExe = require('../../models/dagExe.js');
 var File = require('../../models/file.js');
+var logger = require('../../utils/logger.js');
 var router = express.Router();
 var fs = require('fs');
 var config = require('../../config');
@@ -67,9 +68,11 @@ module.exports = function(app) {
                     code: 2,
                     message: err + ""
                 });
-                files && files.forEach(function(f) {
+                if(files){
+                  files.forEach(function(f) {
                     result.result.push(front(f));
-                });
+                  });
+                }
                 res.send({
                     files: files
                 });
@@ -85,27 +88,35 @@ module.exports = function(app) {
                 }
             }, function(err, dags) {
                 if (err) {
-                    cb(err)
+                    cb(err);
                 }
-                dags.forEach(function(f) {
-                    result.result.push(front({
+                dags.unshift({
+                    originalname: "_Runs",
+                    size: "0",
+                    uploadDate: new Date(),
+                    type: "dir",
+                    _id: "/_Runs/",
+                    veneno: ""
+                });
+                dags = dags.map(function(f) {
+                    return front({
                         originalname: f.nombre,
                         size: "0",
                         uploadDate: new Date(),
                         type: "dir",
                         _id: "/_Runs/" + f.nombre + "/",
                         veneno: ""
-                    }));
+                    });
                 });
-                cb(dags);
+                cb(null, dags);
             });
         }
 
         function listDagExeFiles(path, p, userId, cb) {
             var directorio = p.slice(1).join(path.sep);
             DagExe.findOne({
-                    userid: userId
-                    nombre: directorio;
+                    userid: userId,
+                    nombre: p[1]
                 }, function(err, dag) {
                     if (err || !dag) {
                         return cb("Exe doesn't exists");
@@ -136,13 +147,16 @@ module.exports = function(app) {
                                 if (err) {
                                     return cb(err);
                                 }
-                                files && files.forEach(function(f) {
-                                    result.result.push(front(f));
-                                });
+                                if(files){
+                                  files = files.map(function(f) {
+                                    return front(f);
+                                  });
+                                }
                                 cb(null, files);
-                            });
+                            }
+                        );
                     });
-                }
+                });
             }
 
             function listVirtualFolder(cwd, userId, root, cb) {
@@ -156,7 +170,7 @@ module.exports = function(app) {
                         owner: userId
                     }, function(err, files) {
                         if (err) return cb(err);
-                        //files.unshift(folderP);
+                        files.unshift(folderP);
                         if (root) {
                             files.push({
                                 originalname: "_Runs",
@@ -167,8 +181,8 @@ module.exports = function(app) {
                                 veneno: ""
                             });
                         }
-                        files.forEach(function(f) {
-                            result.result.push(front(f));
+                        files = files.map(function(f) {
+                            return front(f);
                         });
                         cb(null, files);
                     });
@@ -182,15 +196,18 @@ module.exports = function(app) {
 
             router.post("/listar", isAuthenticated, function(req, res, next) {
                 getRootFolder(req.user._id, function(err, idRaiz) {
+                  var result = {
+                      result: []
+                  };
+                  if(err){
+                    return res.send(result);
+                  }
                     var cwd = false,
                         root = false;
                     if (req.body.path) {
                         cwd = req.body.path.cwd;
                     }
                     var userId = req.user._id;
-                    var result = {
-                        result: []
-                    };
                     if (!cwd) {
                         cwd = idRaiz;
                         root = true;
@@ -211,7 +228,7 @@ module.exports = function(app) {
                             return elem !== "" && elem !== ".." && elem !== ".";
                         });
                         if (p.length < 2) {
-                            listDagExeFolders(cb);
+                            listDagExeFolders(userId,cb);
                         } else {
                             listDagExeFiles(path, p, userId, cb);
                         }

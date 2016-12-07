@@ -31,7 +31,7 @@
     "serve-favicon": "^2.3.0",
     "simple-ssh": "^0.9.0",
     "soap": "^0.13.0",
-    "soap-htcondor": "^1.0.0",
+    "soap-htcondor": "^1.0.1",
     "socket.io": "^1.5.1",
     "superheroes": "^1.0.0",
     "tar-fs": "^1.12.0",

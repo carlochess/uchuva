@@ -9,9 +9,9 @@ block content
           li.list-group-item
             a(href='/crearDag', id="createdag") Nuevo Dag
           li.list-group-item
-            a(href='/filemanager', id="filemanager") Manejador de archivos
+            a(href='/filemanager', id="filemanager") Administrador de archivos
           <!--li.list-group-item
-            a#open Consola-->
+            a#open Consola https://dummyimage.com/600x200/de7818/ffffff&text=No+image-->
 
     .main(class="col-sm-9 col-md-10")
       if mensajes.length
@@ -25,7 +25,10 @@ block content
 
           .col-sm-6.col-md-4
             .thumbnail
-              img(src=val.imagen, width=500, height=400)
+              if val.imagen
+                img(src=val.imagen, width=500, height=400)
+              else
+                img(src='noimage.png', width=500, height=200)
               .caption
                 h3
                   a(href="/editar?id="+val._id)= val.nombre

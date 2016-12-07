@@ -47,7 +47,7 @@
           render(param, document.getElementById("opciones"));
           opciones.append('<li> <textarea id="argss" cols="10" rows="4">'+param.argumento+'</textarea></li></br>"');//
 
-          opciones.append('<li><input type="number" name="times" min="1" id="times"></li></br>"');//
+          opciones.append('<li><input type="number" name="times" min="1" id="times" value="'+param.times+'"></li></br>"');//
 
           param.file && param.file.forEach(function(archivo,i){
             opciones.append("<li data-type="+archivo.type+" data-id="+i+"> " + archivo.filename +
@@ -68,6 +68,13 @@
           $('#plantillaPrograma').val(buscado);
           rederizarArg(nodo.configurado);
       }
+
+      function rederizarProyecto(){
+        console.log("Be my")
+        var opciones = $("#opciones");
+        opciones.append('<li><input type="text" name="loadManager" id="loadManager" value="'+workloader+'"></li></br>"');//
+      }
+
       $('#menu').click(function(event) {
           var $box = $(event.target),
               boxName = $box.attr('class'),
@@ -137,6 +144,13 @@ var boton = undefined;
 		  idSeleccionado = graph.state.selectedNode.id;
 		  boton = e.relatedTarget;
 	  });
+});
+
+$('#opciones').on('keydown', '#loadManager', function(ev) {
+  ev.stopPropagation();
+});
+$('#opciones').on('keyup', '#loadManager', function(ev) {
+    workloader = $(this).val();
 });
 
 $(function(){

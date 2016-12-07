@@ -8,13 +8,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
         thisGraph.idct = 0;
 
         thisGraph.nodes = nodes || [];
-        /*thisGraph.nodes.forEach(function(nodo){
-        	agregarNodo(nodo.id);
-        });*/
         thisGraph.edges = edges || [];
-        /*thisGraph.edges.forEach(function(ar){
-        	agregarArista(ar.source.id, ar.target.id)
-        });*/
 
         thisGraph.nodes.forEach(function(nodo) {
             if (nodo.id >= thisGraph.idct) {
@@ -147,24 +141,15 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                     "proyecto": proyecto,
                     "nodes": thisGraph.nodes,
                     "edges": thisGraph.edges,
-                    "imagen": uri
+                    "imagen": uri,
+                    "workloader": workloader,
                 };
                 var blob = envio;
-                /*$("#enviar").click(function(){
-                	// $("#debug").text(JSON.stringify(programa.render));
-                	if(programa.validation(programa.render)){
-                  	var comando = programa.transformation(programa.render);
-                    $("#debug").text(comando);
-                  }
-                })*/
                 $.ajax({
                     type: "POST",
                     url: "/save",
-                    //enctype: 'multipart/form-data',
                     data: blob,
                     success: function(data, textStatus, jqXHR) {
-                        console.log("Exito");
-                        console.log(data);
                         $.notify(data, {
                             placement: {
                                 from: "bottom",
@@ -186,15 +171,11 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
         });
 
         d3.select("#download-input").on("click", function() {
-            /*var saveEdges = [];
-            thisGraph.edges.forEach(function(val, i){
-              saveEdges.push({source: val.source.id, target: val.target.id});
-            });*/
-            //var blob = /*new Blob([window.JSON.stringify(*/{"nodes": thisGraph.nodes, "edges": saveEdges}/*)], {type: "application/json;charset=utf-8"})*/;
             var envio = {
                 "proyecto": proyecto,
                 "nodes": thisGraph.nodes,
-                "edges": thisGraph.edges
+                "edges": thisGraph.edges,
+                "workloader": workloader
             };
             var blob = new Blob([window.JSON.stringify(envio)], {
                 type: "application/json;charset=utf-8"
@@ -280,6 +261,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                     "proyecto": proyecto,
                     "nodes": thisGraph.nodes,
                     "edges": thisGraph.edges,
+                    "workloader": workloader,
                     "imagen": uri
                 };
                 $.ajax({
@@ -576,7 +558,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                 thisGraph.edges.push(newEdge);
                 if (KahnSAlgorithm(thisGraph)) {
                     var i = -1;
-                    for (var i = 0; i < thisGraph.edges.length; i++) {
+                    for (i = 0; i < thisGraph.edges.length; i++) {
                         if (thisGraph.edges[i].source.id == newEdge.source.id && thisGraph.edges[i].target.id == newEdge.target.id) {
                             break;
                         }
@@ -600,12 +582,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                 id.textContent = mouseDownNode.id;
                 nombre.textContent = mouseDownNode.title;
                 $("#opciones").empty();
-                if (mouseDownNode.configurado) {
-                    rederizarFormulario(mouseDownNode, "");
-                } else {
-                    $('#plantillaPrograma').val("");
-                }
-
+                var actualizar=true;
                 //------------------------------------------------------------
                 // clicked, not dragged
                 if (d3.event.shiftKey) {
@@ -624,7 +601,16 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                         thisGraph.replaceSelectNode(d3node, d);
                     } else {
                         thisGraph.removeSelectFromNode();
+                        console.log("Render project sett");
+                        actualizar = false;
                     }
+                }
+
+                if (actualizar && mouseDownNode.configurado) {
+                    rederizarFormulario(mouseDownNode, "");
+                } else {
+                    $('#plantillaPrograma').val("");
+                    rederizarProyecto();
                 }
             }
         }
@@ -892,8 +878,14 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
         rederizarFormulario(graph.nodes[buscar(id)], this.value);
         graph.updateGraph();
     });
-
+    $('#opciones').on('keydown', 'textarea', function(ev) {
+      ev.stopPropagation();
+    });
+    $('#opciones').on('keydown', 'input', function(ev) {
+      ev.stopPropagation();
+    });
     $('#opciones').on('keyup', 'textarea', function(ev) {
+        ev.stopPropagation();
         if (!graph.state.selectedNode || $(this).attr("id") === "argss")
             return;
         var id = graph.state.selectedNode.id;
@@ -902,11 +894,24 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
     });
 
     $('#opciones').on('keyup', 'input', function(ev) {
+        ev.stopPropagation();
         if (!graph.state.selectedNode)
             return;
         var id = graph.state.selectedNode.id;
         var nodo = graph.nodes[buscar(id)];
         cambiar($(this).attr('id').split("."), $(this).val(), nodo);
+    });
+
+    $('#opciones').on('keydown', '#times', function(ev) {
+        ev.stopPropagation();
+    });
+    $('#opciones').on('change', '#times', function(ev) {
+        ev.stopPropagation();
+        if (!graph.state.selectedNode)
+            return;
+        var id = graph.state.selectedNode.id;
+        var nodo = graph.nodes[buscar(id)];
+        nodo.configurado.times = $(this).val();
     });
 
     //input.checkbox,

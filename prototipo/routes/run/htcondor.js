@@ -34,15 +34,13 @@ function submitJobs(dagl, cb) {
     htcondor.createSchedduler(function(err, schedd) {
         if (err) {
             logger.info("Error al crear Schedd", err);
-            cb(err);
-            return;
+            return cb(err);
         }
         schedd.createDagJob(dagJob, function(err, job) {
-            /*if(err){
+            if(err){
               logger.info("Error al enviar dag");
-              cb(err);
-              return;
-            }*/
+              return cb(err);
+            }
             logger.info("Enviado a htcondor");
             cb(null, null);
         });

@@ -43,7 +43,7 @@ html
       input#save-input(type='image', title='Guardar', src='save.png', alt='save graph')
       input#download-input(type='image', title='Descargar', src='download.png', alt='download graph')
       input#delete-graph(type='image', title='Borrar', src='trash.png', alt='delete graph')
-      input#open(type='image', title='Consola', src='console.png', alt='console')
+      //input#open(type='image', title='Consola', src='console.png', alt='console')
 
 
     #filem.modal.bs-example-modal-lg(tabindex='-1', role='dialog', aria-labelledby='myLargeModalLabel', aria-hidden='true')
@@ -86,6 +86,7 @@ html
       nodes= !{nodes};
       edgesTpm= !{edges};
       ejecucion = null;
+      workloader = "htcondor";
 
       edges = [];
 

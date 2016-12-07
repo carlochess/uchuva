@@ -1,8 +1,9 @@
 apt-get update --fix-missing
 curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 apt-get install -y build-essential wget autoconf libncurses5-dev itcl3-dev tcl gfortran mpich2
-wget http://www.openlava.org/tarball/openlava-4.0.tar.gz
-
+# wget http://www.openlava.org/tarball/openlava-4.0.tar.gz
+cp /vagrant/openlava-4.0.tar.gz ~
+cd ~/
 tar -xzvf openlava-4.0.tar.gz
 cd openlava-4.0/
 

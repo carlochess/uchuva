@@ -123,6 +123,7 @@ module.exports = function(app){
       req.checkBody('nodes', 'Invalid nodes').optional().isArrayOfNodes();
       req.checkBody('edges', 'Invalid edges').optional().isArrayOfEdges();
       //req.checkBody('imagen', 'Invalid image').optional().isAlphanumeric();
+      //req.checkBody('workloader', 'Invalid workloader').optional();
       var errors = req.validationErrors();
       if (errors) {
           var asStr = errors.map(function(e){

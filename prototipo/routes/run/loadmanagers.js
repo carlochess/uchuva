@@ -13,24 +13,17 @@ function nodeAClassAd(nodo, dagDir, filese, filess, cm) {
     var res = "";
     if (nodo.configurado) {
         var configuracion = nodo.configurado;
+        var obj = {
+            config: configuracion,
+            nodo: nodo,
+            dagdir: dagDir
+        };
         if (cm == 1) {
-            res = config.JOB_TEMPLATE.openlava({
-                config: configuracion,
-                nodo: nodo,
-                dagdir: dagDir
-            });
+            res = config.JOB_TEMPLATE.openlava(obj);
         } else if (cm == 2) {
-            res = config.JOB_TEMPLATE.torque({
-                config: configuracion,
-                nodo: nodo,
-                dagdir: dagDir
-            });
+            res = config.JOB_TEMPLATE.torque(obj);
         } else if (cm == 3) {
-            res = config.JOB_TEMPLATE.slurm({
-                config: configuracion,
-                nodo: nodo,
-                dagdir: dagDir
-            });
+            res = config.JOB_TEMPLATE.slurm(obj);
         }
     }
     return res;
@@ -62,40 +55,31 @@ var enviarssh = function(i, cwd, cb) {
         key: config.SSHKEY,
         baseDir: cwd,
     }).on('error', function(err){
-      cb(err);
+      return cb(err);
     });
     var commands = ["condor_submit_dag", "bsub", "qsub", "sbatch"];
     if (config.BMANAGER == 1 || config.BMANAGER == 2) {
         comando = "cat " + i + " | " + commands[config.BMANAGER];
-        ssh.exec(comando, {
-            out: function(stdout) {
-                var regex = regexs[config.BMANAGER - 1];
-                var m = regex.exec(stdout);
-                if(m && m.length > 1)
-                  cb(null, m[1]);
-                else
-                  cb("Unknow error");
-            },
-            err: function(stderr) {
-                cb(stderr);
-            }
-        }).start();
     } else {
         comando = commands[config.BMANAGER] +" "+ i;
-        ssh.exec(comando, {
-            out: function(stdout) {
-                var regex = regexs[config.BMANAGER - 1];
-                var m = regex.exec(stdout);
-                if(m && m.length > 1)
-                  cb(null, m[1]);
-                else
-                  cb("Unknow error");
-            },
-            err: function(stderr) {
-                cb(stderr);
-            },
-        }).start();
     }
+    ssh.exec(comando, {
+        out: function(stdout) {
+            var regex = regexs[config.BMANAGER - 1];
+            var m = regex.exec(stdout);
+            if(m && m.length > 1)
+              return cb(null, m[1]);
+            else
+              return cb("Unknow error");
+        },
+        err: function(stderr) {
+            return cb(stderr);
+        }
+    }).start(function(err, start){
+      if(err){
+        return cb(err);
+      }
+    });
 };
 
 var enviar = function(i, cwd, cb) {
