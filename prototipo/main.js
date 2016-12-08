@@ -15,6 +15,8 @@ var User = require('./models/user.js');
 var session = require('express-session');
 var config = require('./config.js');
 var compression = require('compression');
+var paginate = require('express-paginate');
+var i18n = require("i18n");
 //var tty = require('./tty/tty.js');
 //var proxyvnc = require('./utils/websockify.js');
 var MongoStore = require('connect-mongo')(session);
@@ -53,6 +55,12 @@ app.use(session({
     saveUninitialized: false
 }));
 
+app.use(paginate.middleware(10, 50));
+app.all(function(req, res, next) {
+  if (req.query.limit <= 10) req.query.limit = 10;
+  next();
+});
+
 app.use(passport.initialize());
 app.use(passport.session());
 
@@ -77,6 +85,16 @@ passport.use(new LocalAPIKeyStrategy(
     }
 ));
 
+i18n.configure({
+    locales:['es', 'en'],
+    directory: __dirname + '/locales',
+    updateFiles: false,
+    cookie: 'lang',
+    queryParameter: 'lang',
+});
+
+app.use(i18n.init);
+
 var routesUsers = require('./routes/index');
 require('./routes/vfs/file-delete')(app);
 require('./routes/vfs/file-download')(app);
@@ -91,40 +109,19 @@ var routesSubmits = require('./routes/run/submit.js')(app);
 var routesRuns = require('./routes/run.js')(app);
 
 app.use('/', routesUsers);
-//app.use('/', routesFiles);
-//app.use('/', routesConsola);
-//app.use('/', routesProgramas);
-//app.use('/', routesDags);
-//app.use('/', routesRuns);
-//app.use('/', routesBuilds);
-//app.use('/', routesSubmits);
-
 
 mongoose.connect(config.DATABASE_URI);
-// CONNECTION EVENTS
-// When successfully connected
 mongoose.connection.on('connected', function() {
     logger.info('Mongoose default connection open to ' + config.DATABASE_URI);
 });
-
-// If the connection throws an error
 mongoose.connection.on('error', function(err) {
     logger.error('Mongoose default connection error: ' + err);
     process.exit(1);
 });
-
-// When the connection is disconnected
 mongoose.connection.on('disconnected', function() {
     logger.error('Mongoose default connection disconnected');
 });
 
-/* If the Node process ends, close the Mongoose connection
-process.on('SIGINT', function () {
-    mongoose.connection.close(function () {
-        logger.error('Mongoose default connection disconnected through app termination');
-    });
-});
-*/
 app.use(function(err, req, res, next) {
     logger.error('Unknown error: ' + err);
     res.status(err.status || 500);

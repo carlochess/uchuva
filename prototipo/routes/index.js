@@ -1,7 +1,6 @@
 var express = require('express');
 var passport = require('passport');
 var User = require('../models/user');
-var Dag = require('../models/dag');
 var archivos = require('../utils/file.js');
 var router = express.Router();
 var config = require('../config');
@@ -12,34 +11,6 @@ var File = require('../models/file.js');
 router.get('/', function(req, res) {
     res.render('index', {
         user: req.user
-    });
-});
-
-router.get('/user', isAuthenticated, function(req, res) {
-    Dag.find({
-        userid: req.user._id
-    }, null, {
-        sort: {
-            date: -1
-        }
-    }, function(err, dags) {
-        if(err){
-          logger.error("Error trying to get dags: "+err);
-          dags=[];
-        }
-        res.format({
-            html: function() {
-                res.render('home', {
-                    user: req.user,
-                    dags: dags,
-                    title: "Home",
-                    mensajes : req.flash('error')
-                });
-            },
-            json: function() {
-                res.json(dags);
-            }
-        });
     });
 });
 

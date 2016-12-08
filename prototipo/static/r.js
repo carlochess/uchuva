@@ -50,6 +50,7 @@
             render(param, document.getElementById("opciones"));
           }
           opciones.append('<button class="nada" id="raw">Raw</button>');
+          opciones.append('<li><input type="number" name="times" min="1" id="times" value="'+param.times+'"></li></br>"');//
           param.file && param.file.forEach(function(archivo,i){
             opciones.append("<li data-type="+archivo.type+" data-id="+i+"> " + archivo.filename +
             (archivo.entrada? ' <span class="glyphicon glyphicon-menu-up" aria-hidden="true"></span>':

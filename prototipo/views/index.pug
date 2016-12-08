@@ -16,19 +16,18 @@ head
       ul.nav.nav-pills.pull-right
         if (user)
            li.active(role='presentation')
-             a(href='/user') Entrar
+             a(href='/user')= __('Home')
         else
            li(role='presentation')
-             a(href='/register') Registro
+             a(href='/register')= __('Registro')
            li(role='presentation')
-             a(href='/login') Login
+             a(href='/login')= __('Entrar')
     h3.text-muted Uchuva
   .jumbotron
     h1#titulo Uchuva
-    p.lead
-      | Un portal cientifico creado para facilitar el uso y aprendizaje de aplicaciones como Cat, Cp, Mv, entre otras
+    p(class="lead")= __('description')
     p
-      a.btn.btn-lg.btn-success(href='/register', role='button') Registrate
+      a.btn.btn-lg.btn-success(href='/register', role='button')= __('Registro')
   .row.marketing
     .col-lg-6
       h4 Workloaders

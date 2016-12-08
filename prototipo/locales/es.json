@@ -1,0 +1,17 @@
+{
+  "Nuevo Dag": "Nuevo Dag",
+  "Administrador de archivos" : "Administrador de archivos",
+  "Editar" : "Editar",
+  "Ejecuciones" : "Ejecuciones",
+  "Eliminar" : "Eliminar",
+  "No tienes proyectos aun": "¡No tienes proyectos aun!",
+  "Cancel" : "Cancelar",
+  "Submit" : "Enviar",
+  "Registro" : "Registrarse",
+  "Entrar" : "Entrar",
+  "Home":"Inicio",
+  "Desarrolladores":"Desarrolladores",
+  "Logout":"Salir",
+  "description": "Un portal cientifico creado para facilitar el uso y aprendizaje de aplicaciones como Cat, Cp, Mv, entre otras",
+  "Usuario": "Usuario"
+}

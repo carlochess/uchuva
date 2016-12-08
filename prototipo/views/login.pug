@@ -14,8 +14,8 @@ block content
       .form-group
         input.form-control(type='password', name="password", placeholder='Password', id='password')
       a(href='/')
-        button.btn.btn-default(type="button") Cancel
-      button.btn.btn-primary(type='submit', id="btn-login") Submit
+        button.btn.btn-default(type="button")= __('Cancel')
+        button.btn.btn-primary(type='submit', id="btn-login")= __('Submit')
     br
     a(href='/register')
-      button.btn.btn-success(type="button") Register
+      button.btn.btn-success(type="button")= __('Registro')

@@ -15,6 +15,7 @@ block content
     .main(class="col-sm-9 col-md-10")
         .row
         if dags.length
+            include _paginate
             each val in dags
               .col-sm-6.col-md-4
                 .thumbnail

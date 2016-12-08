@@ -7,9 +7,9 @@ block content
     .col-sm-3.col-md-2
        ul.list-group
           li.list-group-item
-            a(href='/crearDag', id="createdag") Nuevo Dag
+            a(href='/crearDag', id="createdag")= __('Nuevo Dag')
           li.list-group-item
-            a(href='/filemanager', id="filemanager") Administrador de archivos
+            a(href='/filemanager', id="filemanager")= __('Administrador de archivos')
           <!--li.list-group-item
             a#open Consola https://dummyimage.com/600x200/de7818/ffffff&text=No+image-->
 
@@ -20,6 +20,7 @@ block content
             div.alert.alert-danger= mensajes
         br
       if dags.length
+        include _paginate
         .row
         each val in dags.length ? dags : []
 
@@ -34,8 +35,8 @@ block content
                   a(href="/editar?id="+val._id)= val.nombre
                 p= val.date
                 p
-                  a.btn.btn-primary(href="/editar?id="+val._id, role='button') Editar
-                  a.btn.btn-default(href="/builds?id="+val._id, role='button') Ejecuciones
-                  a.btn.btn-danger(href="/eliminarDag?id="+val._id, role='button') Eliminar
+                  a.btn.btn-primary(href="/editar?id="+val._id, role='button')= __('Editar')
+                  a.btn.btn-default(href="/builds?id="+val._id, role='button')= __('Ejecuciones')
+                  a.btn.btn-danger(href="/eliminarDag?id="+val._id, role='button')= __('Eliminar')
       else
-        p#welcome ¡No tienes proyectos aun!.
+        p#welcome= __('No tienes proyectos aun')

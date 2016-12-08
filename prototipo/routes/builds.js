@@ -4,6 +4,7 @@ var DagExe = require('../models/dagExe.js');
 var logger = require('../utils/logger.js');
 var isAuthenticated = require('../utils/login.js');
 var expressValidator = require('express-validator');
+var paginate = require('express-paginate');
 
 module.exports = function(app){
   app.use('/', router);
@@ -83,15 +84,17 @@ module.exports = function(app){
       });
   });
 
-  function builds(idProyecto, idUsuario, cb) {
+  function builds(idProyecto, idUsuario, page, limit, cb) {
     // TODO: Comprobar que el DAG existe
-      DagExe.find({
+      DagExe.paginate({
           userid: idUsuario,
           proyecto: idProyecto
-      }, null, {
-          sort: {
-              date: -1
-          }
+      }, {
+        page: page,
+        limit: limit,
+        sort: {
+          date: -1
+        }
       }, cb);
   }
   router.get('/builds', isAuthenticated, function(req, res) {
@@ -120,7 +123,13 @@ module.exports = function(app){
     }
     var idProyecto = req.query.id;
     var userId = req.user._id;
-    builds(idProyecto, userId, function(err, dags) {
+    var page = req.query.page;
+    var limit = req.query.limit;
+
+    builds(idProyecto, userId, page, limit,function(err, result) {
+          var dags = result.docs;
+          var itemCount= result.limit;
+          var pageCount= Math.ceil(result.total/itemCount);
           if (err) {
             logger.error(error+", dag "+idBuild+", user: "+userId);
             res.format({
@@ -134,12 +143,16 @@ module.exports = function(app){
             });
             return;
           }
+          var pages = paginate.getArrayPages(req)(itemCount, pageCount, req.query.page);
           res.format({
               html: function() {
                   res.render('builds', {
                       user: req.user,
                       dags: dags,
-                      title: "Ejecuciones"
+                      title: "Ejecuciones",
+                      pageCount: pageCount,
+                      itemCount: itemCount,
+                      pages: pages
                   });
               },
               json: function() {

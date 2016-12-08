@@ -1,0 +1,17 @@
+{
+	"Nuevo Dag": "Create Dag",
+	"Administrador de archivos": "File manager",
+	"Editar": "Edit",
+	"Ejecuciones": "Exections",
+	"Eliminar": "Delete",
+	"No tienes proyectos aun": "You don't have any dag!",
+	"Cancel": "Cancel",
+	"Submit": "Submit",
+	"Registro": "Register",
+	"Entrar": "Login",
+	"Home": "Home",
+	"Desarrolladores": "Developers",
+	"Logout": "Logout",
+	"description": "A scientific web portal that allows users to create and submit workflows to HTCondor (Dagman), Slurm, OpenLava (LSF), Torque (PBS)",
+	"Usuario": "User"
+}

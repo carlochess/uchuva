@@ -6,9 +6,48 @@ var logger = require('../utils/logger.js');
 var controladorArchivos = require('../utils/file.js');
 var Dag = require('../models/dag.js');
 var isAuthenticated = require('../utils/login.js');
+var paginate = require('express-paginate');
 
 module.exports = function(app){
   app.use('/', router);
+
+  router.get('/user', isAuthenticated, function(req, res) {
+      Dag.paginate({
+          userid: req.user._id
+      }, {
+        page: req.query.page,
+        limit: req.query.limit,
+        sort: {
+          date: -1
+        }
+      }, function(err, result) {
+          var dags = result.docs;
+          var itemCount= result.limit;
+          var pageCount= Math.ceil(result.total/itemCount);
+          if(err){
+            logger.error("Error trying to get dags: "+err);
+            dags=[];
+          }
+          var pages = paginate.getArrayPages(req)(itemCount, pageCount, req.query.page);
+          res.format({
+              html: function() {
+                  res.render('home', {
+                      user: req.user,
+                      dags: dags,
+                      title: "Home",
+                      mensajes : req.flash('error'),
+                      pageCount: pageCount,
+                      itemCount: itemCount,
+                      pages: pages
+                  });
+              },
+              json: function() {
+                  res.json(dags);//pageCount: pageCount,itemCount: itemCount,
+              }
+          });
+      });
+  });
+
   function crearDag(userId, cb) {
       var superh = superheroes.random();
       var dag = new Dag({
@@ -123,7 +162,7 @@ module.exports = function(app){
       req.checkBody('nodes', 'Invalid nodes').optional().isArrayOfNodes();
       req.checkBody('edges', 'Invalid edges').optional().isArrayOfEdges();
       //req.checkBody('imagen', 'Invalid image').optional().isAlphanumeric();
-      //req.checkBody('workloader', 'Invalid workloader').optional();
+      req.checkBody('workloader', 'Invalid workloader').optional();
       var errors = req.validationErrors();
       if (errors) {
           var asStr = errors.map(function(e){
@@ -137,6 +176,7 @@ module.exports = function(app){
       var nodes = req.body.nodes;
       var edges = req.body.edges;
       var imagen = req.body.imagen;
+      var workloader = req.body.workloader;
       var userId = req.user._id;
 
       var where = {
@@ -146,7 +186,8 @@ module.exports = function(app){
       Dag.findOneAndUpdate(where, {
           nodes: nodes,
           edges: edges,
-          imagen: imagen
+          imagen: imagen,
+          workloader:workloader
       }, {new : true}, function(err, d) {
           if (err || !d) {
               logger.error("Error saving dag "+err+", user: "+userId);

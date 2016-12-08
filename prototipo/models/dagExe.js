@@ -1,4 +1,5 @@
 var mongoose = require('mongoose');
+var mongoosePaginate = require('mongoose-paginate');
 
 var DagExeSchema = mongoose.Schema({
     proyecto: String,
@@ -40,5 +41,5 @@ var DagExeSchema = mongoose.Schema({
     imagen : String,
     tipo : Number
 });
-
+DagExeSchema.plugin(mongoosePaginate);
 module.exports = mongoose.model('DagExe', DagExeSchema);
