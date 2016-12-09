@@ -14,7 +14,7 @@ nav.navbar.navbar-inverse
       .navbar-form.navbar-right
         if (user)
             input.form-control.input-sm(type='text', ng-show='config.searchForm', placeholder="Buscar...", ng-model='$parent.query')
-            button#dropDownMenuLang.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-expanded='true') __('Usuario') #{user.username}
+            button#dropDownMenuLang.btn.btn-default.btn-sm.dropdown-toggle(type='button', data-toggle='dropdown', aria-expanded='true') #{__('Usuario')} #{user.username}
             ul.dropdown-menu(role='menu', aria-labelledby='dropDownMenuLang')
               li(role='presentation')
                 a(role='menuitem', tabindex='-1', href='/user')= __('Home')

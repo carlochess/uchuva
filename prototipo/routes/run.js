@@ -78,8 +78,9 @@ module.exports = function(app){
   router.post('/datanodedag', isAuthenticated, function(req, res) {
       req.checkQuery('idEjecucion', 'Invalid id exe').notEmpty();
       //req.checkQuery('nodo.title', 'Invalid node title').notEmpty();
-      //req.checkQuery('nodo._id', 'Invalid node_id').notEmpty();
+      //req.checkQuery('nodo.id', 'Invalid node id').notEmpty();
       //req.checkQuery('tipo', 'Invalid type').notEmpty();
+      //req.checkQuery('index', 'Invalid index').notEmpty();
       var errors = req.validationErrors();
       if (errors) {
           var asStr = errors.map(function(e){
@@ -97,7 +98,8 @@ module.exports = function(app){
       var nodo = envio.nodo;
       var nombre = (nodo.title + "_" + nodo.id).replace(/[^a-z0-9]/gi, '_').toLowerCase();
       var tipo = envio.tipo; // log, err, out
-      controladorArchivos.leerArchivo(path.join(config.DAG_DIR, dag, nombre + "." + tipo), function(err, data) {
+      var archuvo = path.join(config.DAG_DIR, dag, nombre+ (envio.index>1?"."+envio.index:"") + "." + tipo);
+      controladorArchivos.leerArchivo(archivo, function(err, data) {
           if (err) {
               res.send({
                   error: "Sin informacion"

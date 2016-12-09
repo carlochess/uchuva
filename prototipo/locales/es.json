@@ -13,5 +13,11 @@
   "Desarrolladores":"Desarrolladores",
   "Logout":"Salir",
   "description": "Un portal cientifico creado para facilitar el uso y aprendizaje de aplicaciones como Cat, Cp, Mv, entre otras",
-  "Usuario": "Usuario"
+  "Usuario": "Usuario",
+	"Integración con HTCondor, Slurm, Torque y Openlava" : "Integración con HTCondor, Slurm, Torque y Openlava",
+	"Numerosas aplicaciones pueden ser configuradas usando un formulario" : "Numerosas aplicaciones pueden ser configuradas usando un formulario",
+	"Conexión SSH para sitios remotos" : "Conexión SSH para sitios remotos",
+	"Todos los archivos en un solo lugar" : "Todos los archivos en un solo lugar",
+	"Tienes a tu disposición una terminal virtual" : "Tienes a tu disposición una terminal virtual",
+	"Modela tus experimentos usando grafos" : "Modela tus experimentos usando grafos"
 }

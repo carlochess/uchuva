@@ -2,7 +2,7 @@
 	"Nuevo Dag": "Create Dag",
 	"Administrador de archivos": "File manager",
 	"Editar": "Edit",
-	"Ejecuciones": "Exections",
+	"Ejecuciones": "Executions",
 	"Eliminar": "Delete",
 	"No tienes proyectos aun": "You don't have any dag!",
 	"Cancel": "Cancel",
@@ -13,5 +13,11 @@
 	"Desarrolladores": "Developers",
 	"Logout": "Logout",
 	"description": "A scientific web portal that allows users to create and submit workflows to HTCondor (Dagman), Slurm, OpenLava (LSF), Torque (PBS)",
-	"Usuario": "User"
+	"Usuario": "User",
+	"Integración con HTCondor, Slurm, Torque y Openlava" : "Integration with HTCondor, Slurm, Torque y Openlava",
+	"Numerosas aplicaciones pueden ser configuradas usando un formulario" : "Many scientific apps can be used",
+	"Conexión SSH para sitios remotos" : "SSH conection to remote sites",
+	"Todos los archivos en un solo lugar" : "All your files in one place",
+	"Tienes a tu disposición una terminal virtual" : "Use a web terminal",
+	"Modela tus experimentos usando grafos" : "Model your experiments using graphs"
 }

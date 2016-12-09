@@ -80,6 +80,7 @@ router.post('/register', function(req, res) {
         createRootFolder(account._id, function(err, folder){
           if (err) {
               logger.error("Error trying to register: "+err);
+              // account.delete()
               res.format({
                 html: function() {
                   res.render('register', {
