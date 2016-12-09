@@ -3,6 +3,7 @@ var mongoosePaginate = require('mongoose-paginate');
 
 var DagExeSchema = mongoose.Schema({
     proyecto: String,
+    workloader:String,
     nodes: [{
 		title: String,
 		id: Number,
@@ -15,6 +16,8 @@ var DagExeSchema = mongoose.Schema({
 		    useDocker : Boolean,
 		    image: String,
         argumento : String,
+        raw: Number,
+        times: Number,
         file: [mongoose.Schema.Types.Mixed]
 	    }
 	}],

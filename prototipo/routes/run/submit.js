@@ -25,6 +25,8 @@ module.exports = function(app){
       req.checkBody('nodes', 'Invalid nodes').optional().isArrayOfNodes();
       req.checkBody('edges', 'Invalid edges').optional().isArrayOfEdges();
       //req.checkBody('imagen', 'Invalid image').optional().isAlphanumeric();
+      req.checkBody('workloader', 'Invalid workloader').optional().isAlphanumeric();
+
       var errors = req.validationErrors();
       if (errors) {
           var asStr = errors.map(function(e){
@@ -36,6 +38,8 @@ module.exports = function(app){
 
       var envio = req.body;
       var proyecto = envio.proyecto;
+      var workloader = "htcondor,openlava,torque,slurm".split(",").indexOf(envio.workloader);
+      workloader = (workloader == -1?0:workloader);
 
       controladorArchivos.crearDirectorio(config.DAG_DIR, function(err,nombreDir) {
           if (err) {
@@ -50,10 +54,10 @@ module.exports = function(app){
                   res.send({error : 3, message : "Error trasteo archivos"});
                   return;
               }
-              if (config.BMANAGER === 0)
+              if (workloader===0)
                   htcondor.enviarHTC(envio, nombreDir, notificarBlaBla);
               else
-                  loadmanagers.submitToLoadManagers(envio, nombreDir, notificarBlaBla);
+                  loadmanagers.submitToLoadManagers(envio, nombreDir,workloader, notificarBlaBla);
           });
 
           function notificarBlaBla(err, nodes) {
@@ -72,7 +76,7 @@ module.exports = function(app){
                   userid: req.user._id,
                   ejecuciones: [],
                   imagen: envio.imagen,
-                  tipo: config.BMANAGER
+                  tipo: workloader
               });
               dag.save(function(err) {
                   if (err) {
