@@ -15,6 +15,7 @@ to HTCondor (Dagman), Slurm, OpenLava (LSF), Torque (PBS) and OAR. Is designed t
  - Vagrant
  - Docker
  - Tested using mocha/chai: unit testing, regression, integration and aceptance test (selenium)
+ - i8ln
  - Easy to monitor with ELK stack (logger)
 
 > For more information please visit the [wiki](https://github.com/carlochess/uchuva/wiki)
