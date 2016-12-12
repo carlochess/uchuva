@@ -14,7 +14,6 @@ services:
       SHARE: /app
       CONDOR_URL: http://htcondor:8080/
       CONDOR_JOB_OWNER: uchuva
-#      DATABASE_URI: "mongodb://mongo/uchuva"
       BMANAGER: 3
 
   mongo:
@@ -22,55 +21,6 @@ services:
     expose:
       - "27017"
 
-  htcondor:
-    build:
-      ./docker/htcondor
-    expose:
-      - "8080"
-    volumes_from:
-      - uchuva
-
-### docker run -d -h docker -p 10022:22 --name openlava carlochess/openlava
-  openlava:
-    build:
-      ./docker/openlava
-    hostname: docker
-    volumes_from:
-      - uchuva
-    expose:
-      - "22"
-
-### docker run -d -h docker -p 10022:22 --privileged --name torque agaveapi/torque
-  torque:
-    image:
-      agaveapi/torque
-    volumes_from:
-        - uchuva
-    hostname: docker
-    expose:
-      - "22"
-    privileged: true
-
-#### Recordar el sed del /etc/hosts
-#### docker run -h docker.example.com -p 10022:22 --rm --name slurm agaveapi/slurm
-  slurm:
-    image:
-      agaveapi/slurm
-    volumes_from:
-      - uchuva
-    hostname: docker.example.com
-    expose:
-      - "22"
-      
-#docker run -p 4569:4569 --name my_s3 -d lphoward/fake-s3
-  fake-s3:
-    image:
-      lphoward/fake-s3
-      
-# docker run -p 5601:5601 -p 9200:9200 -p 5044:5044 -it -v $(pwd)/docker/filebeat/uchuva.conf:/etc/logstash/conf.d/uchuva.conf --name elk sebp/elk
-# 5601 (Kibana web interface).
-# 9200 (Elasticsearch JSON interface).
-# 5044 (Logstash Beats interface, receives logs from Beats such as Filebeat – see the Forwarding logs with Filebeat section).
   elk:
     image:
       sebp/elk
@@ -81,16 +31,3 @@ services:
     ports:
       - "5601:5601"
 
-# docker run -d --volumes-from nginx -v "/path/to/your/filebeat.yml:/etc/filebeat/filebeat.yml" olinicola/filebeat
-
-# docker run -d --name ftpd_server -p 21:21 -p 30000-30009:30000-30009 -e "PUBLICHOST=localhost" stilliard/pure-ftpd:hardened
-# pure-pw useradd bob -f /etc/pure-ftpd/passwd/pureftpd.passwd -m -u ftpuser -d /home/ftpusers/bob
-# ftp -p localhost 21
-
-# docker run -p 2222:22 -d atmoz/sftp bob:bob:1001
-# User "foo" with password "pass" can login with sftp and upload files to a folder called "upload". No mounted directories or custom UID/GID. Later you can inspect the files and use --volumes-from to mount them somewhere else (or see next example).
-#  sftp:
-#    image: atmoz/sftp
-#    ports:
-#        - "2222:22"
-#    command: foo:123:1001

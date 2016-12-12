@@ -88,19 +88,19 @@ var enviar = function(i, cwd, workloader,cb) {
         argumento;
     var otros = {
       cwd: cwd,
-      timeout: 10,
+      timeout: 5000,
     };
     if (workloader == 1 || workloader == 2) {
         var commands = ["bsub", "qsub"];
-        comando = "cat " + i + " | " + commands[workloader - 1];
-        ejecutar(comando, otros, cb);
+        comando = commands[workloader - 1]+" < "+ i;
+        ejecutar(comando, cb);
     } else if (workloader == 3) {
         comando = 'sbatch ' + i;
-        ejecutar(comando, otros, cb);
+        ejecutar(comando, cb);
     }
-    function ejecutar(comando, otros, cb) {
+    function ejecutar(comando/*, otros*/, cb) {
         logger.info("Ejecutando", comando);
-        var proc = exec(comando, otros, function(error, stdout, stderr) {
+        var proc = exec(comando/*, otros*/, function(error, stdout, stderr) {
             if (error) {
                 return cb(error);
             }
