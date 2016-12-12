@@ -26,7 +26,7 @@ function validarArchivos(items, cb) {
         }
     }, function(err, files) {
         if (err) {
-            logger.info("No encontrados");
+            logger.error("No encontrados");
             cb(err);
             return;
         }
@@ -96,6 +96,7 @@ function trasteo(envio, nombreDir, cb) {
             }
         });
     }
+    logger.info(ficheros,{ funcion: 'trasteo'});
     validarArchivos(ficheros, function(err, ficherosbd) {
         if (err) {
             cb(err);

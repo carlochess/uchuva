@@ -845,7 +845,7 @@
                             "type": "string",
                             "description": "Program arguments"
                         },
-                        "files": {
+                        "file": {
                             "type": "array",
                             "description": "Program arguments",
                             "items": {

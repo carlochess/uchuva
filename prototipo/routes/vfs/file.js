@@ -10,18 +10,36 @@ var logger = require('../../utils/logger.js');
 
 var upload = multer({
     dest: config.UPLOAD_DIR
-});
+});/**/
 /*
 var storage = require('multer-gridfs-storage')({
    url: config.DATABASE_URI // 'mongodb://localhost:27017/database'
 });
 // Set multer storage engine to the newly created object
-var upload = multer({ storage: storage });
+var upload = multer({
+  storage: storage,
+  filename: function(req, file, cb) {
+        cb(null, file.originalname);
+  }
+});
+/**/
+
+// Cree un archivo de credenciales en ~/.aws/credentials en Mac/Linux o bien en C:\Users\USERNAME\.aws\credentials en Windows
+/*
+[default]
+aws_access_key_id = your_access_key
+aws_secret_access_key = your_secret_key
 */
 /*
-var multerS3 = require('multer-s3')
-var s3 = new aws.S3({ ... })
-
+var multerS3 = require('multer-s3');
+var aws = require('aws-sdk');
+var config = {
+  s3ForcePathStyle: true,
+  accessKeyId: 'ACCESS_KEY_ID',
+  secretAccessKey: 'SECRET_ACCESS_KEY',
+  endpoint: new aws.Endpoint('http://localhost:4569')
+};
+var s3 = new aws.S3(config);
 var upload = multer({
   storage: multerS3({
     s3: s3,
@@ -30,12 +48,29 @@ var upload = multer({
       cb(null, {fieldName: file.fieldname});
     },
     key: function (req, file, cb) {
-      cb(null, Date.now().toString())
+      cb(null, Date.now().toString());
+    }
+  })
+});
+/**/
+
+// $ npm install --save multer-ftp
+/*
+var FTPStorage = require('multer-ftp')
+
+var upload = multer({
+  storage: new FTPStorage({
+    basepath: '/',
+    ftp: {
+      host: 'localhost',
+      secure: true, // enables FTPS/FTP with TLS
+      user: 'bob',
+      password: 'bob',
+      port : 2222 //
     }
   })
 })
-
-*/
+/**/
 var isAuthenticated = require('../../utils/login.js');
 
 function fechaActual() {

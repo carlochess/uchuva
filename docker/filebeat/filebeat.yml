@@ -1,0 +1,13 @@
+output:
+  logstash:
+    enabled: true
+    hosts:
+      - elk:5044
+    timeout: 15
+
+filebeat:
+  prospectors:
+    -
+      paths:
+        - /app/logs/all-logs.log
+      document_type: syslog

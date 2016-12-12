@@ -1,17 +1,13 @@
 #lang racket
-
+(provide build-maze show-maze)
 ;; the structure representing a maze of size NxM
 (struct maze (N M tbl))
-
 ;; managing cell properties
 (define (connections tbl c) (dict-ref tbl c '()))
-
 (define (connect! tbl c n)
   (dict-set! tbl c (cons n (connections tbl c)))
   (dict-set! tbl n (cons c (connections tbl n))))
-
 (define (connected? tbl a b) (member a (connections tbl b)))
-
 ;; Returns a maze of a given size
 ;; build-maze :: Index Index -> Maze
 (define (build-maze N M)
@@ -28,7 +24,6 @@
       (move-to-cell n)))
   ; return the result
   (maze N M tbl))
-
 ;; Shows a maze
 (define (show-maze m)
   (match-define (maze N M tbl) m)
@@ -48,6 +43,5 @@
           (display "+---")))
     (displayln "+"))
   (newline))
-
 ; (define m (build-maze 10 7))
 ; (show-maze m)

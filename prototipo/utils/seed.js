@@ -1,11 +1,11 @@
 var mongoose = require('mongoose');
-var user = require('../models/user');
+var User = require('../models/user');
 mongoose.connect('mongodb://localhost/uchuva');
 var users = [
   {
-    _id: '559645cd1a38532d14349240',
-    name: 'admin',
-    friends: []
+    name: 'admin3',
+    username : 'admin3',
+    apikey : 'admin3'
   },
 ];
 
