@@ -857,7 +857,11 @@
                                   },
                                   "entrada": {
                                       "type": "string",
-                                      "description": "true or"
+                                      "description": "true or false"
+                                  },
+                                  "filename": {
+                                      "type": "string",
+                                      "description": "name of the file"
                                   }
                               }
                             }

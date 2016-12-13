@@ -2,6 +2,7 @@ universe = {{= it.config.universe.trim() }}
 {{? it.config.useDocker }}docker_image = {{= it.config.image.trim() }}{{?}}
 executable = {{= it.config.location.trim() }}
 arguments = {{= it.config.argumento.trim() }}
+transfer_executable = false
 {{? it.filese.length > 0 || it.filess.length > 0 }}
 should_transfer_files = YES
 when_to_transfer_output = ON_EXIT
@@ -11,4 +12,4 @@ when_to_transfer_output = ON_EXIT
 output = {{=it.nodoNombre}}.{{? it.config.times > 1 }}$(Process).{{?}}out
 error = {{=it.nodoNombre}}.{{? it.config.times > 1 }}$(Process).{{?}}err
 log = {{=it.nodoNombre}}.{{? it.config.times > 1 }}$(Process).{{?}}log
-{{? it.config.times > 1 }}queue {{= it.config.times }} {{?}}
+queue {{? it.config.times > 1 }}{{= it.config.times }}{{?}}

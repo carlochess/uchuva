@@ -63,7 +63,7 @@
 
 (define (submit)
   (letrec (
-    [credd (register (string->url "http://localhost:3000/register") "carlos2" "losa")]
+    [credd (register (string->url "http://localhost:3000/register") "carlos16" "losa")]
     [apikey (hash-ref credd 'apikey)]
     [rootfolder (hash-ref credd 'rootfolder)]
     [idArchivo (hash-ref (crearArchivo apikey (string->url "http://localhost:3000/crearArchivo") "main.rkt") 'success)]
@@ -81,8 +81,9 @@
                       'y  0
                       'configurado
                          (hasheq
-                            'file  (list (hasheq 'id idArchivo 'type "file" 'entrada "true") (hasheq 'id idArchivo2 'type "file" 'entrada "true"))
-                            'location "racket"
+                            'file  (list (hasheq 'id idArchivo 'filename "main.rkt" 'type "file" 'entrada "true")
+                                        (hasheq 'id idArchivo2 'filename "maze.rkt" 'type "file" 'entrada "true"))
+                            'location "/usr/bin/racket"
                             'argumento "main.rkt -m"))))]
     )
     (run apikey (string->url "http://localhost:3000/run") dag)
@@ -130,7 +131,7 @@
 ))
 
 (if (maze-mode)
-  (let ([m (build-maze 10 7)])
+  (let ([m (build-maze 200 700)])
     (show-maze m))
   (submit)
 )

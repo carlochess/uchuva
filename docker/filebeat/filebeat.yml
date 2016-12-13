@@ -2,7 +2,7 @@ output:
   logstash:
     enabled: true
     hosts:
-      - elk:5044
+      - 172.17.9.15:5044
     timeout: 15
 
 filebeat:
@@ -10,4 +10,4 @@ filebeat:
     -
       paths:
         - /app/logs/all-logs.log
-      document_type: syslog
+      document_type: uchuva-log
