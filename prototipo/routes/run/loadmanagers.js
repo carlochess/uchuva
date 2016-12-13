@@ -44,7 +44,7 @@ function indiceNodo(ordenado, id,workloader) {
 
 var enviarssh = function(i, cwd, workloader,cb) {
     logger.info("enviando");
-    var regexs = [/Job <(\d*)>.*<([a-zA-Z]*)>/g, /(\d*.[a-zA-Z]*)/g, /Submitted batch job (\d*)/g,];
+    var regexs = [/Job <(\d*)>.*<([a-zA-Z]*)>/g, /(\d*.*)/g, /Submitted batch job (\d*)/g,];
     var comando,
         argumento,
         otros;
