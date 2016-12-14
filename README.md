@@ -224,19 +224,7 @@ Please report any issues using [Github](https://github.com/carlochess/uchuva/iss
  - Puppet for their HTCondor, Mongo, Docker, etc modules
  - Swagger for the api generator
  - TTY.js for such amazing web terminal
+ - Graph ordering and rendering: [Dagre](https://github.com/cpettitt/dagre/wiki)
 
 ## Roadmap
- - Add a better text editor
- - Inprove the REST clients examples (ruby for the obvious, groovy for the unmaginable)
- - Use a CI/CD and an Issues reporter
- - Create unit, integration and alfa/beta test
- - Correct the error handling for the rest api
- - Verify the workloader status
- - Allow a workflow choose the workloader
- - Allow a job to execute many times
- - Change the project name
- - Change from remote execution to local execution
- - Add pluggins for the storage: S3, HDFS, FTP, MongoGridFS
- - Add support for windows
- - Add VNC websockify proxy
- - Create more command examples
+See [TODO.md](TODO.md)
