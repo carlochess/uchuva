@@ -50,24 +50,24 @@ services:
 # 5601 (Kibana web interface).
 # 9200 (Elasticsearch JSON interface).
 # 5044 (Logstash Beats interface, receives logs from Beats such as Filebeat – see the Forwarding logs with Filebeat section).
-#  elk:
-#    image:
-#      sebp/elk
-#    volumes_from:
-#      - uchuva
-#    volumes:
-#      - ./docker/filebeat/uchuva.conf:/etc/logstash/conf.d/uchuva.conf
-#    ports:
-#      - "5601:5601"
+  elk:
+    image:
+      sebp/elk
+    volumes_from:
+      - uchuva
+    volumes:
+      - ./docker/filebeat/02-beats-input.conf:/etc/logstash/conf.d/02-beats-input.conf
+    ports:
+      - "5601:5601"
 
 # docker run -d --volumes-from uchuva -v "./docker/filebeat/filebeat.yml:/etc/filebeat/filebeat.yml" olinicola/filebeat
   filebeat:
     image:
-      olinicola/filebeat:1.2.3
+      prima/filebeat
     volumes_from:
       - uchuva
     volumes:
-      - ./docker/filebeat/filebeat.yml:/etc/filebeat/filebeat.yml
+      - ./docker/filebeat/filebeat.yml:/filebeat.yml
 
 # docker run -d --name ftpd_server -p 21:21 -p 30000-30009:30000-30009 -e "PUBLICHOST=localhost" stilliard/pure-ftpd:hardened
 # pure-pw useradd bob -f /etc/pure-ftpd/passwd/pureftpd.passwd -m -u ftpuser -d /home/ftpusers/bob

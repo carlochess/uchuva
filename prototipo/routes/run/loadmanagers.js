@@ -132,13 +132,26 @@ var submitToLoadManagers = function(envio, nombreDir,workloader,cbbbb) {
     //-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
     function notificarBlaBla() {
         async.reduce(ordenado, 0, function(i, item, callback) {
+            var singleTorq=[];
             var deps = envio.edges.filter(function(elem) {
                 return (elem.target.id === ordenado[i].id);
-            }).map(function(o) {
-                if (workloader != 1)
-                    return indiceNodo(ordenado, o.source.id,workloader);
-                return "done(" + nombreDir + "_" + indiceNodo(ordenado, o.source.id,workloader) + ")";
-            });
+            }).reduce(function(depend,o) {
+                if (workloader === 3)
+                    depend.push(indiceNodo(ordenado, o.source.id,workloader));
+                else if (workloader === 2){
+                  if(o.source.configurado.times > 1){
+                    depend.push("afterokarray:"+ indiceNodo(ordenado, o.source.id,workloader));
+                  }else{
+                    singleTorq.push(indiceNodo(ordenado, o.source.id,workloader));
+                  }
+                }
+                else {
+                  depend.push("done(" + nombreDir + "_" + indiceNodo(ordenado, o.source.id,workloader) + ")");
+                }
+                return(depend);
+            }, []);
+            if(workloader === 2 && singleTorq.length > 0)
+              deps.push("afterok:"+singleTorq.join(":"));
             ordenado[i].nombre = (ordenado[i].title + "_" + ordenado[i].id).replace(/[^a-z0-9]/gi, '_').toLowerCase();
             ordenado[i].dependencia = deps;
             ordenado[i].directorio = nombreDir;

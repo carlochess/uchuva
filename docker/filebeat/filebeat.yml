@@ -2,7 +2,7 @@ output:
   logstash:
     enabled: true
     hosts:
-      - 172.17.9.15:5044
+      - elk:5044
     timeout: 15
 
 filebeat:
@@ -10,4 +10,12 @@ filebeat:
     -
       paths:
         - /app/logs/all-logs.log
-      document_type: uchuva-log
+      json.overwrite_keys: true
+      json.keys_under_root: true
+      json.message_key: "@message"
+      fields_under_root: true
+      tags: [
+        "i",
+        "heart",
+        "json"
+      ]
