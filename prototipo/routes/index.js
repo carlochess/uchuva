@@ -60,7 +60,7 @@ router.post('/register', function(req, res) {
         apikey: apikey
     }), password, function(err, account) {
         if (err) {
-            logger.error("Error trying to register: "+err);
+            logger.error("POST /register Error trying to register: "+err);
             res.format({
               html: function() {
                 res.render('register', {
@@ -79,7 +79,7 @@ router.post('/register', function(req, res) {
         }
         createRootFolder(account._id, function(err, folder){
           if (err) {
-              logger.error("Error trying to register: "+err);
+              logger.error("POST /register Error trying to register: "+err);
               // account.delete()
               res.format({
                 html: function() {

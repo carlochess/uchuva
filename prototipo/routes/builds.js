@@ -45,7 +45,7 @@ module.exports = function(app){
           var asStr = errors.map(function(e){
             return e.msg;
           }).join(",");
-
+          logger.error("GET /build "+asStr);
           res.format({
               html: function() {
                   req.flash('error', asStr);
@@ -61,7 +61,7 @@ module.exports = function(app){
       var userId = req.user._id;
       build(idBuild,userId, function(error, result) {
           if (error) {
-              logger.error(error+", dag "+idBuild+", user: "+userId);
+              logger.error("GET /build "+error+", dag "+idBuild+", user: "+userId);
               res.format({
                   html: function() {
                       req.flash('error', error);
@@ -104,7 +104,7 @@ module.exports = function(app){
       var asStr = errors.map(function(e){
         return e.msg;
       }).join(",");
-
+      logger.error("GET /builds "+asStr);
         res.format({
             html: function() {
                 req.flash('error', asStr);

@@ -25,7 +25,7 @@ module.exports = function(app){
           var itemCount= result.limit;
           var pageCount= Math.ceil(result.total/itemCount);
           if(err){
-            logger.error("Error trying to get dags: "+err);
+            logger.error("GET /user Error trying to get dags: "+err);
             dags=[];
           }
           var pages = paginate.getArrayPages(req)(itemCount, pageCount, req.query.page);
@@ -72,7 +72,7 @@ module.exports = function(app){
       var userId = req.user._id;
       crearDag(userId ,function(err, dagMetaData) {
         if (err) {
-            logger.error(error+", user: "+userId);
+            logger.error("GET /crearDag "+error+", user: "+userId);
             res.format({
                 html: function() {
                     req.flash('error', err);
@@ -111,6 +111,7 @@ module.exports = function(app){
           var asStr = errors.map(function(e){
             return e.msg;
           }).join(",");
+          logger.error("GET /editar "+asStr);
           res.format({
               html: function() {
                   req.flash('error', asStr);
@@ -127,6 +128,7 @@ module.exports = function(app){
       //res.send("i'm not satisfy")
       editar(dagId, userId, function(error, dag) {
           if (error) {
+            logger.error("GET /editar "+error+" usuario "+userId);
             res.format({
                 html: function() {
                     req.flash('error', error);
@@ -168,6 +170,7 @@ module.exports = function(app){
           var asStr = errors.map(function(e){
             return e.msg;
           }).join(",");
+          logger.error("POST /save "+asStr);
           res.send({error : 1, message : asStr});
           return;
       }
@@ -190,7 +193,7 @@ module.exports = function(app){
           workloader:workloader
       }, {new : true}, function(err, d) {
           if (err || !d) {
-              logger.error("Error saving dag "+err+", user: "+userId);
+              logger.error("POST /save Error saving dag "+err+", user: "+userId);
               res.send({
                 error: 2,
                 message: err

@@ -203,7 +203,7 @@ You can read my bacherlor thesis (Spanish) in the `doc/` folder
 El prototípo esta programado en Nodejs 6.X (Javascript V8).
 
 ## Related projects
-Pegasus, Swift parallel scripting language, Dagman, Taverna, Apache airavata, Galaxy, OnlineHPC, Kepler
+Pegasus, Swift parallel scripting language, Dagman, Taverna, Apache airavata, Galaxy, OnlineHPC, Kepler, [makeflow](http://ccl.cse.nd.edu/software/makeflow/), Askaban, Luigi, Agave API, 
 
 ## Why does my project is call by a super heroe name?
 Because i believe that your project would save too many lives and therefore the planet :)
