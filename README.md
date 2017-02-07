@@ -1,9 +1,9 @@
 # Uchuva - A Scientific web Portal [![Build Status](https://travis-ci.org/carlochess/uchuva.svg?branch=master)](https://travis-ci.org/carlochess/uchuva)
-> Currently, under heavy development, keep in touch :). [DEMO](http://138.68.49.78:3000/)
+> Currently, under heavy development, keep in touch :).
 
 <img align="right" height="260" src="http://4.bp.blogspot.com/-NeOpxs6fQMQ/Tp4ON0TNywI/AAAAAAAAADc/WxEEbycCly4/s1600/aguaymanto.jpg">
 Uchuva is a scientific web portal that allow users to create workflows and submit
-to HTCondor (Dagman), Slurm, OpenLava (LSF), Torque (PBS) and OAR. Is designed to be fast, flexible and simple.
+to HTCondor (Dagman), Slurm, OpenLava (LSF) and Torque (PBS). Is designed to be fast, flexible and simple.
 
 
 ## Features
@@ -198,9 +198,6 @@ puts "Number of dags", result.length
 ## Documentation
 You can read my bacherlor thesis (Spanish) in the `doc/` folder
 ![](https://raw.githubusercontent.com/carlochess/uchuva/master/doc/home.png)
-
-## Development 
-El prototípo esta programado en Nodejs 6.X (Javascript V8).
 
 ## Related projects
 Pegasus, Swift parallel scripting language, Dagman, Taverna, Apache airavata, Galaxy, OnlineHPC, Kepler, [makeflow](http://ccl.cse.nd.edu/software/makeflow/), Askaban, Luigi, Agave API, 
