@@ -3,6 +3,7 @@ sudo add-apt-repository ppa:ubuntu-lxc/lxd-stable
 
 sudo apt-get update
 sudo apt-get install -y golang git
+git clone https://github.com/angt/slurm-https
 cd /vagrant/slurm-https
 export PKG_CONFIG_PATH=/tmp/lib/pkgconfig
 export GOPATH=$HOME/go
