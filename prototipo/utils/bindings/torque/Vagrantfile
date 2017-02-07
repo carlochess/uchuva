@@ -1,0 +1,22 @@
+cluster = {
+    :controller => {
+        :hostname => "controller",
+        :ipaddress => "10.10.10.3",
+        :type => "controller"
+    }
+}
+Vagrant.configure("2") do |global_config|
+    cluster.each_pair do |name, options|
+        global_config.vm.define name do |config|
+            config.vm.box = "ubuntu/trusty64"
+            config.vm.hostname = "#{name}"
+            config.vm.network :private_network, ip: options[:ipaddress]
+            
+            config.vm.provider :virtualbox do |v|
+                v.customize ["modifyvm", :id, "--memory", "512"]
+            end
+         
+            config.vm.provision "shell", path: "server.sh"
+        end
+    end
+end

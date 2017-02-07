@@ -1,0 +1,1 @@
+{"virtualbox":{"/vagrant":{"guestpath":"/vagrant","hostpath":"/home/carlos/Música/openlava","disabled":false,"__vagrantfile":true},"vagrant-cache":{"id":"vagrant-cache","guestpath":"/tmp/vagrant-cache","hostpath":"/home/carlos/.vagrant.d/cache/ubuntu/trusty64","disabled":false,"__vagrantfile":true}}}

@@ -1,0 +1,42 @@
+cluster = {
+    :controller => {
+        :hostname => "controller",
+        :ipaddress => "10.10.10.3",
+        :type => "controller"
+    },
+    :server1 => {
+        :hostname => "server1",
+        :ipaddress => "10.10.10.4",
+        :type => "node"
+    },
+    :server2 => {
+        :hostname => "server2",
+        :ipaddress => "10.10.10.5",
+        :type => "node"
+    },
+}
+
+Vagrant.configure("2") do |global_config|
+  cluster.each_pair do |name, options|
+    global_config.vm.define name do |config|
+      config.vm.box = "ubuntu/trusty64"
+      config.vm.hostname = "#{name}"
+      config.vm.network :private_network, ip: options[:ipaddress]
+            
+      config.vm.provider :virtualbox do |v|
+        v.customize ["modifyvm", :id, "--memory", "512"]
+      end
+      
+      if options[:type] == "controller"
+        config.vm.provision "shell", path: "master.sh"
+        #config.vm.network "forwarded_port", guest: 3000, host: 3000
+      elsif options[:type] == "node"
+        config.vm.provision "shell", path: "server.sh"
+      end
+      
+      if Vagrant.has_plugin?("vagrant-cachier")
+        config.cache.scope = :box
+      end
+    end
+  end
+end
