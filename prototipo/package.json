@@ -4,6 +4,7 @@
   "description": "Un modulo para el envio de workflows a diferentes load managers",
   "main": "main.js",
   "dependencies": {
+    "amqplib": "^0.5.1",
     "async": "^2.0.0-rc.2",
     "bluebird": "^3.4.6",
     "body-parser": "^1.15.0",

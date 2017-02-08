@@ -1,5 +1,5 @@
 var amqp = require('amqplib/callback_api');
-var execute = require('./lib/run/submit.js');
+var execute = require('./run/submit.js');
 var host = "localhost";
 
 amqp.connect('amqp://user:password@'+host, function(err, conn) {

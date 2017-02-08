@@ -13,6 +13,8 @@ var config = require('../../config.js');
 var isAuthenticated = require('../../utils/login.js');
 var DagExe = require('../../models/dagExe.js');
 var router = express.Router();
+var amqp = require('amqplib/callback_api');
+var host = "localhost";
 
 module.exports = function(app){
   app.use('/', router);
@@ -48,6 +50,7 @@ module.exports = function(app){
               return;
           }
 
+        /*
           datos.trasteo(envio, nombreDir, function(err) {
               if (err) {
                   logger.error("/run Moviendo los ficheros a "+nombreDir);
@@ -66,12 +69,12 @@ module.exports = function(app){
                   res.send({error : 4, message : err});
                   return;
               }
-              logger.info("Guardando");
+              logger.info("Guardando");*/
               var dag = new DagExe({
                   nombre: nombreDir,
                   descripcion: "[Editar]",
                   proyecto: envio.proyecto,
-                  nodes: nodes || envio.nodes,
+                  nodes: /*nodes ||*/ envio.nodes,
                   edges: envio.edges,
                   userid: req.user._id,
                   ejecuciones: [],
@@ -83,6 +86,22 @@ module.exports = function(app){
                       logger.error("/run ",err);
                       return res.send({error : 5, message : "Error guardando"});
                   }
+
+                amqp.connect('amqp://user:password@'+host, function(err, conn) {
+                  if(err){
+                    console.log(err);
+                    return;
+                  }
+                  conn.createChannel(function(err, ch) {
+                    var q = 'task_queue';
+                    var msg = dag._id.toString(); //process.argv.slice(2).join(' ') || "Hello World!";
+
+                    ch.assertQueue(q, {durable: true});
+                    ch.sendToQueue(q, new Buffer(msg), {persistent: true});
+                    console.log(" [x] Sent '%s'", msg);
+                  });
+                });
+
                   res.format({
                       html: function() {
                           res.send(nombreDir);
@@ -94,8 +113,8 @@ module.exports = function(app){
                       }
                   });
                   logger.info("/run Directorio creado " + nombreDir);
-              });
-          }
+              });/*
+          }*/
       });
   });
 };

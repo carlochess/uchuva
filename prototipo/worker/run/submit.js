@@ -1,28 +1,36 @@
 var fs = require('fs');
-//var express = require('express');
 var passport = require('passport');
 var soap = require('soap');
 var path = require('path');
 var mongoose = require('mongoose');
 var datos = require("./moverdatos");
 var htcondor = require("./htcondor");
-//var loadmanagers = require("./loadmanagers");
-//var logger = require('../utils/logger.js');
-var controladorArchivos = require('../utils/file.js');
-var config = require('../config/config.js');
-//var isAuthenticated = require('../utils/login.js');
-var DagExe = require('../models/dagExe.js');
-//var router = express.Router();
+var loadmanagers = {
+  submitToLoadManagers : function(){
+    return 0;
+  }
+};//require("./htcondor");
+var controladorArchivos = require('../../utils/file.js');
+var config = require('../../config.js');
+var DagExe = require('../../models/dagExe.js');
+
+var logger = {
+  error : console.log
+}
 
 function ejecutar(dagExeId){
-    DagExe.findById({id : dagExeId }, function(err, dag){
-	//var nombreDir = dag.nombre;
-	controladorArchivos.crearDirectorio(config.DAG_DIR, function(err,nombreDir) {
+    DagExe.findById(dagExeId, function(err, dag){
+      if(err){
+        logger.error("Dag no encontrado: ", err);
+        return;
+      }
+	var nombreDir = dag.nombre;
+	/*controladorArchivos.crearDirectorio(config.DAG_DIR, function(err,nombreDir) {
 	    if (err) {
 		logger.error("/run Error creando carpeta ejecucion");
 		return;
 	    }
-
+*/
 	    datos.trasteo(envio, nombreDir, function(err) {
 		if (err) {
 		    logger.error("/run Moviendo los ficheros a "+nombreDir);
@@ -40,8 +48,8 @@ function ejecutar(dagExeId){
 		    return;
 		}
 		logger.info("Guardando");
-		var dag = search DagExe(nodes);
-
+		//var dag = search DagExe(nodes);
+                dag.sended = true;
 		dag.save(function(err) {
 		    if (err) {
 			logger.error("/run ",err);
@@ -51,5 +59,6 @@ function ejecutar(dagExeId){
 		});
 	    }
 	});
-    });
+    //});
 }
+module.exports.ejecutar = ejecutar;
