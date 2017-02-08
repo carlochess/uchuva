@@ -12,7 +12,7 @@ function rscript(){
       nombroOpt : "Packages",
       multiple: true,
       description : "Is a comma-separated list of package names or NULL",
-      representation: "--default-packages=list",
+      representation: "--default-packages=",
       value : [] // text(""),bool(t/f),area(""),domain([0..]),multiple([])
     };
 
@@ -23,11 +23,12 @@ function rscript(){
     };
 
     var opcion3 = {
-	    //type : "domain", // bool,area,domain
+	  type : "text",  //type : "domain", // bool,area,domain
       nombroOpt : "Expression",
       description : "R expression(s), properly quoted.",
-      representation: "--default-packages=list",
-      value : "" // text(""),bool(t/f),area(""),domain([0..]),multiple([])
+      representation: "-e",
+      multiple: true,
+      value : [] // text(""),bool(t/f),area(""),domain([0..]),multiple([])
     };
 
     var expmultiples = {
@@ -41,11 +42,12 @@ function rscript(){
       multiple : true,
       argumento : true,
       nombroOpt : "args",
-      value : [],
+      value : [""],
     };
 
     return {
         name: "rscript",
+        location: "rscript",
         version : "0.0.1",
         description : "This is an alternative front end for use in #! scripts and other scripting applications.",
         file: [],
@@ -61,7 +63,7 @@ function rscript(){
             return true;
         },
         transformation: function(data){
-            var salida = "Rscript ";
+            var salida = "";
             var optsmultiples = data[0].value.join(" ")+" ";
             var expmultiples = data[1].value.map(function(exp){
               return "-e "+exp.value;

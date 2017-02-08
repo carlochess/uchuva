@@ -7,8 +7,8 @@ transfer_executable = false
 should_transfer_files = YES
 when_to_transfer_output = ON_EXIT
 {{?}}
-{{? it.filese.length > 0 }}transfer_input_files =  {{= it.filese.join(", ")}} {{?}}
-{{? it.filess.length > 0 }}transfer_output_files = {{= it.filess.join(", ")}} {{?}}
+{{? it.filese.length > 0 }}transfer_input_files ={{= it.filese.join(",")}}{{?}}
+{{? it.filess.length > 0 }}transfer_output_files ={{= it.filess.join(",")}}{{?}}
 output = {{=it.nodoNombre}}.{{? it.config.times > 1 }}$(Process).{{?}}out
 error = {{=it.nodoNombre}}.{{? it.config.times > 1 }}$(Process).{{?}}err
 log = {{=it.nodoNombre}}.{{? it.config.times > 1 }}$(Process).{{?}}log

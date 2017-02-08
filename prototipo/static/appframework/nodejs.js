@@ -43,6 +43,7 @@ function nodejs(){
 
     return {
         name: "nodejs",
+        location: "nodejs",
         version : "0.0.1",
         description : "node - Server-side JavaScript",
         file: [],

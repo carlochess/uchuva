@@ -10,8 +10,8 @@ alex [OPTION]... file [OPTION]...
 */
 function alex(){
 // Redirecting Output
-var redirOut = [["−−debug","Instructs Alex to generate a lexer which will output debugging messsages as it runs."],
-["−−ghc", "Instructs Alex to generate a lexer which is optimised for compiling with GHC. The lexer will be significantly more efficient, both in terms of the size of the compiled lexer and its runtime."]];
+var redirOut = [["--debug","Instructs Alex to generate a lexer which will output debugging messsages as it runs."],
+["--ghc", "Instructs Alex to generate a lexer which is optimised for compiling with GHC. The lexer will be significantly more efficient, both in terms of the size of the compiled lexer and its runtime."]];
   var optsredirOut = redirOut.map(function(opt){
     return {
 	    type : "bool", // text,bool,area,domain
@@ -22,8 +22,8 @@ var redirOut = [["−−debug","Instructs Alex to generate a lexer which will ou
     };
   });
 
-var optsargs = [["−−outfile","Directs Happy to produce an info file containing detailed information about the grammar, parser states, parser actions, and conflicts. Info files are vital during the debugging of grammars.The filename argument is optional, and if omitted the info file will be written to FILE.info (where FILE is the input file name with any extension removed)."],
-  ["−−info","Specifies the destination of the generated parser module. If omitted, the parser will be placed in FILE.hs, where FILE is the name of the input file with any extension removed. If FILE is - the generated parser is sent to the standard output."]]
+var optsargs = [["--outfile","Directs Happy to produce an info file containing detailed information about the grammar, parser states, parser actions, and conflicts. Info files are vital during the debugging of grammars.The filename argument is optional, and if omitted the info file will be written to FILE.info (where FILE is the input file name with any extension removed)."],
+  ["--info","Specifies the destination of the generated parser module. If omitted, the parser will be placed in FILE.hs, where FILE is the name of the input file with any extension removed. If FILE is - the generated parser is sent to the standard output."]]
 
   var optsArgs = optsargs.map(function(opt){
     return {

@@ -13,6 +13,7 @@ var DagExeSchema = mongoose.Schema({
 		StatusDetail: String,
 		configurado : {
 		    programa: String,
+                    location : String,
 		    useDocker : Boolean,
 		    image: String,
         argumento : String,

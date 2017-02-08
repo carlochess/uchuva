@@ -14,7 +14,7 @@ var redirOut = [["-hcsuf","set the suffix to use for intermediate C files [dynam
 
   var optsredirOut = redirOut.map(function(opt){
     return {
-	    type : "text", // text,bool,area,domain
+	    type : "bool", // text,bool,area,domain
       nombroOpt : opt[0].substring(1),
       description : opt[1],
       representation: opt[0],
@@ -38,7 +38,7 @@ var redirOut = [["-hcsuf","set the suffix to use for intermediate C files [dynam
     };
 
     var optsmultiples = {
-    	opts : [opcion1,opcion2,opcion3],
+    	opts : optsredirOut.concat([opcion2,opcion3]),
       opciones : true,
       value : [] // text(""),bool(t/f),area(""),domain([0..]),multiple([])
     };
@@ -61,7 +61,7 @@ var redirOut = [["-hcsuf","set the suffix to use for intermediate C files [dynam
         image: "haskell",
         argumento : "",
         render: [
-            optsredirOut.concat(optsmultiples),
+            optsmultiples,
             argumentos
         ],
         validation: function(data){

@@ -1,5 +1,5 @@
 var amqp = require('amqplib/callback_api');
-var execute = require('./run/submit.js');
+var execute = require('./run/submit');
 var host = "localhost";
 
 amqp.connect('amqp://user:password@'+host, function(err, conn) {
@@ -8,20 +8,15 @@ amqp.connect('amqp://user:password@'+host, function(err, conn) {
 
     ch.assertQueue(q, {durable: true});
     ch.prefetch(1);
-    console.log(" [*] Waiting for messages in %s. To exit press CTRL+C", q);
+    console.log(" [*] Esperando un mensaje en la cola %s.", q);
+    console.log("Executes.kkk()", execute.kkk());
     ch.consume(q, function(msg) {
-      /*var secs = msg.content.toString().split('.').length - 1;
-
-      console.log(" [x] Received %s", msg.content.toString());
-      setTimeout(function() {
-	console.log(" [x] Done");
-	ch.ack(msg);
-      }, secs * 1000);*/
-      var dagExeId = msg.content.toString();
-      execute.ejecutar(dagExeId, function(){
-	console.log("[x] Done");
-	ch.ack(msg);
-      });
+     console.log(" [x] Mensaje recibido %s", msg.content.toString());
+     var dagExeId = msg.content.toString();
+     execute.ejecutar(dagExeId, function(){
+       console.log("[x] Termine de procesar");
+       ch.ack(msg);
+     });
     }, {noAck: false});
   });
 });

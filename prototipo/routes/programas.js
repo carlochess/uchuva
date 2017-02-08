@@ -8,7 +8,7 @@ module.exports = function(app){
   router.post('/listarProgramas', isAuthenticated, function(req, res) {
       //var programas = ["ghc","happy","nodejs","alex","cat","sleep"];
       // https://hub.docker.com/r/sjackman/bioinformatics/~/dockerfile/
-      var programas = ["cat", "test", "rscript"];
+      var programas = ["cat", "test", "head" , "rscript", ];
       res.json(programas);
   });
 };
