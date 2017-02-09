@@ -14,10 +14,7 @@ var controladorArchivos = require('../../utils/file.js');
 var config = require('../../config.js');
 var DagExe = require('../../models/dagExe.js');
 
-var logger = console; /*{
-  error : console.log,
-  info : console.log
-}*/
+var logger = console;
 
 mongoose.Promise = require('bluebird');
 mongoose.connect(config.DATABASE_URI);
@@ -46,8 +43,6 @@ if (process.getgid) {
 }
 logger.info("Current directory"+process.cwd());
 
-
-
 function ejecutar(dagExeId, cb){
     DagExe.findById(dagExeId, function(err, envio){
       if(err){
@@ -75,7 +70,6 @@ function ejecutar(dagExeId, cb){
 	  return;
 	}
 	logger.info("Guardando");
-	//var dag = search DagExe(nodes);
         envio.sended = true;
 	envio.save(function(err) {
 	  if (err) {
@@ -89,6 +83,3 @@ function ejecutar(dagExeId, cb){
     });
 }
 exports.ejecutar = ejecutar;
-exports.kkk = function(){
-  return ":D";
-};

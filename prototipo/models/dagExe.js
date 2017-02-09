@@ -22,6 +22,7 @@ var DagExeSchema = mongoose.Schema({
         file: [mongoose.Schema.Types.Mixed]
 	    }
 	}],
+  sended : Boolean,
     edges: [{
 		source: {
 			title: String,

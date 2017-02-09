@@ -9,7 +9,6 @@ amqp.connect('amqp://user:password@'+host, function(err, conn) {
     ch.assertQueue(q, {durable: true});
     ch.prefetch(1);
     console.log(" [*] Esperando un mensaje en la cola %s.", q);
-    console.log("Executes.kkk()", execute.kkk());
     ch.consume(q, function(msg) {
      console.log(" [x] Mensaje recibido %s", msg.content.toString());
      var dagExeId = msg.content.toString();
@@ -19,4 +18,6 @@ amqp.connect('amqp://user:password@'+host, function(err, conn) {
      });
     }, {noAck: false});
   });
+  //  basic.reject() Setting requeue to false will cause RabbitMQ to remove
+// the message / basic.nack()
 });
