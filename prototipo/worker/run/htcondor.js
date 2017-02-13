@@ -2,7 +2,7 @@ var HTCondor = require("soap-htcondor");
 var async = require('async');
 var fs = require('fs');
 var path = require('path');
-var logger = require('../../utils/logger.js');
+var logger =  console; //require('../../utils/logger.js');
 var controladorArchivos = require('../../utils/file.js');
 var config = require('../../config.js');
 

@@ -3,11 +3,11 @@ var path = require('path');
 var exec = require('child_process').exec;
 var SSH = require('simple-ssh');
 var async = require('async');
-var logger = require('../../utils/logger.js');
-var graphalg = require('../utils/graphalg.js');
-var controladorArchivos = require('../utils/file.js');
-var config = require('../config/config.js');
-var DagExe = require('../models/dagExe.js');
+var logger = console; //require('../../utils/logger.js');
+var graphalg = require('../../utils/graphalg.js');
+var controladorArchivos = require('../../utils/file.js');
+var config = require('../../config.js');
+var DagExe = require('../../models/dagExe.js');
 
 function nodeAClassAd(nodo, dagDir, filese, filess, cm) {
     var res = "";

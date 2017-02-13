@@ -40,12 +40,12 @@ services:
     hostname: docker.example.com
     expose:
       - "22"
-      
+
 #docker run -p 4569:4569 --name my_s3 -d lphoward/fake-s3
 #  fake-s3:
 #    image:
 #      lphoward/fake-s3
-      
+
 # docker run -p 5601:5601 -p 9200:9200 -p 5044:5044 -it -v $(pwd)/docker/filebeat/uchuva.conf:/etc/logstash/conf.d/uchuva.conf --name elk sebp/elk
 # 5601 (Kibana web interface).
 # 9200 (Elasticsearch JSON interface).

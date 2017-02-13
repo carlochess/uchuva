@@ -68,13 +68,14 @@ module.exports = function(app) {
                     code: 2,
                     message: err + ""
                 });
+                var archivos = [];
                 if(files){
                   files.forEach(function(f) {
-                    result.result.push(front(f));
+                    archivos.push(front(f));
                   });
                 }
                 res.send({
-                    files: files
+                    files: archivos
                 });
             });
         });

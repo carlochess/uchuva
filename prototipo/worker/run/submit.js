@@ -5,11 +5,7 @@ var path = require('path');
 var mongoose = require('mongoose');
 var datos = require("./moverdatos");
 var htcondor = require("./htcondor");
-var loadmanagers = {
-  submitToLoadManagers : function(){
-    return 0;
-  }
-};//require("./htcondor");
+var loadmanagers = require("./loadmanagers.js");
 var controladorArchivos = require('../../utils/file.js');
 var config = require('../../config.js');
 var DagExe = require('../../models/dagExe.js');
@@ -29,35 +25,19 @@ mongoose.connection.on('disconnected', function() {
     logger.error('Mongoose default connection disconnected');
 });
 
-var newmask = 0000;
-var oldmask = process.umask(newmask);
-logger.info("Changed umask from "+
-  oldmask.toString(8)+" to "+newmask.toString(8));
-logger.info("This process is pid "+process.pid);
-logger.info("This platform is " + process.platform);
-if (process.getuid) {
-  logger.info("Current uid: "+process.getuid());
-}
-if (process.getgid) {
-  logger.info("Current gid: "+process.getgid());
-}
-logger.info("Current directory"+process.cwd());
-
 function ejecutar(dagExeId, cb){
     DagExe.findById(dagExeId, function(err, envio){
       if(err){
         logger.error("Dag no encontrado: ", err);
-        cb();
-        return;
+        return cb();
       }
       var nombreDir = envio.nombre;
       var workloader = envio.tipo;
       datos.trasteo(envio, nombreDir, function(err) {
 	if (err) {
 	  logger.error("/run Moviendo los ficheros a "+nombreDir);
-	  return;
+	  return cb(err);
 	}
-        console.log("Termine")
 	if (workloader===0)
 	  htcondor.enviarHTC(envio, nombreDir, notificarBlaBla);
 	else
@@ -67,14 +47,14 @@ function ejecutar(dagExeId, cb){
       function notificarBlaBla(err, nodes) {
 	if (err) {
 	  logger.error("/run ",err);
-	  return;
+	  return cb(err);
 	}
 	logger.info("Guardando");
         envio.sended = true;
 	envio.save(function(err) {
 	  if (err) {
 	    logger.error("/run ",err);
-	    return cb();
+	    return cb(err);
 	  }
 	  logger.info("/run Directorio creado " + nombreDir);
           return cb();

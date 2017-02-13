@@ -52,7 +52,8 @@ var config = function(){
         CONDOR_URL : condorUrl,
         CONDOR_JOB_OWNER : condorJobOwner,
         JOB_TEMPLATE : descfiles,//submitfile
-        SSHKEY : key
+        SSHKEY : key,
+        QUEUE : process.env.QUEUE || 'amqp://user:password@localhost'
     };
 };
 

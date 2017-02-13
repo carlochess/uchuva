@@ -1,20 +1,48 @@
 version: '2'
 
 services:
+
   uchuva:
     build:
       ./prototipo
-    restart: 
+    image:
+      carlochess/uchuva
+    restart:
       always
     volumes:
         - /app
     ports:
-      - "80:3000"
+      - "3030:3000"
     environment:
       SHARE: /app
       CONDOR_URL: http://htcondor:8080/
       CONDOR_JOB_OWNER: uchuva
       BMANAGER: 3
+      QUEUE : 'amqp://user:password@rabbit'
+
+  uchuvaworker:
+    image: carlochess/uchuva
+    command:
+      npm run worker
+    volumes_from:
+      - uchuva
+    restart:
+      always
+    volumes:
+        - /app
+    environment:
+      SHARE: /app
+      CONDOR_URL: http://htcondor:8080/
+      CONDOR_JOB_OWNER: uchuva
+      BMANAGER: 3
+      QUEUE : 'amqp://user:password@rabbit'
+
+  rabbit:
+    image: rabbitmq:3-management-alpine
+    hostname: my-rabbit
+    environment:
+      RABBITMQ_DEFAULT_USER : user
+      RABBITMQ_DEFAULT_PASS : password
 
   mongo:
     image: mongo

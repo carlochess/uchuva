@@ -1,5 +1,5 @@
 var path = require('path');
-var logger = require('../../utils/logger.js');
+var logger = console;//require('../../utils/logger.js');
 var controladorArchivos = require('../../utils/file.js');
 var File = require('../../models/file.js');
 var mongoose = require('mongoose');

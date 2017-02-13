@@ -7,7 +7,8 @@
 # npm install amqplib
 
 docker start some-rabbit
-for i in `seq 1 4`;
-do
-  node destinatario.js &
-done
+#for i in `seq 1 4`;
+#do
+#  node destinatario.js &
+#done
+node destinatario.js

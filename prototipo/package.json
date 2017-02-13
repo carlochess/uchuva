@@ -39,6 +39,7 @@
     "socket.io": "^1.5.1",
     "superheroes": "^1.0.0",
     "tar-fs": "^1.12.0",
+    "throng": "^4.0.0",
     "validator": "^6.1.0",
     "winston": "^2.2.0"
   },
@@ -60,7 +61,8 @@
     "format": "./node_modules/.bin/esformatter --config formatter.json -i 'routes/**/*.js' ",
     "start": "NODE_ENV=production node main.js",
     "devel": "./node_modules/.bin/nodemon --ignore 'data/*' main.js",
-    "build-rpm": "speculate"
+    "build-rpm": "speculate",
+    "worker" : "node ./worker/destinatario.js"
   },
   "keywords": [
     "workflows",

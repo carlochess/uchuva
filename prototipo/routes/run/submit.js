@@ -14,7 +14,6 @@ var isAuthenticated = require('../../utils/login.js');
 var DagExe = require('../../models/dagExe.js');
 var router = express.Router();
 var amqp = require('amqplib/callback_api');
-var host = "localhost";
 
 module.exports = function(app){
   app.use('/', router);
@@ -87,7 +86,7 @@ module.exports = function(app){
                       return res.send({error : 5, message : "Error guardando"});
                   }
 
-                amqp.connect('amqp://user:password@'+host, function(err, conn) {
+                amqp.connect(config.QUEUE, function(err, conn) {
                   if(err){
                     console.log(err);
                     return;
