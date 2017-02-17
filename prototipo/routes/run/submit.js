@@ -88,8 +88,8 @@ module.exports = function(app){
 
                 amqp.connect(config.QUEUE, function(err, conn) {
                   if(err){
-                    console.log(err);
-                    return;
+                      logger.error("/run ",err);
+                      return res.send({error : 6, message : "Error enviando a la cola"});
                   }
                   conn.createChannel(function(err, ch) {
                     var q = 'task_queue';
@@ -98,22 +98,20 @@ module.exports = function(app){
                     ch.assertQueue(q, {durable: true});
                     ch.sendToQueue(q, new Buffer(msg), {persistent: true});
                     console.log(" [x] Sent '%s'", msg);
-                  });
-                });
-
-                  res.format({
+                    res.format({
                       html: function() {
-                          res.send(nombreDir);
+                        res.send(nombreDir);
                       },
                       json: function() {
-                          res.json({
-                              id: nombreDir
-                          });
+                        res.json({
+                          id: nombreDir
+                        });
                       }
+                    });
+                    logger.info({error : 0, message : "/run Directorio creado " + nombreDir});
                   });
-                  logger.info("/run Directorio creado " + nombreDir);
-              });/*
-          }*/
+                });
+              });
       });
   });
 };

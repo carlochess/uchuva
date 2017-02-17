@@ -76,11 +76,11 @@ module.exports = function(app){
   // <id>.0.log
   // <id>.0.err
   router.post('/datanodedag', isAuthenticated, function(req, res) {
-      req.checkQuery('idEjecucion', 'Invalid id exe').notEmpty();
-      //req.checkQuery('nodo.title', 'Invalid node title').notEmpty();
-      //req.checkQuery('nodo.id', 'Invalid node id').notEmpty();
-      //req.checkQuery('tipo', 'Invalid type').notEmpty();
-      //req.checkQuery('index', 'Invalid index').notEmpty();
+      /*req.checkBody('idEjecucion', 'Invalid id exe').notEmpty();
+      req.checkBody('nodo.title', 'Invalid node title').notEmpty();
+      req.checkBody('nodo.id', 'Invalid node id').notEmpty();
+      req.checkBody('tipo', 'Invalid type').notEmpty();
+      req.checkBody('index', 'Invalid index').notEmpty()
       var errors = req.validationErrors();
       if (errors) {
           var asStr = errors.map(function(e){
@@ -91,14 +91,14 @@ module.exports = function(app){
               error: asStr
           });
           return;
-      }
+      };*/
 
       var envio = req.body;
       var dag = envio.idEjecucion;
       var nodo = envio.nodo;
       var nombre = (nodo.title + "_" + nodo.id).replace(/[^a-z0-9]/gi, '_').toLowerCase();
       var tipo = envio.tipo; // log, err, out
-      var archuvo = path.join(config.DAG_DIR, dag, nombre+ (envio.index>1?"."+envio.index:"") + "." + tipo);
+      var archivo = path.join(config.DAG_DIR, dag, nombre+ (envio.index>1?"."+envio.index:"") + "." + tipo);
       controladorArchivos.leerArchivo(archivo, function(err, data) {
           if (err) {
               res.send({

@@ -268,26 +268,29 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                     type: "POST",
                     url: "/run",
                     data: envio,
-                    success: function(data, textStatus, jqXHR) {
-                        $.notify({
-                            message: "Ver ejecución " + data,
-                            url: "/build?id=" + data
-                        }, {
-                            placement: {
-                                from: "bottom",
-                                align: "left"
-                            }
-                        });
-                        //console.log(data);
-                    },
-                    error: function(jqXHR, textStatus, errorThrown) {
-                        $.notify("Error al intentar ejecutar", {
-                            placement: {
-                                from: "bottom",
-                                align: "left"
-                            }
-                        });
+                  success: function(data, textStatus, jqXHR) {
+                    var respuesta = {};
+                    if(data.error){
+                      respuesta.message = data.message;
+                    }else{
+                      respuesta.message = "Enviada a la cola: " + data;
+                      respuesta.url = "/build?id=" + data;
                     }
+                    $.notify(respuesta, {
+                      placement: {
+                        from: "bottom",
+                        align: "left"
+                      }
+                    });
+                  },
+                  error: function(jqXHR, textStatus, errorThrown) {
+                    $.notify("Error del servidor", {
+                      placement: {
+                        from: "bottom",
+                        align: "left"
+                      }
+                    });
+                  }
                 });
             });
         });

@@ -51,7 +51,10 @@
           }
           opciones.append('<button class="nada" id="raw">Raw</button>');
           opciones.append('<li><input type="number" name="times" min="1" id="times" value="'+param.times+'"></li></br>"');//
-          param.file && param.file.forEach(function(archivo,i){
+        param.file && param.file.forEach(function(archivo,i){
+          if(typeof archivo.entrada === "string"){
+            archivo.entrada =  archivo.entrada === "true";
+          }
             opciones.append("<li data-type="+archivo.type+" data-id="+i+"> " + archivo.filename +
             (archivo.entrada? ' <span class="glyphicon glyphicon-menu-up" aria-hidden="true"></span>':
             ' <span class="glyphicon glyphicon-menu-down" aria-hidden="true"></span>') +
@@ -72,13 +75,12 @@
       }
 
       function rederizarProyecto(){
-        console.log("Be my")
         var opciones = $("#opciones");
         opciones.append('<li><input type="text" name="loadManager" id="loadManager" value="'+workloader+'"></li></br>"');//
       }
 
       $('#menu').click(function(event) {
-          ev.stopPropagation();
+          event.stopPropagation();
           var $box = $(event.target),
               boxName = $box.attr('class'),
               box = {
@@ -159,7 +161,7 @@ $('#opciones').on('keyup', '#loadManager', function(ev) {
 $(function(){
   function cambiarSentido(elem){
     var idArchivo = elem.data("id");
-    var id = idSeleccionado;
+    var id = graph.state.selectedNode.id;
     graph.nodes[id].configurado.file[idArchivo].entrada = !graph.nodes[id].configurado.file[idArchivo].entrada;
     $("#opciones").empty();
     $('#archivos').val("");
@@ -179,7 +181,7 @@ $(function(){
   $('#opciones').on('click', '.glyphicon.glyphicon-remove',function(ev){
     var elemento = $(this).parent();
     var idArchivo = elemento.data("id");
-    var id = idSeleccionado;
+    var id = graph.state.selectedNode.id; //idSeleccionado;
     graph.nodes[id].configurado.file.splice(idArchivo,1);
     $("#opciones").empty();
     $('#archivos').val("");
@@ -195,7 +197,7 @@ $(function(){
             return { model : { name : o.trim() , id : o.trim() , type : "indicado" }} ;
 		});
 	  }
-	  var id = idSeleccionado;
+          var id = graph.state.selectedNode.id;//idSeleccionado;
 
 	  if(elementos && elementos.length > 0){
   		var target = boton;

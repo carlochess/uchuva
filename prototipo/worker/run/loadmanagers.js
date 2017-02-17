@@ -155,9 +155,7 @@ var submitToLoadManagers = function(envio, nombreDir,workloader,cbbbb) {
 	    ordenado[i].nombre = (ordenado[i].title + "_" + ordenado[i].id).replace(/[^a-z0-9]/gi, '_').toLowerCase();
 	    ordenado[i].dependencia = deps;
 	    ordenado[i].directorio = nombreDir;
-	    console.dir(ordenado[i]);
 	    var nodeOut = nodeAClassAd(ordenado[i], config.DAG_DIR, [], [], workloader);
-	    console.log(nodeOut);
 	    controladorArchivos.crearArchivo(path.join(config.DAG_DIR, nombreDir, ordenado[i].nombre + ".bash"), nodeOut, function(err, cb) {
 		if (err) {
 		    return callback(err, i);
