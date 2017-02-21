@@ -114,9 +114,10 @@ var enviar = function(i, cwd, workloader,cb) {
 	    else
 	      cb("Unknow error");
 	});
-	/*proc.on("error", function(err){
+	proc.on("error", function(err){
 	  cb(err);
-	});*/
+	});
+        proc.on('close', function(code) { console.log("Return code", code) }); 
     }
 };
 
@@ -127,7 +128,7 @@ var submitToLoadManagers = function(envio, nombreDir,workloader,cbbbb) {
     if (!envio.edges) {
 	envio.edges = [];
     }
-    var ordenado = graphalg.KahnSAlgorithm(envio).orden;
+  var ordenado = graphalg.KahnSAlgorithm(envio).orden;
     notificarBlaBla();
     //-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*-*
     function notificarBlaBla() {
@@ -139,11 +140,11 @@ var submitToLoadManagers = function(envio, nombreDir,workloader,cbbbb) {
 		if (workloader === 3)
 		    depend.push(indiceNodo(ordenado, o.source.id,workloader));
 		else if (workloader === 2){
-		  if(o.source.configurado.times > 1){
+		  /*if(o.source.configurado.times > 1){
 		    depend.push("afterokarray:"+ indiceNodo(ordenado, o.source.id,workloader));
-		  }else{
+		  }else{*/
 		    singleTorq.push(indiceNodo(ordenado, o.source.id,workloader));
-		  }
+		  //}
 		}
 		else {
 		  depend.push("done(" + nombreDir + "_" + indiceNodo(ordenado, o.source.id,workloader) + ")");
@@ -154,7 +155,8 @@ var submitToLoadManagers = function(envio, nombreDir,workloader,cbbbb) {
 	      deps.push("afterok:"+singleTorq.join(":"));
 	    ordenado[i].nombre = (ordenado[i].title + "_" + ordenado[i].id).replace(/[^a-z0-9]/gi, '_').toLowerCase();
 	    ordenado[i].dependencia = deps;
-	    ordenado[i].directorio = nombreDir;
+	  ordenado[i].directorio = nombreDir;
+          console.log(ordenado[i]);
 	    var nodeOut = nodeAClassAd(ordenado[i], config.DAG_DIR, [], [], workloader);
 	    controladorArchivos.crearArchivo(path.join(config.DAG_DIR, nombreDir, ordenado[i].nombre + ".bash"), nodeOut, function(err, cb) {
 		if (err) {

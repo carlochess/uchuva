@@ -16,7 +16,7 @@ function KahnSAlgorithm(graph){
 		var res = [];
 		for(var i=0; i< copiaEdges.length ; i++){
 			if(copiaEdges[i].source.id == nodo.id){
-			 	res.push(copiaEdges[i].target);
+			  res.push(graph.nodes[indiceDe(copiaEdges[i].target, graph.nodes)]);
 			}
 		}
 		return res;

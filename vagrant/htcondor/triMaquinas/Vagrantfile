@@ -45,7 +45,6 @@ Vagrant.configure("2") do |global_config|
                   puppet.module_path = "puppet/modules"
 			            puppet.options = "--verbose --debug"
 			          end
-            end
             elsif options[:type] == "node"
                 config.vm.provision :puppet do |puppet|
 	                puppet.environment = "production"

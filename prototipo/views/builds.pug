@@ -22,7 +22,7 @@ block content
                   img(src=val.imagen, width=500, height=400)
                   .caption
                     h3
-                      a(href="/editar?id="+val.proyecto)= val.nombre
+                      a(href="/build?id="+val.nombre)= val.nombre
                     p= val.date
                     p
                       a.btn.btn-default(href="/build?id="+val.nombre, role='button') Ver

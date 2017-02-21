@@ -76,7 +76,13 @@
 
       function rederizarProyecto(){
         var opciones = $("#opciones");
-        opciones.append('<li><input type="text" name="loadManager" id="loadManager" value="'+workloader+'"></li></br>"');//
+         opciones.append('<li><select id="loadManager" name="loadmanager">'+
+           '<option value="htcondor">htcondor</option>'+
+           '<option value="torque">torque</option>'+
+           '<option value="openlava">openlava</option>'+
+           '<option value="slurm">slurm</option>'+
+         '</select></li></br>');
+        opciones.val(workloader).change();
       }
 
       $('#menu').click(function(event) {
@@ -152,10 +158,15 @@ var boton = undefined;
 });
 
 $('#opciones').on('keydown', '#loadManager', function(ev) {
+   ev.stopPropagation();
+});
+$('#opciones').on('', '#loadManager', function(ev) {
   ev.stopPropagation();
 });
-$('#opciones').on('keyup', '#loadManager', function(ev) {
-    workloader = $(this).val();
+
+$('#opciones').on('change', '#loadManager', function(ev) {
+  ev.stopPropagation();
+  workloader = $(this).val();
 });
 
 $(function(){

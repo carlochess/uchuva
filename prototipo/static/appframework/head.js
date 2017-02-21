@@ -9,7 +9,7 @@ function head(){
 
     return {
         name: "head",
-        location: "/bin/head",
+        location: "/usr/bin/head",
         version : "0.0.1",
         description : "Output the first part of files",
         file: [],

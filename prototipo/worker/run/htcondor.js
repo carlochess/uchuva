@@ -5,6 +5,8 @@ var path = require('path');
 var logger =  console; //require('../../utils/logger.js');
 var controladorArchivos = require('../../utils/file.js');
 var config = require('../../config.js');
+var exec = require('child_process').exec;
+var SSH = require('simple-ssh');
 
 function nodeAClassAd(nodo, dagDir, filese, filess, cm) {
     var res = "";
@@ -21,6 +23,71 @@ function nodeAClassAd(nodo, dagDir, filese, filess, cm) {
     }
     return res;
 }
+
+var enviarssh = function( dagfile, cwd,cb) {
+    logger.info("enviando");
+    var regexs = [/Job <(\d*)>.*<([a-zA-Z]*)>/g];
+    var ssh = new SSH({
+        host: 'htcondor',
+        port: '22',
+        user: 'testuser',
+        key: config.SSHKEY,
+        baseDir: cwd
+    }).on('error', function(err){
+      return cb(err);
+    });
+    var comando = "condor_submit_dag" +" "+ dagfile;
+    ssh.exec(comando, {
+        out: function(stdout) {
+            /*var regex = regexs[workloader - 1];
+            var m = regex.exec(stdout);
+            if(m && m.length > 1)*/
+              console.log(stdout)
+              return cb(null/*, m[1]*/);/*
+            else
+              return cb("Unknow error");*/
+        },
+        err: function(stderr) {
+            return cb(stderr);
+        }
+    }).start(function(err, start){
+      if(err){
+        return cb(err);
+      }
+    });
+};
+
+
+var enviar = function(dagfile, cwd,cb) {
+    var regexs = [/Job <(\d*)>.*<([a-zA-Z]*)>/g];
+    var otros = {
+      cwd: cwd,
+      timeout: 5000
+    };
+    var comando = 'condor_submit_dag ' + dagfile;
+    ejecutar(comando, cb);
+    function ejecutar(comando/*, otros*/, cb) {
+        logger.info("Ejecutando", comando);
+        var proc = exec(comando/*, otros*/, function(error, stdout, stderr) {
+            if (error) {
+                return cb(error);
+            }
+            if (stderr) {
+                return cb(stderr);
+            }
+            /*var regex = regexs[workloader - 1];
+            var m = regex.exec(stdout);
+            if(m && m.length > 1)*/
+              cb(null/*, m[1]*/);/*
+            else
+              cb("Unknow error");*/
+        });
+        proc.on("error", function(err){
+          cb(err);
+        });
+        proc.on('close', function(code) { console.log("Return code", code) });
+    }
+};
 
 function submitJobs(dagl, cb) {
     var htcondor = new HTCondor({
@@ -124,7 +191,13 @@ var enviarHTC = function(envio, nombreDir, cb) {
                 cb(err);
                 return;
             }
-            submitJobs(path.join(config.DAG_DIR, nombreDir, "dagman.dag"), cb);
+            //submitJobs(path.join(config.DAG_DIR, nombreDir, "dagman.dag"), cb);
+            enviarssh(path.join(config.DAG_DIR, nombreDir, "dagman.dag"),
+                    path.join(config.DAG_DIR, nombreDir),
+                    cb);
+            /*enviar(path.join(config.DAG_DIR, nombreDir, "dagman.dag"),
+                    path.join(config.DAG_DIR, nombreDir),
+                    cb);*/
         });
     }
 };

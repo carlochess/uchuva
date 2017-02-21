@@ -53,7 +53,10 @@ var config = function(){
         CONDOR_JOB_OWNER : condorJobOwner,
         JOB_TEMPLATE : descfiles,//submitfile
         SSHKEY : key,
-        QUEUE : process.env.QUEUE || 'amqp://user:password@localhost'
+      QUEUE : process.env.QUEUE || 'amqp://user:password@localhost',
+      USESSH : [process.env.HTCONDOR_SSH,process.env.OPENLAVA_SSH,process.env.TORQUE_SSH,process.env.SLURM_SSH],
+      USEQUEUE :process.env.USEQUEUE,
+      USESOAP :process.env.USESOAP
     };
 };
 

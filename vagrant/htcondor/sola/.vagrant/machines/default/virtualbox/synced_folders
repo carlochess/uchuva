@@ -1,1 +1,1 @@
-{"virtualbox":{"/vagrant":{"guestpath":"/vagrant","hostpath":"/home/carlos/Documentos/tesis/Vagrant/sola","disabled":false,"__vagrantfile":true}}}
+{"virtualbox":{"/app":{"guestpath":"/app","hostpath":"/home/carlos/Documentos/uchuva/prototipo","disabled":false,"__vagrantfile":true},"/vagrant":{"guestpath":"/vagrant","hostpath":"/home/carlos/Documentos/uchuva/vagrant/htcondor/sola","disabled":false,"__vagrantfile":true}}}

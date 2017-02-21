@@ -30,7 +30,7 @@ Vagrant.configure("2") do |global_config|
       
       if options[:type] == "controller"
         config.vm.provision "shell", path: "master.sh"
-        #config.vm.network "forwarded_port", guest: 3000, host: 3000
+        config.vm.network "forwarded_port", guest: 3000, host: 3000
       elsif options[:type] == "node"
         config.vm.provision "shell", path: "server.sh"
       end

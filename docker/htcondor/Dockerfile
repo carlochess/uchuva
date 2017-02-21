@@ -16,16 +16,35 @@ RUN	set -ex \
         && export DEBIAN_FRONTEND=noninteractive \
 	&& apt-get update \
 	&& apt-get install condor -y --force-yes \
- 	&& apt-get install -y python-pip && pip install supervisor supervisor-stdout \
+ 	&& apt-get install -y  openssh-server python-pip && pip install supervisor supervisor-stdout \
 	# CLEAN
 	&& apt-get -y remove wget python-pip \
-        && apt-get clean all 
+        && apt-get clean all
 COPY 	supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 COPY    condor_config /etc/condor/condor_config
+RUN chmod 777 /etc/condor/condor_config
 COPY    run.sh /usr/local/sbin/run.sh
 RUN chmod 777 /usr/local/sbin/run.sh
+
+RUN useradd -m "testuser"  && \
+    echo "testuser:testuser" | chpasswd
+
+USER testuser
+RUN mkdir /home/testuser/.ssh
+ADD ssh/id_rsa.pub /home/testuser/.ssh/authorized_keys
+USER root
+
+RUN chown -R testuser:testuser /home/testuser/
+RUN mkdir -p /var/run/sshd
+RUN sed -ri 's/UsePAM yes/#UsePAM yes/g' /etc/ssh/sshd_config
+RUN sed -ri 's/#UsePAM no/UsePAM no/g' /etc/ssh/sshd_config
+RUN echo 'PermitUserEnvironment yes' >> /etc/ssh/sshd_config
+RUN mkdir -p /var/log/supervisor
+
+RUN /bin/date
 
 RUN useradd -ms /bin/bash uchuva
 RUN gpasswd -a uchuva condor
 RUN newgrp condor
+EXPOSE 22
 ENTRYPOINT ["/sbin/tini", "--", "/usr/local/sbin/run.sh"]

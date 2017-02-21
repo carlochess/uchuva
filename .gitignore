@@ -25,7 +25,9 @@ prototipo/test-*-reports.xml
 *.out
 *.synctex.gz
 vagrant/sola/.vagrant
+
 vagrant/slurm/.vagrant/*
+vagrant/htcondor/sola/.vagrant
 vagrant/slurm/data/*
 vagrant/torque/.vagrant/*
 vagrant/torque/data/*
@@ -34,6 +36,7 @@ vagrant/openlava/data/*
 prototipo/data/run/*
 prototipo/data/uploads/*
 vagrant/deb/.vagrant/*
+vagrant/htcondor/triMaquinas/.vagrant
 
 # OS-specific
 .DS_Store

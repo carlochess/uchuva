@@ -6,6 +6,8 @@ sudo systemctl stop firewalld
 sudo systemctl disable firewalld
 cd /etc/yum.repos.d/
 sudo wget https://research.cs.wisc.edu/htcondor/yum/repo.d/htcondor-stable-rhel7.repo
+wget http://research.cs.wisc.edu/htcondor/yum/RPM-GPG-KEY-HTCondor
+rpm --import RPM-GPG-KEY-HTCondor
 sudo yum install -y epel-release 
 curl --silent --location https://rpm.nodesource.com/setup_6.x | sudo bash -
 sudo yum install -y condor condor-python nano docker-io nodejs
@@ -31,6 +33,7 @@ TRUST_UID_DOMAIN = TRUE
 SOAP_LEAVE_IN_QUEUE = ((JobStatus==4) && ((ServerTime - CompletionDate) < (60 * 60 * 24)))
 ENABLE_WEB_SERVER = TRUE
 WEB_ROOT_DIR=/usr/share/condor/webservice/
+USE_SHARED_PORT=FALSE
 EOF
 
 sudo groupadd docker
@@ -46,11 +49,12 @@ condor_status -l | grep -i docker
 condor_status -const HasDocker
 
 
-docker pull haskell
+#docker pull haskell
 docker run -p 27017:27017 --name some-mongo -d mongo
+docker run -d --hostname my-rabbit --name some-rabbit -p 8082:15672 -p 5672:5672 -e RABBITMQ_DEFAULT_USER=user -e RABBITMQ_DEFAULT_PASS=password rabbitmq:3-management-alpine
 sudo npm install -g nodemon
 
-cd /vagrant/nodejs
+cd
 
 #docker pull elyase/staticpython
 #docker pull openfoamplus/of_v30plus_rhel66
