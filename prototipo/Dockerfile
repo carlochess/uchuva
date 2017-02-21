@@ -12,6 +12,7 @@ ENV OPENLAVA_SSH=true
 ENV TORQUE_SSH=true
 ENV SLURM_SSH=true
 ENV USEQUEUE=true
+ENV USESOAP=true
 
 RUN mkdir -p /app/logs
 

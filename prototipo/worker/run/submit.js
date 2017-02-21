@@ -8,7 +8,7 @@ var DagExe = require('../../models/dagExe.js');
 
 var logger = console;
 
-mongoose.Promise = require('bluebird');
+mongoose.Promise = global.Promise;
 mongoose.connect(config.DATABASE_URI);
 mongoose.connection.on('connected', function() {
     logger.info('Mongoose default connection open to ' + config.DATABASE_URI);

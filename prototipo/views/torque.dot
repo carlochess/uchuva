@@ -5,5 +5,5 @@
 #PBS -e {{= it.dagdir}}/{{= it.nodo.directorio}}/{{= it.nodo.nombre}}{{? it.config.times > 1 }}.$PBS_ARRAYID{{?}}.err
 #PBS -N {{= it.nodo.directorio}}_{{= it.nodo.nombre}}
 {{? it.config.times > 1 }}#PBS -t 1-{{= it.config.times}} # times{{?}}
-{{? it.nodo.dependencia.length > 0 }}#PBS -W depend={{= it.nodo.dependencia.join(",")}}{{?}}
+{{? it.nodo.dependencia.length > 0 }}#PBS -W depend={{= it.nodo.dependencia.join(":")}}{{?}}
 {{= it.config.location.trim() }} {{= it.config.argumento.trim() }}
