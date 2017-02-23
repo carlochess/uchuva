@@ -39,8 +39,9 @@ $ sudo mv docker-compose /usr/local/bin/docker-compose
 $ chmod +x /usr/local/bin/docker-compose
 $ docker-compose --version
 ```
-And at last, Uchuva
+And finally, download and create Uchuva container
 ```
+$ git clone --depth=1 https://github.com/carlochess/uchuva/ && cd uchuva
 $ docker-compose up -d
 ```
 It may take from 10 to 60 minutes to complete (The first time).
