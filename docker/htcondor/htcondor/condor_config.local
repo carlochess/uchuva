@@ -1,0 +1,54 @@
+##  What machine is your central manager?
+
+CONDOR_HOST = $(FULL_HOSTNAME)
+
+## Pool's short description
+
+COLLECTOR_NAME = Personal Condor at $(FULL_HOSTNAME)
+COLLECTOR_HOST = $(CONDOR_HOST):0
+COLLECTOR_ADDRESS_FILE = $(LOG)/.collector_address
+
+##  When is this machine willing to start a job?
+
+START = TRUE
+TRUST_UID_DOMAIN=TRUE
+
+##  When to suspend a job?
+
+SUSPEND = FALSE
+
+
+##  When to nicely stop a job?
+##  (as opposed to killing it instantaneously)
+
+PREEMPT = FALSE
+
+
+##  When to instantaneously kill a preempting job
+##  (e.g. if a job is in the pre-empting stage for too long)
+
+KILL = FALSE
+
+ENABLE_SOAP = TRUE
+ALLOW_SOAP = *
+QUEUE_ALL_USERS_TRUSTED = TRUE
+SCHEDD_ARGS = -p 8080
+ALLOW_READ = *
+ALLOW_WRITE = *
+HOSTALLOW_READ = *
+HOSTALLOW_WRITE = *
+ALLOW_NEGOTIATOR = *
+ALLOW_ADMINISTRATOR = *
+COLLECTOR_DEBUG = D_FULLDEBUG
+NEGOTIATOR_DEBUG = D_FULLDEBUG
+MATCH_DEBUG = D_FULLDEBUG
+SCHEDD_DEBUG = D_FULLDEBUG
+SOAP_LEAVE_IN_QUEUE = ((JobStatus==4) && ((ServerTime - CompletionDate) < (60 * 60 * 24)))
+ENABLE_WEB_SERVER = TRUE
+WEB_ROOT_DIR=/usr/share/condor/webservice/
+USE_SHARED_PORT=FALSE
+
+##  This macro determines what daemons the condor_master will start and keep its watchful eyes on.
+##  The list is a comma or space separated list of subsystem names
+
+DAEMON_LIST = COLLECTOR, MASTER, NEGOTIATOR, SCHEDD, STARTD

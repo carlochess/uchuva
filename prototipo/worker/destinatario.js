@@ -5,8 +5,9 @@ var newmask = 0000;
 var oldmask = process.umask(newmask);
 var throng = require('throng');
 var config = require('../config.js');
-throng(startWorker);
 
+//throng(startWorker);
+startWorker();
 function startWorker(){
   logger.info("Changed umask from "+
               oldmask.toString(8)+" to "+newmask.toString(8));

@@ -12,7 +12,7 @@ services:
     volumes:
         - /app
     ports:
-      - "3030:3000"
+      - "3000:3000"
     environment:
       SHARE: /app
       CONDOR_URL: http://htcondor:8080/

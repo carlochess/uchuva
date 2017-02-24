@@ -20,7 +20,7 @@ test.after(function() {
   driver.quit();
 });
 
-test.describe('Failed registrations', function(done) {
+test.describe.skip('Failed registrations', function(done) {
   var invalidUsernames = "ar,,45/*/+91235,asdasdasdasdasdasd".split(",");
 
   invalidUsernames.forEach(function(username){

@@ -25,7 +25,7 @@ test.afterEach(function() {
   driver.manage().deleteAllCookies();
 });
 
-test.describe('Title is uchuva', function() {
+test.describe.skip('Title is uchuva', function() {
   test.it('provides no default weight', function() {
     driver.getTitle().then(function(title) {
         assert.equal(title, "Uchuva");

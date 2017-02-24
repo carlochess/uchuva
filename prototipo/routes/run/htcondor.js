@@ -68,7 +68,7 @@ var enviar = function(dagfile, cwd,cb) {
     ejecutar(comando, cb);
     function ejecutar(comando/*, otros*/, cb) {
         logger.info("Ejecutando", comando);
-        var proc = exec(comando/*, otros*/, function(error, stdout, stderr) {
+        var proc = exec(comando , otros, function(error, stdout, stderr) {
             if (error) {
                 return cb(error);
             }

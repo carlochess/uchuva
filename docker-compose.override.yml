@@ -2,10 +2,10 @@ version: '2'
 
 services:
   htcondor:
+    image:
+      agaveapi/htcondor
     build:
       ./docker/htcondor
-    expose:
-      - "8080"
     volumes_from:
       - uchuva
 

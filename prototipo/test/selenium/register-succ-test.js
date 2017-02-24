@@ -20,7 +20,7 @@ test.afterEach(function() {
   driver.quit();
 });
 
-test.describe('Sucess registrations', function(done) {
+test.describe.skip('Sucess registrations', function(done) {
   var validUsernames = "arrr,admin45,455589,______".split(",");
 
   validUsernames.forEach(function(username){
