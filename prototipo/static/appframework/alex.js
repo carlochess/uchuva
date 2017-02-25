@@ -17,7 +17,7 @@ var redirOut = [["--debug","Instructs Alex to generate a lexer which will output
 	    type : "bool", // text,bool,area,domain
       nombroOpt : opt[0].substring(2),
       description : opt[1],
-      representation: opt[0],
+       representation: opt[0],
       value : false // text(""),bool(t/f),area(""),domain([0..]),multiple([])
     };
   });

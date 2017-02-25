@@ -51,8 +51,8 @@ function rscript(){
         version : "0.0.1",
         description : "This is an alternative front end for use in #! scripts and other scripting applications.",
         file: [],
-        useDocker: false,
-        image: "haskell",
+        useDocker: true,
+        image: "r-base",
         argumento : "",
         render: [
             optsmultiples,

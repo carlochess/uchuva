@@ -160,8 +160,10 @@ var boton = undefined;
 $('#opciones').on('keydown', '#loadManager', function(ev) {
    ev.stopPropagation();
 });
-$('#opciones').on('', '#loadManager', function(ev) {
-  ev.stopPropagation();
+$('#opciones').on('click', '.nada', function(ev) {
+    ev.stopPropagation();
+    console.log(":D");
+    $('#filem').modal('show');
 });
 
 $('#opciones').on('change', '#loadManager', function(ev) {

@@ -17,6 +17,9 @@ var config = require('./config.js');
 var compression = require('compression');
 var paginate = require('express-paginate');
 var i18n = require("i18n");
+var https = require('https');
+var http = require('http');
+var fs = require('fs');
 //var tty = require('./tty/tty.js');
 //var proxyvnc = require('./utils/websockify.js');
 var MongoStore = require('connect-mongo')(session);
@@ -152,14 +155,29 @@ if (process.getgid) {
 }
 logger.info("Current directory"+process.cwd());
 
+var options = {
+   key: fs.readFileSync('keys/key.pem'),
+   cert: fs.readFileSync('keys/cert.pem')
+};
 
-var server = app.listen(config.SERVER_PORT, function() {
+
+// openssl req -nodes -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365
+// openssl rsa -in key.pem -out newkey.pem && mv newkey.pem key.pem
+
+http.createServer(app).listen(config.SERVER_PORT, function() {
+    logger.info('The http server is running in url ' + config.SERVER_HOST + ":" + config.SERVER_PORT);
+});
+https.createServer(options, app).listen(4443, function() {
+    logger.info('The https server is running in url ' + config.SERVER_HOST + ":" + 4443);
+});
+
+/*var server = app.listen(config.SERVER_PORT, function() {
     logger.info('The server is running in url ' + config.SERVER_HOST + ":" + config.SERVER_PORT);
 });
 
 server.on('error', function (err){
   logger.error(err);
   process.exit(0);
-});
+});*/
 // tty.createServer({}, app, server);
 //proxyvnc(server,cookieParser,sessionStore);
