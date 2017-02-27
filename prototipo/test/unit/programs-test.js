@@ -45,7 +45,7 @@ describe('GET /listarProgramas', function () {
         'Accept' : 'application/json'
       })
       .expect(200, function (err, res) {
-        expect(res.body).to.include.members(["cat", "test", "rscript"]);
+        expect(res.body).to.include.members(["cat", "head" , "rscript", "alex", "docker", "echo", "ghc", "happy", "nodejs", "racket", "sleep"]);
         done();
       });
   });
