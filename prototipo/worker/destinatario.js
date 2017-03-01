@@ -6,8 +6,8 @@ var oldmask = process.umask(newmask);
 var throng = require('throng');
 var config = require('../config.js');
 
-//throng(startWorker);
-startWorker();
+throng(startWorker);
+//startWorker();
 function startWorker(){
   logger.info("Changed umask from "+
               oldmask.toString(8)+" to "+newmask.toString(8));
@@ -22,7 +22,17 @@ function startWorker(){
   logger.info("Current directory"+process.cwd());
 
   amqp.connect(config.QUEUE, function(err, conn) {
+    if(err){
+        console.log(err);
+        process.exit(1);
+        return;
+    }
     conn.createChannel(function(err, ch) {
+      if(err){
+          console.log(err);
+          process.exit(1);
+          return;
+      }
       var q = 'task_queue';
 
       ch.assertQueue(q, {durable: true});

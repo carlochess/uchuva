@@ -1,7 +1,6 @@
 sudo passwd root
 sudo ufw disable
 echo "deb [arch=amd64] http://research.cs.wisc.edu/htcondor/ubuntu/stable/ trusty contrib" | sudo tee -a /etc/apt/sources.list
-echo "deb [arch=amd64] http://research.cs.wisc.edu/htcondor/ubuntu/development/ trusty contrib" | sudo tee -a /etc/apt/sources.list
 wget -qO - http://research.cs.wisc.edu/htcondor/ubuntu/HTCondor-Release.gpg.key | sudo apt-key add -
 sudo apt-get update
 sudo apt-get install -y condor nano docker.io
