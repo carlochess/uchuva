@@ -8,7 +8,7 @@
 
 (define (submit)
   (letrec (
-    [credd (register (string->url "http://localhost:3000/register") "carlos16" "losa")]
+    [credd (register (string->url "http://localhost:3000/register") "carlos1614" "losa")]
     [apikey (hash-ref credd 'apikey)]
     [rootfolder (hash-ref credd 'rootfolder)]
     [idArchivo (hash-ref (crearArchivo apikey (string->url "http://localhost:3000/crearArchivo") "main.rkt") 'success)]
@@ -19,33 +19,31 @@
     [dag (hasheq 'proyecto idDag
                 'imagen  ""
                 'workloader  "htcondor"
-                'nodes (list (hasheq
+                'nodes
+                (list (hasheq
                       'title  "aaa"
                       'id  0
                       'x  0
                       'y  0
                       'configurado
                          (hasheq
-                            'file  (list (hasheq 'id idArchivo 'filename "main.rkt" 'type "file" 'entrada "true")
-                                        (hasheq 'id idArchivo2 'filename "maze.rkt" 'type "file" 'entrada "true"))
-                            'location "/usr/bin/racket"
-                            'argumento "main.rkt -m"))))]
+                            'location "/bin/echo "
+                            'argumento "'Hola mundo'"))
+                      (hasheq
+                      'title  "aaa"
+                      'id  1
+                      'x  20
+                      'y  20
+                      'configurado
+                         (hasheq
+                            'file  (list (hasheq 'id idArchivo 'filename "main.rkt" 'type "file" 'entrada "true"))
+                            'location "/bin/cat"
+                            'argumento "main.rkt" )))
+                'edges (list (hasheq
+                              'source (hasheq 'id 0)
+                              'target (hasheq 'id 1))))]
     )
     (run apikey (string->url "http://localhost:3000/run") dag)
   )
 )
-
-(define maze-mode (make-parameter #f))
-
-(define file-to-compile
-  (command-line
-   #:program "compiler"
-   #:once-each
-   [("-m" "--maze") "create a maze" (maze-mode #t)]
-))
-
-(if (maze-mode)
-  (let ([m (build-maze 200 700)])
-    (show-maze m))
-  (submit)
-)
+(submit)

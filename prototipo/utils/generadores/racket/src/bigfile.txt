@@ -1,0 +1,53 @@
+splitter nPartes libro -> 25 partes
+
+split -l (( $(wc -c book.txt)/ 25)) book.txt
+
+
+counter $parte -> k:v_$parte
+
+
+tr ' ' '\n' | sort | uniq -c | awk '{print $2" "$1}'
+
+
+join nPartes -> k:v
+
+const readline = require('readline');
+const fs = require('fs');
+
+var wordsFrecuency = {};
+
+function async(arr, func){
+    
+}
+
+function readFileKV(file, cb){ 
+    const rl = readline.createInterface({
+      input: fs.createReadStream(file)
+    });
+
+    rl.on('line', (line) => {
+      var kv = line.split(" ");
+      if(wordsFrecuency[k[0]]){
+        wordsFrecuency[k[0]] += parseInt(k[1])
+      }
+      else{
+        wordsFrecuency[k[0]] = parseInt(k[1])
+      }
+    });
+    rl.on('close', () => {
+        cb();
+    });
+}
+
+Promise.all([1,2,3,4,5,6,7,8,9,10].map(function(part){
+    new Promise( (resolv,reject) => { 
+        readFileKV(part, function(err) {
+            if(err) 
+                reject()
+            else 
+                resolv()
+        })
+   });
+})).then(function(arr){
+
+});
