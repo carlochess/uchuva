@@ -144,6 +144,21 @@ router.post('/login', passport.authenticate('local', {
     res.redirect('/user');
 });
 
+router.post('/loginapi', function handleLocalAuthentication(req, res, next) {
+    passport.authenticate('local', function(err, user, info) {
+        if (err) return next(err);
+        if (!user) {
+            return res.json({
+                error : 1,
+                message: "no user found"
+            });
+        }
+        return res.json({
+            apikey: user.apikey,
+        });
+    })(req, res, next);
+});
+
 router.get('/logout', isAuthenticated, function(req, res) {
     req.logout();
     res.redirect('/');

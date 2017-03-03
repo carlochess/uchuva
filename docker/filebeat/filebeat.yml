@@ -2,7 +2,7 @@ output:
   logstash:
     enabled: true
     hosts:
-      - elk:5044
+      - 172.17.9.4:5044
     timeout: 15
 
 filebeat:

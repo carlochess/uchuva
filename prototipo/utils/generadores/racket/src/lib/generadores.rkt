@@ -4,10 +4,19 @@
 (require net/uri-codec)
 (require net/url)
 
-(provide register listToMP crearDag run dataNodeDag crearArchivo)
+(provide register listToMP crearDag run dataNodeDag crearArchivo crearCarpeta login)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (define (register url username password)
+  (call/input-url url
+                  (lambda (url h)
+                    (post-pure-port url (string->bytes/utf-8 (alist->form-urlencoded
+                     (list (cons 'username username)
+                           (cons 'password password)))) h))
+                  read-json
+                  (list "Accept: application/json" "Content-Type: application/x-www-form-urlencoded")))
+
+(define (login url username password)
   (call/input-url url
                   (lambda (url h)
                     (post-pure-port url (string->bytes/utf-8 (alist->form-urlencoded
@@ -50,6 +59,13 @@
   (call/input-url url
                   (lambda (url h)
                     (post-pure-port url (string->bytes/utf-8  (jsexpr->string dag)) h))
+                  read-json
+                  (list (string-append "apikey:" apikey) "Accept: application/json" "Content-Type: application/json")))
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+(define (crearCarpeta apikey url newPath)
+  (call/input-url url
+                  (lambda (url h)
+                    (post-pure-port url (string->bytes/utf-8  (jsexpr->string newPath)) h))
                   read-json
                   (list (string-append "apikey:" apikey) "Accept: application/json" "Content-Type: application/json")))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

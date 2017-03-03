@@ -61,13 +61,13 @@ services:
 #      - "5601:5601"
 
 # docker run -d --volumes-from uchuva -v "./docker/filebeat/filebeat.yml:/etc/filebeat/filebeat.yml" olinicola/filebeat
-#  filebeat:
-#    image:
-#      prima/filebeat
-#    volumes_from:
-#      - uchuva
-#    volumes:
-#      - ./docker/filebeat/filebeat.yml:/filebeat.yml
+  filebeat:
+    image:
+      prima/filebeat
+    volumes_from:
+      - uchuva
+    volumes:
+      - ./docker/filebeat/filebeat.yml:/filebeat.yml
 
 # docker run -d --name ftpd_server -p 21:21 -p 30000-30009:30000-30009 -e "PUBLICHOST=localhost" stilliard/pure-ftpd:hardened
 # pure-pw useradd bob -f /etc/pure-ftpd/passwd/pureftpd.passwd -m -u ftpuser -d /home/ftpusers/bob

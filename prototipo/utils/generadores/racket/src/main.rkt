@@ -8,9 +8,8 @@
 
 (define (submit)
   (letrec (
-    [credd (register (string->url "http://localhost:3000/register") "carlos16" "losa")]
+    [credd (login (string->url "http://localhost:3000/loginapi") "admin" "admin")]
     [apikey (hash-ref credd 'apikey)]
-    [rootfolder (hash-ref credd 'rootfolder)]
     [idArchivo (hash-ref (crearArchivo apikey (string->url "http://localhost:3000/crearArchivo") "main.rkt") 'success)]
     [idArchivo2 (hash-ref (crearArchivo apikey (string->url "http://localhost:3000/crearArchivo") "maze.rkt") 'success)]
     [newdag (crearDag apikey (string->url "http://localhost:3000/crearDag"))]

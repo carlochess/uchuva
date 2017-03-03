@@ -7,7 +7,7 @@ var expect = require('chai').expect;
 
 var express = require('express');
 
-describe('POST /buscar', function () {
+describe.skip('POST /buscar', function () {
   var app, fileFindStub, request, route;
 
   beforeEach(function () {
