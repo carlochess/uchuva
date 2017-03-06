@@ -70,7 +70,7 @@ var enviar = function(dagfile, cwd,cb) {
         logger.info("Ejecutando", comando);
         var proc = exec(comando , otros, function(error, stdout, stderr) {
             if (error) {
-                return cb(error);
+                return cb(error.message);
             }
             if (stderr) {
                 return cb(stderr);
