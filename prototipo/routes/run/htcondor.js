@@ -8,7 +8,7 @@ var config = require('../../config.js');
 var exec = require('child_process').exec;
 var SSH = require('simple-ssh');
 
-function nodeAClassAd(nodo, dagDir, filese, filess, cm) {
+function nodeAClassAd(nodo, filese, filess, cm) {
     var res = "";
     if (nodo.configurado) {
         var configuracion = nodo.configurado;
@@ -145,7 +145,7 @@ var enviarHTC = function(envio, nombreDir, cb) {
         }
         var nombre = (nodo.title + "_" + nodo.id).replace(/[^a-z0-9]/gi, '_').toLowerCase();
         nodo.nombre = nombre;
-        var nodeOut = nodeAClassAd(nodo, nombre, nombresEntrada, nombresSalida, config.BMANAGER);
+        var nodeOut = nodeAClassAd(nodo, nombresEntrada, nombresSalida, config.BMANAGER);
         dagManContent += "Job " + nombre + " " + nombre + ".submit" + "\r\n";
         //return nodo;
         controladorArchivos.crearArchivo(path.join(config.DAG_DIR, nombreDir, nombre + ".submit"), nodeOut, function(err) {
@@ -208,3 +208,4 @@ var enviarHTC = function(envio, nombreDir, cb) {
     }
 };
 exports.enviarHTC = enviarHTC;
+exports.nodeAClassAd = nodeAClassAd;

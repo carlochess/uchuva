@@ -6,42 +6,89 @@ describe('NodeAClassad', function () {
   var app, fileFindStub,fileFindOneStub,dagExeFindStub, request, route;
 
   beforeEach(function () {
-    fileFindStub = sinon.stub();
+    /*fileFindStub = sinon.stub();
     fileFindOneStub = sinon.stub();
-    dagExeFindStub = sinon.stub();
+    dagExeFindStub = sinon.stub();*/
     route = proxyquire('../../routes/run/loadmanagers.js', {
       "../../utils/logger.js": console,
     });
   });
 
   it('should return nothing', function (done) {
-    fileFindOneStub.yields(new Error(), []);
+    //fileFindOneStub.yields(new Error(), []);
       expect(route.nodeAClassAd({}, "")).to.be.equal("");
       done();
   });
 
-  it('should respond with 200 and Invalid filename', function (done) {
-    fileFindOneStub.yields(new Error(), []);
+  it('should return an openlava valid bash desc file', function (done) {
+    //fileFindOneStub.yields(new Error(), []);
       expect(route.nodeAClassAd({
-          title: "String",
-          id: 0,
-          x: 0,
-          y: 0,
-          NodeStatus: "String",
-          StatusDetail:"String",
+          directorio: "String",
+          nombre: "",
+          dependencia: "hola".split(""),
           configurado : {
-              programa: "String",
-              location : "String",
+              location : "Location",
+              argumento : "Argumento",
+              times: 20,
               useDocker : false,
-              image:"String",
-              argumento : "String",
-              raw: "Number",
-              times: "Number",
-              file: [{
-
-              }]
+              image:"Image",
+              //universe: ""
           }
-      }, 0)).to.be.equal("");
+      }, 1)).to.be.a('string');
+      done();
+  });
+
+    it('should return a torque valid bash desc file', function (done) {
+    //fileFindOneStub.yields(new Error(), []);
+      expect(route.nodeAClassAd({
+          directorio: "String",
+          nombre: "",
+          dependencia: "hola".split(""),
+          configurado : {
+              location : "Location",
+              argumento : "Argumento",
+              times: 20,
+              useDocker : false,
+              image:"Image",
+              //universe: ""
+          }
+      }, 2)).to.be.a('string');
+      done();
+  });
+
+  it('should return a slurm valid bash desc file', function (done) {
+    //fileFindOneStub.yields(new Error(), []);
+      expect(route.nodeAClassAd({
+          directorio: "String",
+          nombre: "",
+          dependencia: "hola".split(""),
+          configurado : {
+              location : "Location",
+              argumento : "Argumento",
+              times: 20,
+              useDocker : false,
+              image:"Image",
+              //universe: ""
+          }
+      }, 3)).to.be.a('string');
+      done();
+  });
+
+  it.skip('should return an exception', function (done) {
+    //fileFindOneStub.yields(new Error(), []);
+      expect(route.nodeAClassAd({
+          directorio: "String",
+          nombre: "",
+          dependencia: 5,//"hola".split(""),
+          configurado : {
+              location : "Location",
+              argumento : "Argumento",
+              times: 20,
+              useDocker : false,
+              image:"Image",
+              //universe: ""
+          }
+      }, 3)).to.throw(new Error());
       done();
   });
 });

@@ -3,6 +3,11 @@
 #BSUB -W 00:06              # tiempo (hrs:mins)
 #BSUB -o {{= it.dagdir}}/{{= it.nodo.directorio}}/{{= it.nodo.nombre}}{{? it.config.times > 1 }}.%I{{?}}.out    # out
 #BSUB -e {{= it.dagdir}}/{{= it.nodo.directorio}}/{{= it.nodo.nombre}}{{? it.config.times > 1 }}.%I{{?}}.err    # err
-#BSUB -J {{= it.nodo.directorio}}_{{= it.nodo.nombre}}{{? it.config.times > 1 }}[1-{{= it.config.times}}]{{?}} # nombre
-{{? it.nodo.dependencia.length > 0 }}#BSUB -w {{= it.nodo.dependencia.join("&&")}}{{?}} # dependencia
-{{= it.config.location.trim() }} {{= it.config.argumento.trim() }}
+#BSUB -J {{= it.nodo.directorio}}_{{= it.nodo.nombre}}{{? it.config.times && it.config.times > 1 }}[1-{{= it.config.times}}]{{?}} # nombre
+{{? it.nodo.dependencia && it.nodo.dependencia.length > 0 }}#BSUB -w {{= it.nodo.dependencia.join("&&")}}{{?}} # dependencia
+
+{{? it.config.useDocker }}
+docker run -it -p {{= it.dagdir}}/{{= it.nodo.directorio}}:/scratch {{= it.config.image }} {{= it.config.argumento.trim() }}
+{{??}}
+{{= it.config.location && it.config.location.trim() }} {{= it.config.argumento.trim() }}
+{{?}}
