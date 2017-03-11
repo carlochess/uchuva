@@ -20,7 +20,76 @@ describe('NodeAClassad', function () {
       done();
   });
 
-  it('should respond with 200 and Invalid filename', function (done) {
+  it('should respond with valid openlava file format', function (done) {
+    fileFindOneStub.yields(new Error(), []);
+      expect(route.nodeAClassAd({
+        title: "nombre",
+        id: 0,
+        x: 0,
+        y: 0,
+        nombre: "nombre",
+        directorio : "directorio",
+        configurado : {
+          programa: "programa",
+          location : "location",
+          useDocker : false,
+          image: "image",
+          argumento : "argument",
+          raw: 0,
+          times: 0
+        },
+        dependencia : []
+      }, 1)).to.be.equal("");
+      done();
+  });
+
+  it('should respond with valid torque file format', function (done) {
+    fileFindOneStub.yields(new Error(), []);
+      expect(route.nodeAClassAd({
+        title: "nombre",
+        id: 0,
+        x: 0,
+        y: 0,
+        nombre: "nombre",
+        directorio : "directorio",
+        configurado : {
+          programa: "programa",
+          location : "location",
+          useDocker : false,
+          image: "image",
+          argumento : "argument",
+          raw: 0,
+          times: 0
+        },
+        dependencia : []
+      }, 2)).to.be.equal("");
+      done();
+  });
+
+  it('should respond with valid slurm file format', function (done) {
+    fileFindOneStub.yields(new Error(), []);
+      expect(route.nodeAClassAd({
+        title: "nombre",
+        id: 0,
+        x: 0,
+        y: 0,
+        nombre: "nombre",
+        directorio : "directorio",
+        configurado : {
+          programa: "programa",
+          location : "location",
+          useDocker : false,
+          image: "image",
+          argumento : "argument",
+          raw: 0,
+          times: 0
+        },
+        dependencia : []
+      }, 3)).to.be.equal("");
+      done();
+  });
+
+  it.skip('should respond with exception', function (done) {
     fileFindOneStub.yields(new Error(), []);
       expect(route.nodeAClassAd({
           title: "String",
@@ -41,7 +110,7 @@ describe('NodeAClassad', function () {
 
               }]
           }
-      }, 0)).to.be.equal("");
+      }, 1)).to.throw(new Error("Cannot read property 'length' of undefined"));
       done();
   });
 });

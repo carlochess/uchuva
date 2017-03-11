@@ -84,3 +84,4 @@ _site/*
 .ruby-gemset
 .ruby-version
 .rvmrc
+\#*\#

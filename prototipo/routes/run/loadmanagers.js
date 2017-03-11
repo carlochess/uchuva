@@ -22,6 +22,7 @@ function nodeAClassAd(nodo, workloader) {
             nodo: nodo,
             dagdir: config.DAG_DIR
         };
+      console.log("Pasa");
         switch(workloader){
         case 1:
             res = config.JOB_TEMPLATE.openlava(obj);

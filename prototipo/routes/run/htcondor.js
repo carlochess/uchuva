@@ -132,35 +132,38 @@ var enviarHTC = function(envio, nombreDir, cb) {
 
     var dagManContent = "";
     async.each(nodes, function(nodo, callback) {
-        var nombresEntrada = [];
-        var nombresSalida = [];
-        if (nodo.configurado && nodo.configurado.file) {
-            nodo.configurado.file.map(function(o) {
-                if (o.entrada == "true") {
-                    nombresEntrada.push(o.filename);
+      var nombresEntrada = [];
+      var nombresSalida = [];
+      if (nodo.configurado && nodo.configurado.file) {
+          nodo.configurado.file.map(function(o) {
+              if (o.entrada == "true") {
+                  nombresEntrada.push(o.filename);
                 } else {
-                    nombresSalida.push(o.filename);
+                  nombresSalida.push(o.filename);
                 }
             });
         }
-        var nombre = (nodo.title + "_" + nodo.id).replace(/[^a-z0-9]/gi, '_').toLowerCase();
-        nodo.nombre = nombre;
+      var nombre = (nodo.title + "_" + nodo.id).replace(/[^a-z0-9]/gi, '_').toLowerCase();
+      nodo.nombre = nombre;
+      try{
         var nodeOut = nodeAClassAd(nodo, nombre, nombresEntrada, nombresSalida, config.BMANAGER);
-        dagManContent += "Job " + nombre + " " + nombre + ".submit" + "\r\n";
-        //return nodo;
-        controladorArchivos.crearArchivo(path.join(config.DAG_DIR, nombreDir, nombre + ".submit"), nodeOut, function(err) {
-            if (err) {
-                callback(err);
-                return;
-            }
-            callback();
-        });
-    }, function(err) {
+      }catch(ex){
+        return callback(ex);
+      }
+      dagManContent += "Job " + nombre + " " + nombre + ".submit" + "\r\n";
+      //return nodo;
+      controladorArchivos.crearArchivo(path.join(config.DAG_DIR, nombreDir, nombre + ".submit"), nodeOut, function(err) {
         if (err) {
-            cb(err);
-            return;
+          callback(err);
+          return;
         }
-        dagfile();
+        callback();
+      });
+    }, function(err) {
+      if (err) {
+        return cb(err);
+      }
+      return dagfile();
     });
 
     function dagfile() {
