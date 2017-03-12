@@ -1,13 +1,10 @@
       var plantillas = [];
-
       function solicitarPrograma(programa){
         $.getScript( "/appframework/"+programa+".js" )
           .done(function( script, textStatus ) {
-            console.log("loaded",programa);
             plantillas.push(programa);
           })
           .fail(function( jqxhr, settings, exception ) {
-            //$( "div.log" ).text( "Triggered ajaxError handler." );
             console.log("Fracaso: "+exception);
         });
       }
@@ -65,13 +62,18 @@
       }
 
       function rederizarFormulario(nodo, buscado) {
-          if (!nodo.configurado|| buscado !== "")
+          $('#plantillaPrograma').show();
+          $('#plantillaPrograma').val("").change();
+          if(!nodo.configurado && buscado === ""){
+             return;
+          }
+          if (/*!*/nodo/*.configurado*/ && buscado !== "")
           {
               nodo.configurado = jQuery.extend(true, {}, window[buscado]());
               delete nodo.configurado.validation;
               delete nodo.configurado.transformation;
           }
-          $('#plantillaPrograma').val(buscado);
+          $('#plantillaPrograma').val(nodo.configurado.name).change();
           rederizarArg(nodo.configurado);
       }
 
@@ -83,7 +85,8 @@
            '<option value="openlava">openlava</option>'+
            '<option value="slurm">slurm</option>'+
          '</select></li></br>');
-        opciones.val(workloader).change();
+        $("#loadManager").val(workloader).change();
+        $('#plantillaPrograma').hide();
       }
 
 var abrirMenu = function(event, abrir){
@@ -236,4 +239,5 @@ $(function(){
       $('#archivos').val("");
 	  rederizarFormulario(graph.nodes[id], "");
   });
+  rederizarProyecto();
 });

@@ -136,13 +136,15 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
             /* var svg  = document.getElementById('grafo'),
                xml  = new XMLSerializer().serializeToString(svg),
                dataImg = "data:image/svg+xml;base64," + btoa(xml);*/
-            svgAsPngUri(document.getElementById("grafo"), {}, function(uri) {
+
+          svgAsPngUri(document.getElementById("grafo"), {}, function(uri) {
+            console.log(workloader);
                 var envio = {
                     "proyecto": proyecto,
                     "nodes": thisGraph.nodes,
                     "edges": thisGraph.edges,
                     "imagen": uri,
-                    "workloader": workloader,
+                    "workloader": workloader
                 };
                 var blob = envio;
                 $.ajax({
@@ -379,6 +381,8 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
         if (doDelete) {
             thisGraph.nodes = [];
             thisGraph.edges = [];
+            nodes = thisGraph.nodes;
+            edges = thisGraph.edges;
             thisGraph.updateGraph();
         }
     };
@@ -604,12 +608,11 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                         thisGraph.replaceSelectNode(d3node, d);
                     } else {
                         thisGraph.removeSelectFromNode();
-                        console.log("Render project sett");
                         actualizar = false;
                     }
                 }
 
-                if (actualizar && mouseDownNode.configurado) {
+                if (actualizar /*&& mouseDownNode.configurado*/) {
                     rederizarFormulario(mouseDownNode, "");
                 } else {
                     $('#plantillaPrograma').val("");

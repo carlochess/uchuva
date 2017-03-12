@@ -8,7 +8,7 @@
 
 (define (submit)
   (letrec (
-    [credd (register (string->url "http://localhost:3000/register") "carlos1614" "losa")]
+    [credd (register (string->url "http://localhost:3000/register") "admin" "admin")]
     [apikey (hash-ref credd 'apikey)]
     [rootfolder (hash-ref credd 'rootfolder)]
     [idArchivo (hash-ref (crearArchivo apikey (string->url "http://localhost:3000/crearArchivo") "main.rkt") 'success)]

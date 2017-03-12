@@ -37,7 +37,7 @@ function docker(){
     };
 
     return {
-        name: "dockerrun",
+        name: "docker",
         location: "/usr/bin/docker",
         version : "0.0.1",
         description : "the container process that runs is isolated in that it has its own file system, its own networking, and its own isolated process tree separate from the host.",

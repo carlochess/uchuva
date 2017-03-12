@@ -768,6 +768,54 @@
                     }
                 }
             }
+        },
+      "/loginapi": {
+            "post": {
+                "summary": "Get the user token",
+                "description": "The login endpoint allow a person to retrieve the user token\n",
+                "consumes": [
+                  "application/x-www-form-urlencoded"
+                ],
+                "parameters": [
+                    {
+                        "name": "username",
+                        "in": "formData",
+                        "description": "User-name.",
+                        "required": false,
+                        "type": "string"
+                    },
+                    {
+                        "name": "password",
+                        "in": "formData",
+                        "description": "Password.",
+                        "required": false,
+                        "type": "string"
+                    }
+                ],
+                "tags": [
+                    "User"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Result of the operation",
+                        "schema": {
+                            "type": "object",
+                            "properties": {
+                                "apikey": {
+                                    "type": "string",
+                                    "description": "Developers api key"
+                                }
+                            }
+                        }
+                    },
+                    "default": {
+                        "description": "Unexpected error",
+                        "schema": {
+                            "$ref": "#/definitions/Error"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {

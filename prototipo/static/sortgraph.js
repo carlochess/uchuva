@@ -26,7 +26,3 @@ g.nodes().forEach(function(v) {
   nodes[realNode].x = node.x+300;
   nodes[realNode].y = node.y+100;
 });
-
-g.nodes().forEach(function(v) {
-     console.log("Node " + v + ": " + JSON.stringify(g.node(v)));
-});

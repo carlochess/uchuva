@@ -4,7 +4,7 @@
 (require net/uri-codec)
 (require net/url)
 (require "maze.rkt")
-(require "lib/generadores.rkt")
+(require "generadores.rkt")
 
 (define (submit)
   (letrec (
@@ -12,6 +12,7 @@
     [apikey (hash-ref credd 'apikey)]
     [idArchivo (hash-ref (crearArchivo apikey (string->url "http://localhost:3000/crearArchivo") "main.rkt") 'success)]
     [idArchivo2 (hash-ref (crearArchivo apikey (string->url "http://localhost:3000/crearArchivo") "maze.rkt") 'success)]
+    [idArchivo3 (hash-ref (crearArchivo apikey (string->url "http://localhost:3000/crearArchivo") "generadores.rkt") 'success)]
     [newdag (crearDag apikey (string->url "http://localhost:3000/crearDag"))]
     [idDag (hash-ref newdag 'id)]
     [nombreDag (hash-ref newdag 'nombre)]
@@ -26,7 +27,8 @@
                       'configurado
                          (hasheq
                             'file  (list (hasheq 'id idArchivo 'filename "main.rkt" 'type "file" 'entrada "true")
-                                        (hasheq 'id idArchivo2 'filename "maze.rkt" 'type "file" 'entrada "true"))
+                                         (hasheq 'id idArchivo2 'filename "maze.rkt" 'type "file" 'entrada "true")
+                                         (hasheq 'id idArchivo3 'filename "generadores.rkt" 'type "file" 'entrada "true"))
                             'location "/usr/bin/racket"
                             'argumento "main.rkt -m"))))]
     )

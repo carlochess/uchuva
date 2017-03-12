@@ -56,7 +56,7 @@ module.exports = function(app) {
             }
 
             if (config.USEQUEUE) {
-                notificarBlaBla(null, null)
+                notificarBlaBla(null, null);
             } else {
                 datos.trasteo(envio, nombreDir, function(err) {
                     if (err) {
@@ -115,7 +115,7 @@ module.exports = function(app) {
                             }
                             conn.createChannel(function(err, ch) {
                                 var q = 'task_queue';
-                                var msg = dag._id.toString(); //process.argv.slice(2).join(' ') || "Hello World!";
+                                var msg = dag._id.toString();
 
                                 ch.assertQueue(q, {
                                     durable: true

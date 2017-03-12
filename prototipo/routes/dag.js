@@ -140,13 +140,22 @@ module.exports = function(app){
             });
             return;
           }
+          if(dag.nodes){
+            for(var i=0; i< dag.nodes.length; i++){
+              var node = dag.nodes[i];
+              if(node.configurado && !node.configurado.name){
+                node.configurado=false;
+              }
+            };
+          }
           res.format({
               html: function() {
                 res.render('dagman', {
                     proyecto: dag._id,
                     nodes: JSON.stringify(dag.nodes),
                     edges: JSON.stringify(dag.edges),
-                    title: dag.nombre
+                    title: dag.nombre,
+                    workloader : dag.workloader
                 });
               },
               json: function() {
