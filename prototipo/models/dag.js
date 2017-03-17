@@ -20,12 +20,7 @@ var DagSchema = mongoose.Schema({
             raw: Number,
             times: Number,
             file: [mongoose.Schema.Types.Mixed],
-            render: [mongoose.Schema.Types.Mixed],
-                /*[{
-                               filename : String,
-                               id : String,
-                               type : String
-                           }]*/
+            render: [mongoose.Schema.Types.Mixed]
         }
     }],
     edges: [{
@@ -33,14 +28,14 @@ var DagSchema = mongoose.Schema({
             title: String,
             id: Number,
             x: Number,
-            y: Number,
+            y: Number
         },
         target: {
             title: String,
             id: Number,
             x: Number,
             y: Number
-        },
+        }
     }],
     date: {
         type: Date,

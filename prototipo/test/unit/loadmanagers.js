@@ -11,6 +11,20 @@ describe('NodeAClassad', function () {
     dagExeFindStub = sinon.stub();*/
     route = proxyquire('../../routes/run/loadmanagers.js', {
       "../../utils/logger.js": console,
+      "./forkexec.js" : {
+        enviar  :function(comando, config, cb) {
+          cb(null, "Job <20>.<carlos>");
+        },
+        enviarssh : function(comando, config, cb) {
+          cb(null, "Job <20>.<carlos>");
+        }
+      },
+      "../../utils/file.js" : {
+        crearArchivo : function(nombre, nodeout,cb){
+          //console.log("----".repeat(4),nodeout,"----".repeat(4));
+          cb(null);
+        }
+      }
     });
   });
 
@@ -90,5 +104,44 @@ describe('NodeAClassad', function () {
           }
       }, 1)).to.throw(new Error("Cannot read property 'length' of undefined"));
       done();
+  });
+
+  it('should return exec', function (done) {
+    route.submitToLoadManagers({
+      nodes : [{
+        title: "String",
+        id: 0,
+        configurado: {
+            location: "String",
+            name: "String",
+            version: "String",
+            description: "String",
+            useDocker: false,
+            argumento: "Str",
+            times: 0,
+            file: []
+        }
+      },{
+        title: "String",
+        id: 1,
+        configurado: {
+            location: "String",
+            name: "String",
+            version: "String",
+            description: "String",
+            useDocker: false,
+            argumento: "Str",
+            times: 0,
+            file: []
+        }
+      }],
+      edges : [{source: {id: 0} , target: {id : 1}}]
+    }, "ninguno", 1, function(err, out){
+      if(err){
+        return done(err);
+      }
+      expect(out).to.be.array;
+      return done();
+    });
   });
 });

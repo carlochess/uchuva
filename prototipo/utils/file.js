@@ -97,7 +97,7 @@ function copiarArchivo(origen, destino, cb){
   rd.on("error", function(err) {
     done(err);
   });
-  var wr = fs.createWriteStream(destino);
+  var wr = (typeof destino == "string")? fs.createWriteStream(destino) : destino;
   wr.on("error", function(err) {
     done(err);
   });

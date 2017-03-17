@@ -90,63 +90,68 @@
       }
 
 var abrirMenu = function(event, abrir){
-     var $box = $(event.target),
-              boxName = $box.attr('class'),
-              box = {
-                  offset: $box.offset(),
-                  pos: $box.position(),
-                  normal: {
-                      // excludes padding
-                      width: $box.width(),
-                      height: $box.height(),
+  var $box = $(event.target);
+  var cti = event.target.id;
+  if(cti !== "menu" && cti !== "openMenu"){
+    return;
+  }
+  var boxName = $box.attr('class');
+  var box = {
+    offset: $box.offset(),
+    pos: $box.position(),
+    normal: {
+      // excludes padding
+      width: $box.width(),
+      height: $box.height(),
+    },
+    inner: {
+      // includes padding
+      width: $box.innerWidth(),
+      height: $box.innerHeight(),
                   },
-                  inner: {
-                      // includes padding
-                      width: $box.innerWidth(),
-                      height: $box.innerHeight(),
-                  },
-                  outer: {
-                      // includes border
-                      width: $box.outerWidth(),
-                      height: $box.outerHeight()
-                  },
-                  border: {
-                      left: parseInt($box.css('border-left-width'), 10),
-                      right: parseInt($box.css('border-right-width'), 10),
-                      top: parseInt($box.css('border-top-width'), 10),
+    outer: {
+      // includes border
+      width: $box.outerWidth(),
+      height: $box.outerHeight()
+    },
+    border: {
+      left: parseInt($box.css('border-left-width'), 10),
+      right: parseInt($box.css('border-right-width'), 10),
+      top: parseInt($box.css('border-top-width'), 10),
                       bottom: parseInt($box.css('border-bottom-width'), 10)
-                  }
-              };
-          $.extend(box, {
-              inner: {
-                  top: box.offset.top + box.border.top,
-                  left: box.offset.left + box.border.left,
-                  right: box.offset.left + box.border.left + box.inner.width,
-                  bottom: box.offset.top + box.border.top + box.inner.height
+    }
+  };
+
+  $.extend(box, {
+    inner: {
+      top: box.offset.top + box.border.top,
+      left: box.offset.left + box.border.left,
+      right: box.offset.left + box.border.left + box.inner.width,
+      bottom: box.offset.top + box.border.top + box.inner.height
               }
-          });
-          $.extend(box, {
-              inner: {
-                  mouse: {
-                      top: event.pageY - box.inner.top,
-                      left: event.pageX - box.inner.left,
-                      right: event.pageX - box.inner.right,
-                      bottom: event.pageY - box.inner.bottom
-                  }
+  });
+  $.extend(box, {
+    inner: {
+      mouse: {
+        top: event.pageY - box.inner.top,
+        left: event.pageX - box.inner.left,
+        right: event.pageX - box.inner.right,
+        bottom: event.pageY - box.inner.bottom
+      }
               }
-          });
-          if (event.type == 'click') {
-            if (!(box.inner.mouse.top > 0 &&
-                  box.inner.mouse.left > 0 &&
-                  box.inner.mouse.right < 0 &&
-                 box.inner.mouse.bottom < 0) || abrir) {
+  });
+  if (event.type == 'click') {
+    if (!(box.inner.mouse.top > 0 &&
+          box.inner.mouse.left > 0 &&
+          box.inner.mouse.right < 0 &&
+          box.inner.mouse.bottom < 0) || abrir) {
                   var menu = document.getElementById("menu");
-                  if (menu.style.right == "0px")
-                      menu.style.right = "-16em";
-                  else
-                      menu.style.right = "0px";
-              }
-          }
+      if (menu.style.right == "0px")
+        menu.style.right = "-16em";
+      else
+        menu.style.right = "0px";
+    }
+  }
 }
       $('#openMenu').click(function(event) {
           event.stopPropagation();

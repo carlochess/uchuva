@@ -24,11 +24,6 @@ module.exports = function(app){
           }
           var edges = dag.edges || [];
           var nodes = dag.nodes || [];
-          nodes.forEach(function(nodo) {
-              if (!nodo.configurado.programa) {
-                  nodo.configurado = undefined;
-              }
-          });
           cb(null, {
               proyecto: dag.proyecto,
               nodes: JSON.stringify(nodes),

@@ -5,15 +5,14 @@ var path = require('path');
 var logger = console; //require('../../utils/logger.js');
 var controladorArchivos = require('../../utils/file.js');
 var config = require('../../config.js');
-var exec = require('child_process').exec;
-var SSH = require('simple-ssh');
+var forkexec = require('./forkexec.js');
 
 function nodeAClassAd(nodo, filese, filess, cm) {
     var res = "";
     if (nodo.configurado) {
         var configuracion = nodo.configurado;
         configuracion.queue = configuracion.queue || 1;
-        configuracion.universe = configuracion.useDocker? "docker" : configuracion.universe || "vanilla";
+        configuracion.universe = configuracion.useDocker === "true" ? "docker" : configuracion.universe || "vanilla";
         res = config.JOB_TEMPLATE.htcondor({
             config: configuracion,
             nodoNombre: nodo.nombre,
@@ -26,67 +25,28 @@ function nodeAClassAd(nodo, filese, filess, cm) {
 
 var enviarssh = function( dagfile, cwd,cb) {
     logger.info("enviando");
-    var regexs = [/Job <(\d*)>.*<([a-zA-Z]*)>/g];
-    var ssh = new SSH({
-        host: 'htcondor',
-        port: '22',
-        user: 'testuser',
+    var otro = {
+        host: config.SSHHOSTS[0],
+        port: config.SSHPORTS[0],
+        user: config.SSHUSERS[0],
         key: config.SSHKEY,
         baseDir: cwd
-    }).on('error', function(err){
-      return cb(err);
-    });
+    };
     var comando = "condor_submit_dag" +" "+ dagfile;
-    ssh.exec(comando, {
-        out: function(stdout) {
-            /*var regex = regexs[workloader - 1];
-            var m = regex.exec(stdout);
-            if(m && m.length > 1)*/
-              console.log(stdout)
-              return cb(null/*, m[1]*/);/*
-            else
-              return cb("Unknow error");*/
-        },
-        err: function(stderr) {
-            return cb(stderr);
-        }
-    }).start(function(err, start){
-      if(err){
-        return cb(err);
-      }
+    forkexec.enviarssh(comando, otro, function(err, log){
+      return cb(err);
     });
 };
 
-
 var enviar = function(dagfile, cwd,cb) {
-    var regexs = [/Job <(\d*)>.*<([a-zA-Z]*)>/g];
     var otros = {
       cwd: cwd,
       timeout: 5000
     };
     var comando = 'condor_submit_dag ' + dagfile;
-    ejecutar(comando, cb);
-    function ejecutar(comando/*, otros*/, cb) {
-        logger.info("Ejecutando", comando);
-        var proc = exec(comando , otros, function(error, stdout, stderr) {
-            if (error) {
-                return cb(error.message);
-            }
-            if (stderr) {
-                return cb(stderr);
-            }
-            /*var regex = regexs[workloader - 1];
-            var m = regex.exec(stdout);
-            if(m && m.length > 1)*/
-              cb(null/*, m[1]*/);/*
-            else
-              cb("Unknow error");*/
-        });
-        proc.on("error", function(err){
-          cb(err);
-        });
-        proc.on('close', function(code) { console.log("Return code", code) });
-    }
+    forkexec.enviar(comando, otros, function(err, log){
+      return cb(err);
+    });
 };
 
 function submitJobs(dagl, cb) {
@@ -146,7 +106,7 @@ var enviarHTC = function(envio, nombreDir, cb) {
       var nombre = (nodo.title + "_" + nodo.id).replace(/[^a-z0-9]/gi, '_').toLowerCase();
       nodo.nombre = nombre;
       try{
-        var nodeOut = nodeAClassAd(nodo, nombre, nombresEntrada, nombresSalida, config.BMANAGER);
+        var nodeOut = nodeAClassAd(nodo, nombresEntrada, nombresSalida, config.BMANAGER);
       }catch(ex){
         return callback(ex);
       }
