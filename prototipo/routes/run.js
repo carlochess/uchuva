@@ -71,10 +71,35 @@ module.exports = function(app){
       });
   });
 
-  // llamada ajax para conocer el estado de un nodo
-  // <id>.0.out
-  // <id>.0.log
-  // <id>.0.err
+  router.get('/datanodedag', isAuthenticated, function(req, res, next) {
+      /*req.checkBody('idEjecucion', 'Invalid id exe').notEmpty();
+      req.checkBody('nodo.title', 'Invalid node title').notEmpty();
+      req.checkBody('nodo.id', 'Invalid node id').notEmpty();
+      req.checkBody('tipo', 'Invalid type').notEmpty();
+      req.checkBody('index', 'Invalid index').notEmpty()
+      var errors = req.validationErrors();
+      if (errors) {
+          var asStr = errors.map(function(e){
+            return e.msg;
+          }).join(",");
+          res.send({
+              code : 1,
+              error: asStr
+          });
+          return;
+      };*/
+      var envio = req.query;
+      var dag = envio.idEjecucion;
+      var nodo = {};
+      nodo.title = envio.title;
+      nodo.id = envio.id;
+      var nombre = (nodo.title + "_" + nodo.id).replace(/[^a-z0-9]/gi, '_').toLowerCase();
+      var tipo = envio.tipo; // log, err, out
+      var index = envio.index;
+      var archivo = path.join(config.DAG_DIR, dag, nombre+ (index>1?"."+index:"") + "." + tipo);
+      controladorArchivos.copiarArchivo(archivo, res, next);
+  });
+
   router.post('/datanodedag', isAuthenticated, function(req, res) {
       /*req.checkBody('idEjecucion', 'Invalid id exe').notEmpty();
       req.checkBody('nodo.title', 'Invalid node title').notEmpty();
@@ -106,10 +131,7 @@ module.exports = function(app){
               });
               return;
           }
-          res.send({
-              tipo: tipo,
-              info: data
-          });
+          res.send(data);
       });
   });
 };

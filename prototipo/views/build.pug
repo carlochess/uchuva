@@ -9,6 +9,8 @@ html
       ul
         li#id
         li#nombre
+        li#useDocker
+        li#descripcion
         li
           h5 Ejecutable
           h2= proyecto
@@ -31,11 +33,11 @@ html
             button.close(type='button', data-dismiss='modal', aria-label='Close')
               span(aria-hidden='true') ×
             h4#myModalLabel.modal-title Modal title
-          .modal-body#infoo
-            | ...
+          .modal-body
+            p#infoo
           .modal-footer
             button.btn.btn-default(type='button', data-dismiss='modal') Close
-            button.btn.btn-primary(type='button') Save changes
+            button.btn.btn-primary(type='button', href="/hola", target="_blank") See all
 
 
     #filem.modal.bs-example-modal-lg(tabindex='-1', role='dialog', aria-labelledby='myLargeModalLabel', aria-hidden='true')

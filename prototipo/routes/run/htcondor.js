@@ -13,7 +13,8 @@ function nodeAClassAd(nodo, filese, filess, cm) {
     if (nodo.configurado) {
         var configuracion = nodo.configurado;
         configuracion.queue = configuracion.queue || 1;
-        configuracion.universe = configuracion.useDocker? "docker" : configuracion.universe || "vanilla";
+        console.log(configuracion);
+        configuracion.universe = configuracion.useDocker === "true" ? "docker" : configuracion.universe || "vanilla";
         res = config.JOB_TEMPLATE.htcondor({
             config: configuracion,
             nodoNombre: nodo.nombre,
@@ -42,7 +43,7 @@ var enviarssh = function( dagfile, cwd,cb) {
             /*var regex = regexs[workloader - 1];
             var m = regex.exec(stdout);
             if(m && m.length > 1)*/
-              console.log(stdout)
+              console.log(stdout);
               return cb(null/*, m[1]*/);/*
             else
               return cb("Unknow error");*/
@@ -146,7 +147,7 @@ var enviarHTC = function(envio, nombreDir, cb) {
       var nombre = (nodo.title + "_" + nodo.id).replace(/[^a-z0-9]/gi, '_').toLowerCase();
       nodo.nombre = nombre;
       try{
-        var nodeOut = nodeAClassAd(nodo, nombre, nombresEntrada, nombresSalida, config.BMANAGER);
+        var nodeOut = nodeAClassAd(nodo, nombresEntrada, nombresSalida, config.BMANAGER);
       }catch(ex){
         return callback(ex);
       }

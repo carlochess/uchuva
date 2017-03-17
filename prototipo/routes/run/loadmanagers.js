@@ -17,12 +17,12 @@ function nodeAClassAd(nodo, workloader) {
     var res = "";
     if (nodo.configurado) {
         var configuracion = nodo.configurado;
+        configuracion.useDocker = configuracion.useDocker === "true";
         var obj = {
             config: configuracion,
             nodo: nodo,
             dagdir: config.DAG_DIR
         };
-      console.log("Pasa");
         switch(workloader){
         case 1:
             res = config.JOB_TEMPLATE.openlava(obj);

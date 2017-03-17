@@ -312,9 +312,8 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                 },
                 success: function(data, textStatus, jqXHR) {
                     $('#myModal').modal('toggle');
-                    $('#infoo').text(JSON.stringify(data));
-                    //var poster = document.getElementById("myModal");
-                    //poster.click()
+                    $('#infoo').text(data);
+                    $("#myModalLabel").text(graph.state.selectedNode.id);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
                     $.notify("Error al intentar obtener " + tipo, {
@@ -585,9 +584,15 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                 var menu = document.getElementById("menu");
                 var id = document.getElementById("id");
                 var nombre = document.getElementById("nombre");
+                var descripcion = document.getElementById("descripcion");
+                var useDocker = document.getElementById("useDocker");
                 menu.style.right = "0px";
                 id.textContent = mouseDownNode.id;
                 nombre.textContent = mouseDownNode.title;
+                if(useDocker && descripcion){
+                  useDocker.textContent = mouseDownNode.configurado.useDocker;
+                  descripcion.textContent = mouseDownNode.configurado.location + " " + (mouseDownNode.configurado.argumento || "");
+                }
                 $("#opciones").empty();
                 var actualizar=true;
                 //------------------------------------------------------------
