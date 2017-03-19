@@ -104,6 +104,8 @@ require('./routes/vfs/file-download')(app);
 require('./routes/vfs/file-edit')(app);
 require('./routes/vfs/file-list')(app);
 require('./routes/vfs/file')(app);
+require('./routes/admin/index')(app);
+require('./routes/admin/workloader')(app);
 var routesConsola = require('./routes/consola')(app);
 var routesDags = require('./routes/dag')(app);
 var routesProgramas = require('./routes/programas')(app);
@@ -163,14 +165,21 @@ var options = {
 
 // openssl req -nodes -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365
 // openssl rsa -in key.pem -out newkey.pem && mv newkey.pem key.pem
-
-http.createServer(app).listen(config.SERVER_PORT, function() {
+var server = http.createServer(app).listen(config.SERVER_PORT, function() {
     logger.info('The http server is running in url ' + config.SERVER_HOST + ":" + config.SERVER_PORT);
 });
-https.createServer(options, app).listen(4443, function() {
+var serverhttps = https.createServer(options, app).listen(4443, function() {
     logger.info('The https server is running in url ' + config.SERVER_HOST + ":" + 4443);
 });
 
+server.on('error', function (e) {
+  logger.error("An error has ocurred: ", e);
+  process.exit(0);
+});
+
+serverhttps.on('error', function (e) {
+  logger.error("An error has ocurred: ", e);
+});
 /*var server = app.listen(config.SERVER_PORT, function() {
     logger.info('The server is running in url ' + config.SERVER_HOST + ":" + config.SERVER_PORT);
 });

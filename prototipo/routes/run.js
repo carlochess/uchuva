@@ -97,7 +97,12 @@ module.exports = function(app){
       var tipo = envio.tipo; // log, err, out
       var index = envio.index;
       var archivo = path.join(config.DAG_DIR, dag, nombre+ (index>1?"."+index:"") + "." + tipo);
-      controladorArchivos.copiarArchivo(archivo, res, next);
+      controladorArchivos.copiarArchivo(archivo, res, function(err){
+        if(err){
+          return res.send("No data");
+        }
+        return next();
+      });
   });
 
   router.post('/datanodedag', isAuthenticated, function(req, res) {
@@ -125,13 +130,10 @@ module.exports = function(app){
       var tipo = envio.tipo; // log, err, out
       var archivo = path.join(config.DAG_DIR, dag, nombre+ (envio.index>1?"."+envio.index:"") + "." + tipo);
       controladorArchivos.leerArchivo(archivo, function(err, data) {
-          if (err) {
-              res.send({
-                  error: "Sin informacion"
-              });
-              return;
-          }
-          res.send(data);
+        if (err) {
+          return res.send("Sin informacion");
+        }
+        res.send(data);
       });
   });
 };

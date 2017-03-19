@@ -82,13 +82,11 @@ function crearArchivo(archivo,dagOut, cb){
 }
 
 function crearArchivoSync(archivo,dagOut){
-	fs.writeFileSync(archivo, dagOut);
+    fs.writeFileSync(archivo, dagOut);
 }
 
 function leerArchivo(archivo, cb){
-    fs.readFile(archivo, 'utf8', function(err, contents) {
-        return cb(err, contents);
-    });
+    fs.readFile(archivo, 'utf8', cb);
 }
 
 function copiarArchivo(origen, destino, cb){
