@@ -93,10 +93,11 @@ i18n.configure({
     directory: __dirname + '/locales',
     updateFiles: false,
     cookie: 'lang',
-    queryParameter: 'lang',
+    queryParameter: 'lang'
 });
 
 app.use(i18n.init);
+app.disable('x-powered-by');
 
 var routesUsers = require('./routes/index');
 require('./routes/vfs/file-delete')(app);
@@ -106,6 +107,10 @@ require('./routes/vfs/file-list')(app);
 require('./routes/vfs/file')(app);
 require('./routes/admin/index')(app);
 require('./routes/admin/workloader')(app);
+require('./routes/admin/software')(app);
+require('./routes/admin/dag')(app);
+require('./routes/admin/dagexe')(app);
+require('./routes/admin/file')(app);
 var routesConsola = require('./routes/consola')(app);
 var routesDags = require('./routes/dag')(app);
 var routesProgramas = require('./routes/programas')(app);

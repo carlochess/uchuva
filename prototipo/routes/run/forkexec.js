@@ -12,13 +12,13 @@ var enviar = function(comando, config, cb) {
     if (stderr) {
       return cb(stderr);
     }
-    cb(null, stdout);
+    return cb(null, stdout);
   });
   proc.on("error", function(err){
     cb(err);
   });
   proc.on('close', function(code) {
-    logger.info("Return code", code)
+    logger.info("Return code", code);
   });
 };
 

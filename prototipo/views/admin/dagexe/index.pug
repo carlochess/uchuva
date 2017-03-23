@@ -1,0 +1,31 @@
+extends ../layout
+
+block content
+  h1.page-header Dagexes
+  .table-responsive
+    table.table.table-striped
+      thead
+        tr
+         th #
+          th Proyecto
+          th Workloader
+          th Sended
+          th # Nodos
+          th # Edges
+          th Date
+          th User
+          th Acciones
+      tbody
+        each dagexe in dagexes.length ? dagexes : []
+          tr
+            td 1
+            td= dagexe.nombre
+            td= dagexe.workloader
+            td= dagexe.sended
+            td= dagexe.nodes.length
+            td= dagexe.edges.length
+            td= dagexe.date
+            td= dagexe.user
+            td
+              a.btn.btn-default(href='/admin/dagexeexe/show/'+dagexe._id) Ver
+              a.btn.btn-danger(href='/admin/dagexeexe/destroy/'+dagexe._id) Eliminar

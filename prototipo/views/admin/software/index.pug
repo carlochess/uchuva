@@ -1,0 +1,21 @@
+extends ../layout
+
+block content
+  h1.page-header Software
+  a.btn.btn-primary(href='/admin/software/add') Agregar
+  .table-responsive
+    table.table.table-striped
+      thead
+        tr
+          th #
+          th Name
+          th Enable?
+          th Acciones
+      tbody
+        each software in softwares.length ? softwares : []
+          tr
+            td= software
+            td
+              a.btn.btn-default(href='/admin/software/show/'+software) Ver
+              a.btn.btn-primary(href='/admin/software/edit/'+software) Editar
+              a.btn.btn-danger(href='/admin/software/destroy/'+software) Eliminar

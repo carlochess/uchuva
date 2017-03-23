@@ -1,0 +1,23 @@
+extends ../layout
+
+block content
+  h1.page-header Workloaders
+  a.btn.btn-primary(href='/admin/workloader/add') Agregar
+  .table-responsive
+    table.table.table-striped
+      thead
+        tr
+          th #
+          th Name
+          th Enable?
+          th Acciones
+      tbody
+        each workloader in workloaders.length ? workloaders : []
+          tr
+            td 1
+            td= workloader.name
+            td= workloader.enable
+            td
+              a.btn.btn-default(href='/admin/workloader/show/'+workloader._id) Ver
+              a.btn.btn-primary(href='/admin/workloader/edit/'+workloader._id) Editar
+              a.btn.btn-danger(href='/admin/workloader/destroy/'+workloader._id) Eliminar

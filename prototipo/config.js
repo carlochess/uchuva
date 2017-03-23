@@ -45,6 +45,7 @@ var config = function(){
         IS_DEVELOPMENT : process.env.NODE_ENV !== 'production',
         IS_TESTING : true, //process.env.NODE_ENV === 'test',
         BMANAGER : process.env.BMANAGER || 0,
+        APPSDIR : path.join(__dirname,'static','appframework'),
         LOGDIR : logdir,
         DATA_DIR : share,
         DAG_DIR : dag,

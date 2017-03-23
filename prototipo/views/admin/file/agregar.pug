@@ -1,0 +1,14 @@
+extends ../layout
+
+block content
+  h1.page-header Add workloader
+  .row.placeholders
+    form(method="post", action="create")
+      .form-group
+        label(for='inputName') Nombre
+        input#inputName.form-control(type='Nombre', name="name" placeholder='Nombre')
+      .checkbox
+        label
+          input(type='checkbox', name="enable")
+          |  Enable?
+      button.btn.btn-primary(type='submit') Agregar

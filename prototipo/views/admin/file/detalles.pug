@@ -1,0 +1,17 @@
+extends ../layout
+
+block content
+  h1.page-header Details
+  .row.placeholders
+    form
+      .form-group
+        label(for='inputEmail') Email
+        input#inputEmail.form-control(type='email', placeholder='Email')
+      .form-group
+        label(for='inputPassword') Password
+        input#inputPassword.form-control(type='password', placeholder='Password')
+      .checkbox
+        label
+          input(type='checkbox')
+          |  Remember me
+      button.btn.btn-primary(type='submit') Login

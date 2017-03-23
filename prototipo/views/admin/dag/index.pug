@@ -1,0 +1,29 @@
+extends ../layout
+
+block content
+  h1.page-header Dags
+  .table-responsive
+    table.table.table-striped
+      thead
+        tr
+          th #
+          th Proyecto
+          th Workloader
+          th # Nodos
+          th # Edges
+          th Date
+          th User
+          th Acciones
+      tbody
+        each dag in dags.length ? dags : []
+          tr
+            td 1
+            td= dag.nombre
+            td= dag.workloader
+            td= dag.nodes.length
+            td= dag.edges.length
+            td= dag.date
+            td= dag.userid
+            td
+              a.btn.btn-default(href='/admin/dag/show/'+dag._id) Ver
+              a.btn.btn-danger(href='/admin/dag/destroy/'+dag._id) Eliminar

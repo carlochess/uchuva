@@ -1,0 +1,35 @@
+extends ../layout
+
+block content
+  h1.page-header Files
+  .table-responsive
+    table.table.table-striped
+      thead
+        tr
+          th #
+          th Original Name
+          th Mimetype
+          th Size
+          th Destination
+          th Filename
+          th Parent
+          th Type
+          th Date
+          th Owner
+          th Actions
+      tbody
+        each file in files.length ? files : []
+          tr
+            td 1
+            td= file.originalname
+            td= file.mimetype
+            td= file.size
+            td= file.destination
+            td= file.filename
+            td= file.parent
+            td= file.type
+            td= file.uploadDate
+            td= file.owner
+            td
+              a.btn.btn-default(href='/admin/file/show/'+file._id) Ver
+              a.btn.btn-danger(href='/admin/file/destroy/'+file._id) Eliminar

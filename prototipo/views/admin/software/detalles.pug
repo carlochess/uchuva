@@ -1,0 +1,139 @@
+extends ../layout
+
+block scripts
+  link(rel='stylesheet', href='/admin/css/codemirror.css')
+  style.
+    section {
+      width: 100%;
+    }
+    div#one {
+      width: 50%;
+      height: 95%;
+      float:left;
+    }
+    div#two {
+      width: 50%;
+      height: 95%;
+      overflow:hidden;
+    }
+    iframe {
+      width:100%;
+      border:0;
+      height: 500px;
+    }
+    .CodeMirror {
+      height: 100%;
+      background: white;
+    }
+
+
+block content
+  h1.page-header Details
+  .row.placeholders
+    button(onclick='render()') Renderizar
+    br
+    section
+      #one
+        textarea#textarea
+            | function cat(){
+            | var opcion1 = {
+            | type : "bool", // text,bool,area,domain
+            | nombroOpt : "Show-all",
+            | description : "number nonempty output lines, overrides -n",
+            | representation: "-A",
+            | value : false // text(""),bool(t/f),area(""),domain([0..]),multiple([])
+            | };
+            | var opcion2 = {
+            | type : "bool", // text,bool,area,domain
+            | nombroOpt : "Number",
+            | description : "number all output lines",
+            | representation: "--number",
+            | value : false // text(""),bool(t/f),area(""),domain([0..]),multiple([])
+            | };
+            | var opcion3 = {
+            | type : "bool", // text,bool,area,domain
+            | nombroOpt : "Show-tabs",
+            | representation: "-T",
+            | value : false // text(""),bool(t/f),area(""),domain([0..]),multiple([])
+            | };
+            | var optsmultiples = {
+            | opts : [opcion1,opcion2,opcion3],
+            | opciones : true,
+            | value : [] // text(""),bool(t/f),area(""),domain([0..]),multiple([])
+            | };
+            | var argumentos = {
+            | type : "text",
+            | multiple : true,
+            | argumento : true,
+            | nombroOpt : "args",
+            | value : ["/etc/hosts"],
+            | };
+            | return {
+            | name: "cat",
+            | location: "/bin/cat",
+            | version : "0.0.1",
+            | description : "concatenate files and print on the standard output",
+            | file: [],
+            | useDocker: false,
+            | image: "haskell",
+            | argumento : "",
+            | render: [
+            | optsmultiples,
+            | argumentos
+            | ],
+            | validation: function(data){
+            | return true;
+            | },
+            | transformation: function(data){
+            | var salida = "";
+            | var optsmultiples = data[0];
+            | var argumentos  = data[1];
+            | if(optsmultiples.value){
+            | optsmultiples.value.forEach(function(opt){
+            | if(opt.value){
+            | salida += opt.representation + " ";
+            | }
+            | });
+            | }
+            | if(argumentos.value){
+            | salida += argumentos.value.join(" ")+" ";
+            | }
+            | return salida;
+            | }
+            | };
+            | }
+            | var kkk = cat();
+            | render(kkk,document.getElementById("opciones"))
+            | nodo = { id : "0" , configurado : kkk};
+
+      #two
+        iframe#iframe
+    script(src='/admin/js/codemirror.js')
+    script(src='/admin/js/javascript.js')
+    script.
+      var myCodeMirror = CodeMirror.fromTextArea(document.getElementById("textarea"),{
+      extraKeys: {
+        "Ctrl-S": function(instance) { alert("Guardado"); },
+        "Ctrl-Enter": function(instance) {render()}
+      }
+      });
+      myCodeMirror.refresh()
+      myCodeMirror.setSize("100%", "100%");
+    script.
+      function render(){
+        var result = '<html><head></head><body><button onclick="display()">Generate command</button><br\/\><p id="command"></p>'+
+              '<div id="opciones"></div>'+
+              '<script type="text/javascript" src="https://code.jquery.com/jquery-3.1.1.min.js"><\/script>'+
+              '<script type="text/javascript" src="/admin/js/comoes.js"><\/script>'+
+              '<script type="text/javascript">'+myCodeMirror.getValue()+'<\/script>'+
+              '<\/body><\/html>';
+        var iframe = document.getElementById('iframe');
+
+        if(iframe.contentDocument) doc = iframe.contentDocument;
+        else if(iframe.contentWindow) doc = iframe.contentWindow.document;
+        else doc = iframe.document;
+
+        doc.open();
+        doc.writeln(result);
+        doc.close();
+      }
