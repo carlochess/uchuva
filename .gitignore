@@ -63,6 +63,8 @@ test/tmp/
 vendor/
 /exec
 
+!prototipo/static/vendor
+
 # Documentation
 _site/*
 .yardoc/
