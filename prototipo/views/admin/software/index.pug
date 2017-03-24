@@ -14,8 +14,8 @@ block content
       tbody
         each software in softwares.length ? softwares : []
           tr
-            td= software
+            td= software.filename
+            td true
             td
-              a.btn.btn-default(href='/admin/software/show/'+software) Ver
-              a.btn.btn-primary(href='/admin/software/edit/'+software) Editar
-              a.btn.btn-danger(href='/admin/software/destroy/'+software) Eliminar
+              a.btn.btn-primary(href='/admin/software/edit/'+software._id) Editar
+              a.btn.btn-danger(href='/admin/software/destroy/'+software._id) Eliminar

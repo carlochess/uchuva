@@ -14,22 +14,6 @@ module.exports = function(app){
     Dag.findById(req.params.id)
       .then((dag) => res.render("admin/dag/detalles.pug", {dag: dag}));
   });
-  router.get('/add', isAuthenticated, function(req, res) {
-    res.render("admin/dag/agregar.pug");
-  });
-  router.get('/edit/:id', isAuthenticated, function(req, res) {
-    Dag.findById(req.params.id)
-      .then((dag) => res.render("admin/dag/actualizar.pug", {dag: dag}));
-  });
-  router.post('/create', isAuthenticated, function(req, res) {
-    Dag.create(req.body)
-      .then((dag) => res.redirect("/admin/dag"));
-  });
-  router.post('/update/:id', isAuthenticated, function(req, res) {
-    Dag.findById(req.params.id)
-    .then((dag) => dag ? _.merge(dag, req.body).save() : null)
-      .then((dag) => res.redirect("/admin/dag"));
-  });
   router.get('/destroy/:id', isAuthenticated, function(req, res) {
     Dag.findByIdAndRemove(req.params.id)
       .then((dag) => res.redirect("/admin/dag"));

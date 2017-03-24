@@ -20,13 +20,13 @@ var i18n = require("i18n");
 var https = require('https');
 var http = require('http');
 var fs = require('fs');
-//var tty = require('./tty/tty.js');
-//var proxyvnc = require('./utils/websockify.js');
 var MongoStore = require('connect-mongo')(session);
 
 var app = express();
 mongoose.Promise = require('bluebird');
 app.use(express.static(path.join(__dirname, './static/')));
+app.use(express.static(path.join(__dirname, './appframework/')));
+
 // parse application/json
 app.use(bodyParser.json({
     limit: '50mb'
@@ -42,7 +42,6 @@ app.use(expressValidator(validator));
 app.use(compression());
 app.set('view engine', 'pug');
 app.use(flash());
-//app.use(morgan('common', {stream: accessLogStream}))
 
 app.use(favicon(path.join(__dirname, 'static/favicon.ico')));
 var comegalletas = cookieParser();
@@ -167,9 +166,6 @@ var options = {
    cert: fs.readFileSync('keys/cert.pem')
 };
 
-
-// openssl req -nodes -x509 -newkey rsa:2048 -keyout key.pem -out cert.pem -days 365
-// openssl rsa -in key.pem -out newkey.pem && mv newkey.pem key.pem
 var server = http.createServer(app).listen(config.SERVER_PORT, function() {
     logger.info('The http server is running in url ' + config.SERVER_HOST + ":" + config.SERVER_PORT);
 });
@@ -185,13 +181,3 @@ server.on('error', function (e) {
 serverhttps.on('error', function (e) {
   logger.error("An error has ocurred: ", e);
 });
-/*var server = app.listen(config.SERVER_PORT, function() {
-    logger.info('The server is running in url ' + config.SERVER_HOST + ":" + config.SERVER_PORT);
-});
-
-server.on('error', function (err){
-  logger.error(err);
-  process.exit(0);
-});*/
-// tty.createServer({}, app, server);
-//proxyvnc(server,cookieParser,sessionStore);

@@ -59,7 +59,7 @@
     "test": "./node_modules/.bin/mocha test/unit/",
     "test-selenium": "./node_modules/.bin/mocha -R xunit test/selenium/ > test-selenium-reports.xml",
     "test-integration": "./node_modules/.bin/mocha -R xunit test/regression > test-integration-reports.xml",
-    "format": "./node_modules/.bin/esformatter --config formatter.json -i 'routes/**/*.js' ",
+    "format": "./node_modules/.bin/esformatter --config utils/formatter.json -i 'routes/**/*.js' ",
     "start": "NODE_ENV=production node main.js",
     "devel": "./node_modules/.bin/nodemon --ignore 'data/*' main.js",
     "build-rpm": "speculate",

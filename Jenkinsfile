@@ -32,7 +32,7 @@ node {
     	    archiveArtifacts artifacts: 'prototipo/uchuva-*.tgz', fingerprint: true
        
        stage 'Build DEB-RPM' 
-            dir('prototipo'){
+            dir('prototipo/debian'){
     	        sh './build'
     	    }
             archiveArtifacts artifacts: 'vagrant/deb/*.deb', fingerprint: true

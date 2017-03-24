@@ -1,9 +1,9 @@
 doctype html
 html
   head
-    link(rel='stylesheet', href='graph-creator.css')
-    link(rel='stylesheet', href='tesis.css')
-    link(rel='stylesheet', href='style.css')
+    link(rel='stylesheet', href='css/graph-creator.css')
+    link(rel='stylesheet', href='css/tesis.css')
+    link(rel='stylesheet', href='css/style.css')
     title= title
   body
     nav#menu
@@ -38,12 +38,12 @@ html
                         input#archivos.form-control(type='text', placeholder='Archivos')
     #toolbox
       input#hidden-file-upload(type='file')
-      input#upload-input(type='image', title='Subir', src='upload.png', alt='upload graph')
-      input#run-input(type='image', title='Ejecutar', src='run.png', alt='run graph')
-      input#save-input(type='image', title='Guardar', src='save.png', alt='save graph')
-      input#download-input(type='image', title='Descargar', src='download.png', alt='download graph')
-      input#delete-graph(type='image', title='Borrar', src='trash.png', alt='delete graph')
-      input#openMenu(type='image', title='Menu', src='menu.png', alt='menu')
+      input#upload-input(type='image', title='Subir', src='images/upload.png', alt='upload graph')
+      input#run-input(type='image', title='Ejecutar', src='images/run.png', alt='run graph')
+      input#save-input(type='image', title='Guardar', src='images/save.png', alt='save graph')
+      input#download-input(type='image', title='Descargar', src='images/download.png', alt='download graph')
+      input#delete-graph(type='image', title='Borrar', src='images/trash.png', alt='delete graph')
+      input#openMenu(type='image', title='Menu', src='images/menu.png', alt='menu')
       //input#open(type='image', title='Consola', src='console.png', alt='console')
 
 
@@ -104,44 +104,37 @@ html
             edges.push({source : nodes[buscar(edgesTpm[j].source.id)], target : nodes[buscar(edgesTpm[j].target.id)]});
           }
       }
-    script(src='khanalg.js')
-    script(src='dagre.min.js')
-    script(type='text/javascript' src='sortgraph.js')
-    script(src='graph-creator.js')
-    script(src='async.min.js')
-    script(src='r.js')
-    script(src='appframework/renderer.js')
-    script(src='appframework/cat.js')
-
-//
-  script(src='socket.io/socket.io.js')
-  script(src='term.js')
-  script(src='options.js')
-  script(src='tty.js')
+    script(src='js/khanalg.js')
+    script(src='vendor/dagre.min.js')
+    script(type='text/javascript' src='js/sortgraph.js')
+    script(src='js/graph-creator.js')
+    script(src='vendor/async.min.js')
+    script(src='js/r.js')
+    script(src='renderer.js')
 
 // third party
-script(src='saveSvgAsPng.js')
-script(src='angular-filemanager/bower_components/angular/angular.min.js')
-script(src='angular-filemanager/bower_components/angular-translate/angular-translate.min.js')
-script(src='angular-filemanager/bower_components/jquery/dist/jquery.min.js')
-script(src='angular-filemanager/bower_components/bootstrap/dist/js/bootstrap.min.js')
-link(rel='stylesheet', href='angular-filemanager/bower_components/bootswatch/paper/bootstrap.min.css')
-script(src='angular-filemanager/src/js/app.js')
-script(src='bootstrap-notify/bootstrap-notify.min.js')
-script(src='angular-filemanager/src/js/directives/directives.js')
-script(src='angular-filemanager/src/js/filters/filters.js')
-script(src='angular-filemanager/src/js/providers/config.js')
-script(src='angular-filemanager/src/js/entities/chmod.js')
-script(src='angular-filemanager/src/js/entities/item.js')
-script(src='angular-filemanager/src/js/services/apihandler.js')
-script(src='angular-filemanager/src/js/services/apimiddleware.js')
-script(src='angular-filemanager/src/js/services/filenavigator.js')
-script(src='angular-filemanager/src/js/providers/translations.js')
-script(src='angular-filemanager/src/js/controllers/main.js')
-script(src='angular-filemanager/src/js/controllers/selector-controller.js')
-link(href='angular-filemanager/src/css/animations.css', rel='stylesheet')
-link(href='angular-filemanager/src/css/dialogs.css', rel='stylesheet')
-link(href='angular-filemanager/src/css/main.css', rel='stylesheet')
+script(src='vendor/saveSvgAsPng.js')
+script(src='vendor/angular-filemanager/bower_components/angular/angular.min.js')
+script(src='vendor/angular-filemanager/bower_components/angular-translate/angular-translate.min.js')
+script(src='vendor/angular-filemanager/bower_components/jquery/dist/jquery.min.js')
+script(src='vendor/angular-filemanager/bower_components/bootstrap/dist/js/bootstrap.min.js')
+link(rel='stylesheet', href='vendor/angular-filemanager/bower_components/bootswatch/paper/bootstrap.min.css')
+script(src='vendor/angular-filemanager/src/js/app.js')
+script(src='vendor/bootstrap-notify/bootstrap-notify.min.js')
+script(src='vendor/angular-filemanager/src/js/directives/directives.js')
+script(src='vendor/angular-filemanager/src/js/filters/filters.js')
+script(src='vendor/angular-filemanager/src/js/providers/config.js')
+script(src='vendor/angular-filemanager/src/js/entities/chmod.js')
+script(src='vendor/angular-filemanager/src/js/entities/item.js')
+script(src='vendor/angular-filemanager/src/js/services/apihandler.js')
+script(src='vendor/angular-filemanager/src/js/services/apimiddleware.js')
+script(src='vendor/angular-filemanager/src/js/services/filenavigator.js')
+script(src='vendor/angular-filemanager/src/js/providers/translations.js')
+script(src='vendor/angular-filemanager/src/js/controllers/main.js')
+script(src='vendor/angular-filemanager/src/js/controllers/selector-controller.js')
+link(href='vendor/angular-filemanager/src/css/animations.css', rel='stylesheet')
+link(href='vendor/angular-filemanager/src/css/dialogs.css', rel='stylesheet')
+link(href='vendor/angular-filemanager/src/css/main.css', rel='stylesheet')
 script(type='text/javascript').
   angular.module('FileManagerApp').config(['fileManagerConfigProvider', function (config) {
   var defaults = config.$get();
@@ -167,6 +160,6 @@ script(type='text/javascript').
   editUrl: '/editarArchivo',
   downloadFileUrl: '/descargarArchivo',
   getContentUrl: '/contenidoArchivo',
-  tplPath: 'angular-filemanager/src/templates'
+  tplPath: 'vendor/angular-filemanager/src/templates'
   });
   }]);
