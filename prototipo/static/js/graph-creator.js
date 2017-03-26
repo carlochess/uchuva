@@ -260,6 +260,12 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                           nodo.configurado.location = raw.shift();
                           nodo.configurado.argumento = raw.join(" ");
                         }
+                        else if(nombre ==="rawdocker"){
+                          var rawdocker = nodo.configurado.argumento;
+                          nodo.configurado.image = rawdocker.shift();
+                          nodo.configurado.location = rawdocker.shift();
+                          nodo.configurado.argumento = rawdocker.join(" ");
+                        }
                     }else{
                       alert("Nodo "+nodo.title+" Invalido");
                       return;
