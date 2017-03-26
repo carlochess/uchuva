@@ -255,6 +255,14 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                     var validador = window[nombre]();
                     if (validador.validation(nodo.configurado.render)) {
                         nodo.configurado.argumento = validador.transformation(nodo.configurado.render);
+                        if(nombre ==="raw"){
+                          var raw = nodo.configurado.argumento;
+                          nodo.configurado.location = raw.shift();
+                          nodo.configurado.argumento = raw.join(" ");
+                        }
+                    }else{
+                      alert("Nodo "+nodo.title+" Invalido");
+                      return;
                     }
                 }
             }

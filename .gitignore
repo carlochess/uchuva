@@ -64,6 +64,7 @@ vendor/
 /exec
 
 !prototipo/static/vendor
+prototipo/appframework/[a-z]*[0-9]*.js
 
 # Documentation
 _site/*

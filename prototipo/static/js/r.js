@@ -1,8 +1,8 @@
-      var plantillas = [];
-      function solicitarPrograma(programa){
-        $.getScript(programa+".js" )
+var plantillas = {};
+function solicitarPrograma(programa, nombre){
+        $.getScript(programa)
           .done(function( script, textStatus ) {
-            plantillas.push(programa);
+            plantillas[nombre] = window[nombre];
           })
           .fail(function( jqxhr, settings, exception ) {
             console.log("Fracaso: "+exception);
@@ -14,11 +14,11 @@
         url: "/listarProgramas",
         success: function(data, textStatus, jqXHR){
             data.forEach(function(plantilla) {
-                $('#plantillaPrograma').append($('<option>', {
-                          value: plantilla,
-                          text: plantilla
-                }));
-                solicitarPrograma(plantilla);
+              $('#plantillaPrograma').append($('<option>', {
+                 value: plantilla.name,
+                 text: plantilla.name
+              }));
+              solicitarPrograma(plantilla.filename, plantilla.name);
             });
         },
         error: function(jqXHR, textStatus, errorThrown){
@@ -46,7 +46,6 @@
           }else{
             render(param, document.getElementById("opciones"));
           }
-          opciones.append('<button class="nada" id="raw">Raw</button>');
           opciones.append('<p>Times</p>');
           opciones.append('<li><input type="number" name="times" min="1" id="times" value="'+param.times+'"></li></br>"');//
         param.file && param.file.forEach(function(archivo,i){

@@ -29,7 +29,6 @@ block scripts
 
 block content
   h1.page-header Agregar
-  input#filename(type='text')
   .row.placeholders
     button(onclick='render()') Renderizar
     button(onclick='guardar()') Guardar
@@ -108,6 +107,7 @@ block content
         iframe#iframe
     script(src='/admin/js/codemirror.js')
     script(src='/admin/js/javascript.js')
+    script(src='/vendor/esprima.js')
     script.
       var myCodeMirror = CodeMirror.fromTextArea(document.getElementById("textarea"),{
       extraKeys: {
@@ -140,12 +140,39 @@ block content
       }
       function guardar(){
         var result =myCodeMirror.getValue();
-        var filename = document.getElementById("filename").value || "nada.js";
+        try{
+          var tree = esprima.parse(result);
+        }catch(ex){
+          alert(ex);
+          return;
+        }
+        var name;
+        if(tree.type &&  tree.type === "Program"){
+         if(tree.body && tree.body.length && tree.body.length === 1){
+          if(tree.body[0].type === "FunctionDeclaration"){
+           if(tree.body[0].id && tree.body[0].id.type == "Identifier"){
+            name = tree.body[0].id.name.toLowerCase();
+           }else{
+             alert("Error, el plugin debe ser una funcion con un nombre");
+             return;
+           }
+          }else{
+             alert("Error, el plugin debe ser una funcion");
+             return;
+          }
+         }else{
+           alert("Error, el plugin debe ser una funcion");
+           return;
+         }
+        }else{
+          alert("Error, plugin mal formado");
+          return;
+        }
         $.ajax({
           type: "POST",
           url: "/admin/software/create",
           data: {
-            filename : filename,
+            name : name,
             data : result
           },
           success: function(data, status,jqXHR){

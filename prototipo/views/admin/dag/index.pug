@@ -20,8 +20,8 @@ block content
             td 1
             td= dag.nombre
             td= dag.workloader
-            td= dag.nodes.length
-            td= dag.edges.length
+            td= dag.nodes && dag.nodes.length
+            td= dag.edges && dag.edges.length
             td= dag.date
             td= dag.userid
             td

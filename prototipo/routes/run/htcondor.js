@@ -12,7 +12,8 @@ function nodeAClassAd(nodo, filese, filess, cm) {
     if (nodo.configurado) {
         var configuracion = nodo.configurado;
         configuracion.queue = configuracion.queue || 1;
-        configuracion.universe = configuracion.useDocker === "true" ? "docker" : configuracion.universe || "vanilla";
+        configuracion.useDocker = configuracion.useDocker === "true";
+        configuracion.universe = configuracion.useDocker ? "docker" : configuracion.universe || "vanilla";
         res = config.JOB_TEMPLATE.htcondor({
             config: configuracion,
             nodoNombre: nodo.nombre,

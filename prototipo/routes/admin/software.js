@@ -8,7 +8,15 @@ var fs = require("fs");
 var path = require("path");
 var multer  = require('multer');
 var appframeworkDir = path.join(__dirname,'..','..','appframework');
-var upload = multer({ dest: appframeworkDir});
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, appframeworkDir);
+  },
+  filename: function (req, file, cb) {
+    cb(null, file.fieldname+Date.now()+".js");
+  }
+});
+var upload = multer({ storage: storage });
 
 module.exports = function(app){
   app.use('/admin/software', router);
@@ -23,6 +31,14 @@ module.exports = function(app){
   router.get('/add', isAuthenticated, function(req, res) {
     res.render("admin/software/agregar.pug");
   });
+  router.get('/toggle/:id', isAuthenticated, function(req, res) {
+      Software.findById(req.params.id).then(function(software){
+        software.enable = !software.enable;
+        software.save(function(err){
+          res.redirect("/admin/software");
+        });
+      });
+  });
   router.get('/edit/:id', isAuthenticated, function(req, res) {
       Software.findById(req.params.id).then(function(software){
            fs.readFile(path.join(software.path,software.filename), function(err, softwareData){
@@ -31,14 +47,16 @@ module.exports = function(app){
       });
   });
   router.post('/create', isAuthenticated, function(req, res) {
-    fs.writeFile(path.join(appframeworkDir,req.body.filename), req.body.data, function(err){
+    var filename = req.body.name+Date.now()+".js";
+    fs.writeFile(path.join(appframeworkDir,filename), req.body.data, function(err){
       req.body.path = appframeworkDir;
+      req.body.filename = filename;
       Software.create(req.body)
             .then((software) => res.json({error : 0}));
     });
   });
   router.post('/createfile', isAuthenticated, upload.single('software'),  function(req, res) {
-    req.file.nombre = req.file.originalname;
+    req.file.name = req.file.originalname;
     Software.create(_.merge(req.file, req.body))
       .then((software) => res.json({error : 0}));
   });

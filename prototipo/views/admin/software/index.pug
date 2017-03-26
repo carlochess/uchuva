@@ -14,8 +14,13 @@ block content
       tbody
         each software in softwares.length ? softwares : []
           tr
-            td= software.filename
-            td true
+            td 1
+            td= software.name
+            td= software.enable
             td
+              if software.enable
+                a.btn.btn-warning(href='/admin/software/toggle/'+software._id) Deshabilitar
+              else
+                a.btn.btn-success(href='/admin/software/toggle/'+software._id) Habilitar
               a.btn.btn-primary(href='/admin/software/edit/'+software._id) Editar
               a.btn.btn-danger(href='/admin/software/destroy/'+software._id) Eliminar

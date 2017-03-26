@@ -2,13 +2,16 @@ var express = require('express');
 var passport = require('passport');
 var router = express.Router();
 var isAuthenticated = require('../utils/login.js');
+var Software = require('../models/software.js');
+var config = require('../config.js');
 
 module.exports = function(app){
   app.use('/', router);
   router.post('/listarProgramas', isAuthenticated, function(req, res) {
-      //var programas = ["ghc","happy","nodejs","alex","cat","sleep"];
-      // https://hub.docker.com/r/sjackman/bioinformatics/~/dockerfile/
-      var programas = ["cat", "head" , "rscript", "alex", "docker", "echo", "ghc", "happy", "nodejs", "racket", "sleep"];
-      res.json(programas);
+    Software.find({ enable : true})
+      .then(function(softwares){
+        var programas = softwares.map(function(e){return {name : e.name, filename: e.filename};}).concat(config.SOFTWAREA);
+        return res.json(programas);
+      });
   });
 };

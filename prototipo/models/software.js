@@ -2,7 +2,7 @@ var mongoose = require('mongoose');
 
 var SoftwareSchema = mongoose.Schema({
     name: String,
-    enable : Boolean,
+    enable : { type: Boolean, default: true },
     filename: String,
     path: String,
     downloaded: { type: Date, default: Date.now }
