@@ -7,10 +7,7 @@ var controladorArchivos = require('../../utils/file.js');
 var config = require('../../config.js');
 var DagExe = require('../../models/dagExe.js');
 var forkexec = require('./forkexec.js');
-// TODO: Add a better error handling here
-/*
-Test this function: nodo = {configurado: ...}
- */
+
 function nodeAClassAd(nodo, workloader) {
     var res = "";
     if (nodo.configurado) {
@@ -49,7 +46,7 @@ function indiceNodo(ordenado, id, workloader) {
 }
 
 var enviarssh = function(i, cwd, workloader, cb) {
-    var regexs = [/Job <(\d*)>.*<([a-zA-Z]*)>/g, /(\d*.*)/g, /Submitted batch job (\d*)/g, ];
+    var regexs = [/Job <(\d*)>.*<([a-zA-Z]*)>/g, /(.*)/g, /Submitted batch job (\d*)/g, ];
     var comando,argumento;
     var otro = {
         host: config.SSHHOSTS[workloader - 1],
@@ -78,7 +75,7 @@ var enviarssh = function(i, cwd, workloader, cb) {
 };
 
 var enviar = function(i, cwd, workloader, cb) {
-    var regexs = [/Job <(\d*)>.*<([a-zA-Z]*)>/g, /(\d*).*/g, /Submitted batch job (\d*)/g, ];
+    var regexs = [/Job <(\d*)>.*<([a-zA-Z]*)>/g, /(.*)/g, /Submitted batch job (\d*)/g, ];
     var comando,
         argumento;
     var otros = {

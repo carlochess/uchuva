@@ -1,6 +1,7 @@
 #!/bin/bash
 #BSUB -q normal             # queue
 #BSUB -W 00:06              # tiempo (hrs:mins)
+#BSUB -P {{= it.nodo.directorio}}
 #BSUB -o {{= it.dagdir}}/{{= it.nodo.directorio}}/{{= it.nodo.nombre}}{{? it.config.times > 1 }}.%I{{?}}.out    # out
 #BSUB -e {{= it.dagdir}}/{{= it.nodo.directorio}}/{{= it.nodo.nombre}}{{? it.config.times > 1 }}.%I{{?}}.err    # err
 #BSUB -J {{= it.nodo.directorio}}_{{= it.nodo.nombre}}{{? it.config.times && it.config.times > 1 }}[1-{{= it.config.times}}]{{?}} # nombre

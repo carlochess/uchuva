@@ -37,7 +37,12 @@ prototipo/data/run/*
 prototipo/data/uploads/*
 vagrant/deb/.vagrant/*
 vagrant/htcondor/triMaquinas/.vagrant
+vagrant/htcondor/triMaquinas/puppet/modules/
+vagrant/htcondor/triMaquinas/puppet/.librarian
+vagrant/htcondor/triMaquinas/puppet/.tmp
+vagrant/htcondor/triMaquinas/puppet/Puppetfile.lock
 
+!vagrant/htcondor/triMaquinas/puppet/modules/condor
 # OS-specific
 .DS_Store
 
