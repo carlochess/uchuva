@@ -1,0 +1,17 @@
+forge "https://forgeapi.puppetlabs.com"
+
+mod 'puppetlabs-razor'
+mod 'apt'
+mod 'concat'
+
+mod 'docker'
+mod 'epel'
+mod 'firewall'
+mod 'fix/manifests'
+mod 'ganglia'
+mod 'gpg_key'
+mod 'mongodb'
+mod 'nfs'
+mod 'nodejs'
+mod 'r'
+mod 'stdlib'

@@ -3,17 +3,12 @@ html
   head
     title= title
     meta(name='viewport', content='width=device-width, initial-scale=1.0')
-    link(href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css', rel='stylesheet', media='screen')
+    link(href='vendor/bootstrap/bootstrap.min.css', rel='stylesheet', media='screen')
     link(rel='stylesheet', href='css/style.css')
     block head
   body
     include ./navbar.pug
     block content
 
-  script(src='https://code.jquery.com/jquery.js')
-  script(src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js')
-  //
-    script(src='vendor/socket.io/socket.io.js')
-    script(src='vendor/term.js')
-    script(src='vendor/options.js')
-    script(src='vendor/tty.js')
+  script(src='vendor/jquery/jquery.js')
+  script(src='vendor/bootstrap/bootstrap.min.js')
