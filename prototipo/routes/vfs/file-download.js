@@ -6,6 +6,7 @@ var router = express.Router();
 var fs = require('fs');
 var config = require('../../config');
 var isAuthenticated = require('../../utils/login.js');
+var logger = require('../../utils/logger.js');
 
 module.exports = function(app){
     app.use('/', router);
@@ -26,7 +27,7 @@ module.exports = function(app){
       var item = req.query.path;
       if (item.id)
           item = item.id;
-      var userid = req.user._id;
+      var userId = req.user._id;
 
       if (item.indexOf("/") > -1) {
           var p = item.split(path.sep).filter(function(elem) {
@@ -49,7 +50,7 @@ module.exports = function(app){
           File.findOne({
               _id: item,
               type: "file",
-              owner: userid
+              owner: userId
           }, function(err, file) {
               if (err){
                 logger.error("/descargarArchivo "+err+", user: "+userId);
@@ -57,10 +58,9 @@ module.exports = function(app){
               }
               if (!file) {
                 logger.error("/descargarArchivo file not found, user: "+userId);
-                res.send({code:3, message: err+""});
-                return;
+                return res.send({code:3, message: err+""});
               }
-              res.download(file.path, file.originalname);
+              return res.download(file.path, file.originalname);
           });
       }
   });
@@ -68,7 +68,7 @@ module.exports = function(app){
 
   router.get("/descargarMultiple", isAuthenticated, function(req, res, next) {
       var items = req.query.items;
-      var userid = req.user._id;
+      var userId = req.user._id;
       File.find({
           _id: {
               $in: items.map(function(o) {
@@ -76,7 +76,7 @@ module.exports = function(app){
               })
           },
           type: "file",
-          owner: userid
+          owner: userId
       }, function(err, files) {
           if (err) {
             logger.error("/descargarArchivo "+err+", user: "+userId);
@@ -86,8 +86,6 @@ module.exports = function(app){
             logger.error("/descargarArchivo file not found, user: "+userId);
             return res.send(err);
           }
-
-          // Filter file that doesn't exists
 
           res.setHeader('Content-disposition', 'attachment; filename=uchuva.tar');
           res.setHeader('Content-type', 'application/octet-stream');

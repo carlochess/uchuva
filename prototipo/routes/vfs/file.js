@@ -87,11 +87,16 @@ function getRootFolder(userId, cb) {
         owner: userId
     }, function(err, folder) {
         if (err) {
-            logger.error("Creating using root folder" + err + ", user " + userId);
+            logger.error("Getting root folder" + err + ", user " + userId);
+            return cb(err);
+        }
+        if(!folder){
+            err = "Getting root folder, user " + userId;
+            logger.error(err);
             return cb(err);
         }
         var idRaiz = folder._id;
-        cb(null, idRaiz);
+        return cb(null, idRaiz);
     });
 }
 
@@ -109,9 +114,11 @@ module.exports = function(app) {
             type: "dir",
             owner: userId
         }, function(err, folder) {
-            if (err || !folder) {
-                cb(err);
-                return;
+            if (err){
+               return cb(err);
+            }
+            if (!folder){
+               return cb("Error folder not found");
             }
             file.parent = folder._id;
             file.uploadDate = fechaActual();
@@ -134,6 +141,10 @@ module.exports = function(app) {
         upload.single('file'),
         function(req, res, next) {
             getRootFolder(req.user._id, function(err, cwd) {
+                if(err){
+                    res.send({code: 1,message: err});
+                    return;
+                }
                 req.checkBody('cwd', 'Invalid cwd').optional().isMongoId();
                 var errors = req.validationErrors();
                 if (errors) {
@@ -175,9 +186,11 @@ module.exports = function(app) {
             type: "dir",
             owner: userId
         }, function(err, folder) {
-            if (err || !folder) {
-                cb(err);
-                return;
+            if (err){
+               return cb(err);
+            }
+            if (!folder){
+               return cb("Error folder not found");
             }
             async.each(files, function(file, scb) {
                 file.parent = folder._id;
@@ -201,6 +214,10 @@ module.exports = function(app) {
         upload.any(),
         function(req, res, next) {
             getRootFolder(req.user._id, function(err, cwd) {
+                if(err){
+                    res.send({code: 1,message: err});
+                    return;
+                }
                 req.checkBody('cwd', 'Invalid cwd').optional().isMongoId();
                 var errors = req.validationErrors();
                 if (errors) {
@@ -233,12 +250,17 @@ module.exports = function(app) {
             type: "file",
             owner: userId
         }, function(err, file) {
-            if (err || !file) return cb(err);
+            if (err){
+               return cb(err);
+            }
+            if (!file){
+               return cb("File doesn't exists");
+            }
             fs.readFile(file.path, 'utf8', function(err, data) {
                 if (err) {
                     return cb(err);
                 }
-                cb(null, data);
+                return cb(null, data);
             });
         });
     }
@@ -261,7 +283,7 @@ module.exports = function(app) {
                 logger.error("/contenidoArchivo " + err + ", user: " + userId);
                 return res.send({code:2, message: err+""});
             }
-            res.send({
+            return res.send({
                 result: data
             });
         });
@@ -273,8 +295,11 @@ module.exports = function(app) {
             type: "dir",
             owner: userId
         }, function(err, folder) {
-            if (err || !folder) {
-                return res.send(result);
+            if (err){
+               return cb(err);
+            }
+            if (!folder){
+               return cb("Error creating folder");
             }
             var f = new File({
                 filename: nombre, //
@@ -291,7 +316,7 @@ module.exports = function(app) {
                 if (err) {
                     return cb(result);
                 }
-                cb(null, f._id);
+                return cb(null, f._id);
             });
         });
     }
@@ -320,7 +345,7 @@ module.exports = function(app) {
                     logger.error("/crearCarpeta " + err + ", user: " + userId);
                     return res.send({code:2, message: err+""});
                 }
-                res.send({
+                return res.send({
                     success: 0,
                     id: folderId
                 });

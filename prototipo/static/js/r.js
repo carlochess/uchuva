@@ -47,7 +47,8 @@ function solicitarPrograma(programa, nombre){
             render(param, document.getElementById("opciones"));
           }
           opciones.append('<p>Times</p>');
-          opciones.append('<li><input type="number" name="times" min="1" id="times" value="'+param.times+'"></li></br>"');//
+          var times  = param.times || 1;
+          opciones.append('<li><input type="number" name="times" min="1" id="times" value="'+times+'"></li></br>"');//
         param.file && param.file.forEach(function(archivo,i){
           if(typeof archivo.entrada === "string"){
             archivo.entrada =  archivo.entrada === "true";
@@ -78,13 +79,13 @@ function solicitarPrograma(programa, nombre){
 
       function rederizarProyecto(){
         var opciones = $("#opciones");
-         opciones.append('<li><select id="loadManager" name="loadmanager">'+
-           '<option value="htcondor">htcondor</option>'+
-           '<option value="torque">torque</option>'+
-           '<option value="openlava">openlava</option>'+
-           '<option value="slurm">slurm</option>'+
-         '</select></li></br>');
-        $("#loadManager").val(workloader).change();
+        var workloaders = ["htcondor","openlava", "torque", "slurm"];
+        var selectedwl = workloader || workloaders[0];
+        var values = workloaders.reduce(function(init, wl){
+          return init+'<option value="'+wl+'">'+wl+'</option>';
+        },"");
+         opciones.append('<li><select id="loadManager" name="loadmanager">'+values+'</select></li></br>');
+        $("#loadManager").val(selectedwl).change();
         $('#plantillaPrograma').hide();
       }
 
@@ -196,7 +197,9 @@ $(function(){
     $('#archivos').val("");
 	rederizarFormulario(graph.nodes[id], "");
   }
-
+  $('#archivos').keypress(function(ev) {
+    ev.stopPropagation();
+  });
   $('#opciones').on('click', '.glyphicon.glyphicon-menu-up',function(ev){
     var elem = $(this).parent();
     cambiarSentido(elem);

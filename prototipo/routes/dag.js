@@ -53,7 +53,6 @@ module.exports = function(app){
       var dag = new Dag({
           nombre: superh,
           descripcion: "[Editar]",
-          // proyecto: nombre, Eliminado
           nodes: [],
           edges: [],
           userid: userId,
@@ -72,7 +71,7 @@ module.exports = function(app){
       var userId = req.user._id;
       crearDag(userId ,function(err, dagMetaData) {
         if (err) {
-            logger.error("GET /crearDag "+error+", user: "+userId);
+            logger.error("GET /crearDag "+err+", user: "+userId);
             res.format({
                 html: function() {
                     req.flash('error', err);
@@ -101,7 +100,15 @@ module.exports = function(app){
       Dag.findOne({
           _id: dagId,
           userid: userId
-      }, cb);
+      }, function(err,dag){
+        if(err){
+          return cb(err);
+        }
+        if (!dag) {
+           return cb("No existe el dag");
+        }
+        return cb(null, dag);
+      });
   }
 
   router.get('/editar', isAuthenticated, function(req, res) {

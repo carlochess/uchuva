@@ -35,11 +35,16 @@ function getRootFolder(userId, cb) {
         owner: userId
     }, function(err, folder) {
         if (err) {
-            logger.error("Creating using root folder" + err + ", user " + userId);
+            logger.error("Getting root folder" + err + ", user " + userId);
+            return cb(err);
+        }
+        if(!folder){
+            err = "Getting root folder, user " + userId;
+            logger.error(err);
             return cb(err);
         }
         var idRaiz = folder._id;
-        cb(null, idRaiz);
+        return cb(null, idRaiz);
     });
 }
 
@@ -90,6 +95,9 @@ module.exports = function(app) {
             }, function(err, dags) {
                 if (err) {
                     cb(err);
+                }
+                if(!dags || dags.length === 0){
+                    return cb("No dags executions");
                 }
                 dags.unshift({
                     originalname: "_Runs",

@@ -9,6 +9,9 @@ module.exports = function(app){
   app.use('/', router);
   router.post('/listarProgramas', isAuthenticated, function(req, res) {
     Software.find({ enable : true})
+      .catch(function(err){
+        return res.json([]);
+      })
       .then(function(softwares){
         var programas = softwares.map(function(e){return {name : e.name, filename: e.filename};}).concat(config.SOFTWAREA);
         return res.json(programas);

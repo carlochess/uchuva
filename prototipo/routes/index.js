@@ -119,7 +119,7 @@ router.get('/developers', isAuthenticated, function(req, res) {
     res.render('developers', {
         user: req.user,
         apikey: req.user.apikey,
-        title: "Developers",
+        title: "Developers"
     });
 });
 
@@ -139,7 +139,7 @@ router.get('/login', function(req, res) {
 router.post('/login', passport.authenticate('local', {
     successReturnToOrRedirect: '/user',
     failureRedirect: '/login',
-    failureFlash: true,
+    failureFlash: true
 }), function(req, res) {
     res.redirect('/user');
 });
@@ -154,7 +154,7 @@ router.post('/loginapi', function handleLocalAuthentication(req, res, next) {
             });
         }
         return res.json({
-            apikey: user.apikey,
+            apikey: user.apikey
         });
     })(req, res, next);
 });

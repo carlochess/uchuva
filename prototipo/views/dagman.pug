@@ -4,6 +4,7 @@ html
     link(rel='stylesheet', href='css/graph-creator.css')
     link(rel='stylesheet', href='css/tesis.css')
     link(rel='stylesheet', href='css/style.css')
+    link(rel='stylesheet', href='vendor/introjs/introjs.min.css')
     title= title
   body
     nav#menu
@@ -113,6 +114,7 @@ html
     script(src='renderer.js')
 
 // third party
+script(src='vendor/introjs/intro.min.js')
 script(src='vendor/saveSvgAsPng.js')
 script(src='vendor/angular-filemanager/bower_components/angular/angular.min.js')
 script(src='vendor/angular-filemanager/bower_components/angular-translate/angular-translate.min.js')
@@ -163,3 +165,41 @@ script(type='text/javascript').
   tplPath: 'vendor/angular-filemanager/src/templates'
   });
   }]);
+script(type='text/javascript').
+  function startIntro(){
+    var intro = introJs();
+      intro.setOptions({
+        steps: [
+          {
+            intro: "Welcome to Uchuva, lets create a workflow!"
+          },
+          {
+            intro: "Press Shift + Click in the canvas and add a Node (Add all the nodes you want)"
+          },
+          {
+            intro: "Press Shift and drag from a node to another in order to create an edge",
+            position: 'right'
+          },
+          {
+            element: document.querySelector('#openMenu'),
+            intro: 'Select a Node and choose, in the side menu, a software to execute by editing the values.',
+            position: 'top'
+          },
+          {
+            element: document.querySelector('#save-input'),
+            intro: "When you finish editing your dag, click in the save button",
+            position: 'top'
+          },
+          {
+            element: document.querySelector('#run-input'),
+            intro: 'When you finish editing your dag, click in the run button.',
+            position: 'top'
+          }
+        ]
+      });
+      intro.onchange(function(element) {
+         console.log('hint clicked', element);
+      });
+      intro.start();
+    }
+    startIntro();

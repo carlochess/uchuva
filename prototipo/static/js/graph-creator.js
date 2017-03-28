@@ -128,27 +128,25 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
             var saveEdges = [];
             thisGraph.edges.forEach(function(val, i) {
                 saveEdges.push({
-                    source: val.source.id,
-                    target: val.target.id
+                  source: {id :val.source.id},
+                  target: {id :val.target.id}
                 });
             });
-            //var blob = /*new Blob([window.JSON.stringify(*/{"nodes": thisGraph.nodes, "edges": saveEdges}/*)], {type: "application/json;charset=utf-8"})*/;
-            /* var svg  = document.getElementById('grafo'),
-               xml  = new XMLSerializer().serializeToString(svg),
-               dataImg = "data:image/svg+xml;base64," + btoa(xml);*/
 
           svgAsPngUri(document.getElementById("grafo"), {}, function(uri) {
                 var envio = {
                     "proyecto": proyecto,
                     "nodes": thisGraph.nodes,
-                    "edges": thisGraph.edges,
+                    "edges": saveEdges,
                     "imagen": uri,
                     "workloader": workloader
                 };
-                var blob = envio;
+                var blob = JSON.stringify(envio);
                 $.ajax({
                     type: "POST",
                     url: "/save",
+                    contentType:"application/json; charset=utf-8",
+                    dataType:"json",
                     data: blob,
                     success: function(data, textStatus, jqXHR) {
                         $.notify(data, {
@@ -237,8 +235,8 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
             var saveEdges = [];
             thisGraph.edges.forEach(function(val, i) {
                 saveEdges.push({
-                    source: val.source.id,
-                    target: val.target.id
+                  source: {id :val.source.id},
+                  target: {id :val.target.id}
                 });
             });
             if (thisGraph.nodes.length === 0) {
@@ -276,21 +274,24 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                 var envio = {
                     "proyecto": proyecto,
                     "nodes": thisGraph.nodes,
-                    "edges": thisGraph.edges,
+                    "edges": saveEdges,
                     "workloader": workloader,
                     "imagen": uri
                 };
+                var blob = JSON.stringify(envio);
                 $.ajax({
                     type: "POST",
                     url: "/run",
-                    data: envio,
+                    contentType:"application/json; charset=utf-8",
+                    dataType:"json",
+                    data: blob,
                   success: function(data, textStatus, jqXHR) {
                     var respuesta = {};
                     if(data.error){
                       respuesta.message = data.message;
                     }else{
-                      respuesta.message = "Enviada a la cola: " + data;
-                      respuesta.url = "/build?id=" + data;
+                      respuesta.message = "Enviada a la cola: " + data.id;
+                      respuesta.url = "/build?id=" + data.id;
                     }
                     $.notify(respuesta, {
                       placement: {

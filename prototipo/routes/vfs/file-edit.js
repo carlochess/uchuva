@@ -6,6 +6,7 @@ var router = express.Router();
 var fs = require('fs');
 var config = require('../../config');
 var isAuthenticated = require('../../utils/login.js');
+var logger = require('../../utils/logger.js');
 
 module.exports = function(app) {
     app.use('/', router);
@@ -15,7 +16,12 @@ module.exports = function(app) {
             _id: item,
             owner: userId
         }, function(err, file) {
-            if (err || !file) return cb(err);
+            if (err){
+               return cb(err);
+            }
+            if (!file){
+               return cb("File doesn't exists");
+            }
             var newName = path.basename(newItemPath);
             file.originalname = newName;
             file.save(cb);
@@ -28,8 +34,11 @@ module.exports = function(app) {
             type: "dir",
             owner: userId
         }, function(err, folder) {
-            if (err) {
-                return cb(err);
+            if (err){
+               return cb(err);
+            }
+            if (!folder){
+               return cb("Folder doesn't exists");
             }
             File.find({
                 _id: {
@@ -61,8 +70,13 @@ module.exports = function(app) {
             type: "file",
             owner: userId
         }, function(err, file) {
-            if (err || !file) return cb(err);
-            fs.writeFile(file.path, content, cb);
+            if (err){
+               return cb(err);
+            }
+            if (!file){
+               return cb("File doesn't exists");
+            }
+            return fs.writeFile(file.path, content, cb);
         });
     }
 
@@ -84,7 +98,7 @@ module.exports = function(app) {
         function cb(err, data) {
             if (err) {
                 logger.error("Error " + mode + ", " + err);
-                return send(err);
+                return res.send(err);
             }
             if (data) {
                 return res.send({

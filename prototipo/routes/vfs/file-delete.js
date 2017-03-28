@@ -11,13 +11,14 @@ module.exports = function(app) {
     app.use('/', router);
 
     function remover(file, cb) {
-        fs.exists(file.path, function(exists) {
-            if (exists) {
-                fs.unlink(file.path, cb);
-                return;
+        fs.stat(file.path, function(err, stats) {
+            if(err){
+              return cb(err);
             }
-            cb();
-            //cb("File doesn't exists");
+            if (stats.isFile()) {
+              return fs.unlink(file.path, cb);
+            }
+            return cb("File doesn't exists");
         });
     }
 
