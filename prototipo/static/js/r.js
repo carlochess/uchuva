@@ -67,7 +67,7 @@ function solicitarPrograma(programa, nombre){
           if(!nodo.configurado && buscado === ""){
              return;
           }
-          if (/*!*/nodo/*.configurado*/ && buscado !== "")
+          if (nodo && buscado !== "")
           {
               nodo.configurado = jQuery.extend(true, {}, window[buscado]());
               delete nodo.configurado.validation;
@@ -79,8 +79,7 @@ function solicitarPrograma(programa, nombre){
 
       function rederizarProyecto(){
         var opciones = $("#opciones");
-        var workloaders = ["htcondor","openlava", "torque", "slurm"];
-        var selectedwl = workloader || workloaders[0];
+        var selectedwl = workloader;
         var values = workloaders.reduce(function(init, wl){
           return init+'<option value="'+wl+'">'+wl+'</option>';
         },"");

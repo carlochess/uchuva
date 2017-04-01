@@ -1,6 +1,0 @@
-Executable	=	hello
-Universe	=	standard
-Output		=	hello.out.$(cluster).$(process)
-Log		=	hello.log.$(cluster).$(process)
-request_memory	=	10
-Queue 4 

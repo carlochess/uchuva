@@ -1,4 +1,3 @@
-#Lista de maquinas
 cluster = {
     :controller => {
         :hostname => "controller",
@@ -16,46 +15,43 @@ cluster = {
         :type => "node"
     },
 }
+## vagrant plugin install hostnames
 # Problemas
-# Ganglia => Se ejecuta primero que EPL
-# sudo systemctl start httpd
-# sudo systemctl start gmetad
-# sudo systemctl start gmond
 # Docker => Condor y Vagrant no alcanzan a agregarse como usuarios del grupo condor
 Vagrant.configure("2") do |global_config|
-    cluster.each_pair do |name, options|
-        global_config.vm.define name do |config|
-            config.vm.box = "puppetlabs/centos-7.2-64-puppet"
-            config.vm.hostname = "#{name}"
-            config.vm.synced_folder "../../../prototipo", "/app"
-            config.vm.network :public_network, ip: options[:ipaddress]
-            config.vm.provision :hosts, :sync_hosts => true
-            config.vm.provision "shell", path: "installscript.sh"
-            
-            config.vm.provider :virtualbox do |v|
-                v.customize ["modifyvm", :id, "--memory", "512"]
-            end
+  cluster.each_pair do |name, options|
+    global_config.vm.define name do |config|
+      config.vm.box = "puppetlabs/centos-7.2-64-puppet"
+      config.vm.hostname = "#{name}"
+      config.vm.synced_folder "../../../prototipo", "/app"
+      config.vm.network :public_network, ip: options[:ipaddress]
+      config.vm.provision :hosts, :sync_hosts => true
+      config.vm.provision "shell", path: "installscript.sh"
 
-            if options[:type] == "controller"
-                config.vm.network "forwarded_port", guest: 80, host: 3000
-                config.vm.provision :puppet do |puppet|
-                  puppet.environment = "production"
-				          puppet.environment_path = "puppet/environments"
-                  puppet.manifest_file  = "controller.pp"
-                  puppet.manifests_path = "puppet/manifests"
-                  puppet.module_path = "puppet/modules"
-			            puppet.options = "--verbose --debug"
-			          end
-            elsif options[:type] == "node"
-                config.vm.provision :puppet do |puppet|
-	                puppet.environment = "production"
-					        puppet.environment_path = "puppet/environments"
-                  puppet.manifest_file  = "node.pp"
-                  puppet.manifests_path = "puppet/manifests"
-                  puppet.module_path = "puppet/modules"
-			 		        puppet.options = "--verbose --debug"
-                end
-            end
+      config.vm.provider :virtualbox do |v|
+        v.customize ["modifyvm", :id, "--memory", "512"]
+      end
+
+      if options[:type] == "controller"
+        config.vm.network "forwarded_port", guest: 80, host: 3000
+        config.vm.provision :puppet do |puppet|
+          puppet.environment = "production"
+          puppet.environment_path = "puppet/environments"
+          puppet.manifest_file  = "controller.pp"
+          puppet.manifests_path = "puppet/manifests"
+          puppet.module_path = "puppet/modules"
+          puppet.options = "--verbose --debug"
         end
+      elsif options[:type] == "node"
+        config.vm.provision :puppet do |puppet|
+	  puppet.environment = "production"
+          puppet.environment_path = "puppet/environments"
+          puppet.manifest_file  = "node.pp"
+          puppet.manifests_path = "puppet/manifests"
+          puppet.module_path = "puppet/modules"
+          puppet.options = "--verbose --debug"
+        end
+      end
     end
+  end
 end

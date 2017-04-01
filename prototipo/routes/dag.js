@@ -68,7 +68,8 @@ module.exports = function(app){
   }
 
   router.get('/crearDag', isAuthenticated, function(req, res, next) {
-      var userId = req.user._id;
+      var user = req.user;
+      var userId = user._id;
       crearDag(userId ,function(err, dagMetaData) {
         if (err) {
             logger.error("GET /crearDag "+err+", user: "+userId);
@@ -131,8 +132,14 @@ module.exports = function(app){
           return;
       }
       var dagId = req.query.id;
-      var userId = req.user._id;
-      //res.send("i'm not satisfy")
+      var user = req.user;
+      var userId = user._id;
+      var showTutorial = false;
+      if(!user.dagtutorialdone){
+        user.dagtutorialdone = true;
+        showTutorial = true;
+        user.save();// Irresponsable
+      }
       editar(dagId, userId, function(error, dag) {
           if (error) {
             logger.error("GET /editar "+error+" usuario "+userId);
@@ -162,7 +169,8 @@ module.exports = function(app){
                     nodes: JSON.stringify(dag.nodes),
                     edges: JSON.stringify(dag.edges),
                     title: dag.nombre,
-                    workloader : dag.workloader
+                    workloader : dag.workloader,
+                    showTutorial : showTutorial
                 });
               },
               json: function() {

@@ -17,6 +17,7 @@ var UserSchema = mongoose.Schema({
         }
     },
     apikey: String,
+    dagtutorialdone: { type: Boolean, default: false },
     lastConnection: { type: Date, default: Date.now }
 });
 

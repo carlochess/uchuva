@@ -1,10 +1,6 @@
 include stdlib
 include epel
 
-#exec { "actualizar":
-#    command => "/usr/bin/yum -y update"
-#}
-
 class { 'firewall': 
     ensure => 'stopped'
 }
