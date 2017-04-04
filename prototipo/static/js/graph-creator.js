@@ -148,6 +148,19 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                     contentType:"application/json; charset=utf-8",
                     dataType:"json",
                     data: blob,
+                    xhr: function() {
+                      var xhr = new window.XMLHttpRequest();
+                      xhr.upload.addEventListener("progress", function(evt) {
+                        if (evt.lengthComputable) {
+                          var percentComplete = evt.loaded / evt.total;
+                          NProgress.set(percentComplete);
+                        }
+                      }, false);
+                      return xhr;
+                    },
+                    beforeSend : function(){
+                      NProgress.start();
+                    },
                     success: function(data, textStatus, jqXHR) {
                         $.notify(data, {
                             placement: {
@@ -155,6 +168,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                                 align: "left"
                             }
                         });
+                        NProgress.remove();
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         $.notify("Error al intentar guardar", {
@@ -163,6 +177,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                                 align: "left"
                             }
                         });
+                        NProgress.remove();
                     }
                 });
 
@@ -285,6 +300,19 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                     contentType:"application/json; charset=utf-8",
                     dataType:"json",
                     data: blob,
+                    xhr: function() {
+                      var xhr = new window.XMLHttpRequest();
+                      xhr.upload.addEventListener("progress", function(evt) {
+                        if (evt.lengthComputable) {
+                          var percentComplete = evt.loaded / evt.total;
+                          NProgress.set(percentComplete);
+                        }
+                      }, false);
+                      return xhr;
+                    },
+                    beforeSend : function(){
+                      NProgress.start();
+                    },
                   success: function(data, textStatus, jqXHR) {
                     var respuesta = {};
                     if(data.error){
@@ -299,6 +327,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                         align: "left"
                       }
                     });
+                    NProgress.remove();
                   },
                   error: function(jqXHR, textStatus, errorThrown) {
                     $.notify("Error del servidor", {
@@ -307,6 +336,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                         align: "left"
                       }
                     });
+                    NProgress.remove();
                   }
                 });
             });
