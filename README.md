@@ -24,6 +24,66 @@ to HTCondor (Dagman), Slurm, OpenLava (LSF) and Torque (PBS). Is designed to be 
 
 If you want to try it out as quickly as possible, please install MongoDB, ensure that you have the right compilers installed (for OSX, XCode4 will work, for Ubuntu, the build-essential and libssl-dev packages) and then use Docker:
 
+### Native
+
+#### Dependencies
+  - Node.js
+  - MongoDB
+  - Git
+#### Optional Deps
+  - Git
+  - make, g++, curl
+  - HTCondor/OpenLava/Torque/Slurm
+  - Web browser
+
+#### Ubuntu Linux (32 and 64 bits)
+Update and install the essential packages
+
+```
+apt-get update
+apt-get install -y git curl sudo python make build-essential g++
+```
+
+Install [NodeJS 6.9](https://github.com/nodesource/distributions)
+```
+curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+sudo apt-get install -y nodejs mongodb
+```
+
+Clone this repo and install the Node dependencies
+```
+git clone https://github.com/carlochess/uchuva
+cd uchuva/prototipo
+npm install
+```
+
+> [Install MongoDB](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/)
+
+Start uchuva
+```
+npm start
+```
+> [Centos 7](https://github.com/carlochess/uchuva/blob/master/vagrant/htcondor/sola/Instrucciones/centos7)
+
+#### DEB Linux (doesn't work for now)
+Install using [dpkg](https://github.com/carlochess/uchuva/releases)
+```
+$ apt-get update
+$ apt-get install -y git curl sudo python build-essential g++
+$ curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
+$ sudo apt-get install -y nodejs mongodb
+$ sudo dpkg -i uchuva_0.0.1_all.deb
+$ sudo apt-get -f install
+```
+
+All the files for Uchuva install are listed here.
+```
+/var/lib/uchuva      #contains the binaries
+/usr/share/uchuva    #contains the start script
+/var/log/uchuva      #contains the agent logs
+/etc/default/uchuva  #contains all the environment variables with default values. These variable values can be changed as per requirement
+```
+
 ### Docker
 Using Docker to test this project is the better choise you can make. Please, install Docker engine
 
@@ -57,67 +117,7 @@ Go to vagrant/{HTCondor/sola,OpenLava,Torque,Slurm} folder and run
 $ vagrant up
 ```
 > Visit the [wiki vagrant entry](https://github.com/carlochess/uchuva/wiki/Vagrant)
-### Native
-You also can deploy Uchuva without Docker and Vagrant
 
-Dependencies
-  - Node.js
-  - MongoDB
-  - Git
-Optional Deps
-  - Git
-  - make, g++, curl
-  - HTCondor/OpenLava/Torque/Slurm
-  - Web browser
-
-#### DEB Linux
-Install using [dpkg](https://github.com/carlochess/uchuva/releases)
-```
-$ apt-get update
-$ apt-get install -y git curl sudo python build-essential g++
-$ curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
-$ sudo apt-get install -y nodejs mongodb
-$ sudo dpkg -i uchuva_0.0.1_all.deb
-$ sudo apt-get -f install
-```
-
-All the files for Uchuva install are listed here.
-```
-/var/lib/uchuva      #contains the binaries
-/usr/share/uchuva    #contains the start script
-/var/log/uchuva      #contains the agent logs
-/etc/default/uchuva  #contains all the environment variables with default values. These variable values can be changed as per requirement
-```
-
-#### Ubuntu Linux (32 and 64 bits)
-Update and install the essential packages
-
-```
-apt-get update
-apt-get install -y git curl sudo python make build-essential g++
-```
-
-Install [NodeJS 6.9](https://github.com/nodesource/distributions)
-```
-curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
-sudo apt-get install -y nodejs mongodb
-```
-
-Clone this repo and install the Node dependencies
-```
-git clone https://github.com/carlochess/uchuva
-cd uchuva/prototipo
-npm install
-```
-
-> [Install MongoDB](https://docs.mongodb.com/manual/tutorial/install-mongodb-on-ubuntu/)
-
-Start uchuva
-```
-npm start
-```
-
-> [Centos 7](https://github.com/carlochess/uchuva/blob/master/vagrant/htcondor/sola/Instrucciones/centos7)
 
 #### Windows
 

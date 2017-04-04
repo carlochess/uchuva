@@ -1,4 +1,14 @@
-Arch
+Admin
+ - Add a workloader administration (and checking)
+ - Check if an user is admin
+ - Allow an admin to set another user role to admin
+ - Add validations to endpoints
+ - Add Promise's catches for each bd query
+ - Add plugin framework upload
+ - Improve plugin editor
+ - Add a "table graph visualization" or a "tree visualization" (aka JTree)
+ 
+App architecture
  - Separate Bussiness logic from Interface
  
 Workloader integration
@@ -8,15 +18,14 @@ Workloader integration
  - State of the Workloader
  - State of the workflow
  - Stop workflow
- - Remove a workflow
- - When a DAG is deleted, stop the execution
-
-Torque
- - add restriction to existence of multiple and single deps
+ - Remove a workflow, all his files and stop the execution
+ - Colaborative Dags (the problem here is actually a problem of file sharing)
 
 VFS
  - Add files using CLI (Big files)
  - Add a text editor
+ - Copy files
+ - Decompress in situ
 
 VFS Store Pluggins: 
  - Add  for the storage: S3, HDFS, FTP, MongoGridFS
@@ -37,6 +46,7 @@ GUI
  - Improve the "command framework" gui
  - Improve the lateral menu
  - Fix /build log/out/err node information
+ - Add a CMS for each project
 
 Command Framework
  - Add and review more commands plugins
@@ -53,7 +63,10 @@ Logging
 Configuration
  - SSH Keys
  - TLS Certs
-
+ 
+Torque
+ - add restriction to existence of multiple and single deps
+ 
 Security
  - https://github.com/krakenjs/lusca
 
