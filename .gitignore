@@ -42,6 +42,14 @@ vagrant/htcondor/triMaquinas/puppet/.librarian
 vagrant/htcondor/triMaquinas/puppet/.tmp
 vagrant/htcondor/triMaquinas/puppet/Puppetfile.lock
 
+vagrant/digitalocean/.vagrant
+vagrant/digitalocean/puppet/production/modules/
+vagrant/digitalocean/puppet/.librarian
+vagrant/digitalocean/puppet/.tmp
+vagrant/digitalocean/puppet/production/Puppetfile.lock
+
+!vagrant/digitalocean/puppet/production/modules/condor
+!vagrant/digitalocean/puppet/production/modules/uchuva
 !vagrant/htcondor/triMaquinas/puppet/modules/condor
 # OS-specific
 .DS_Store

@@ -27,9 +27,18 @@ class { '::nodejs':
 package { 'pm2':
   ensure   => 'present',
   provider => 'npm',
-}
+}->
+## TODO: create the puppet module, use slurm, openlava and torque.
+class {"uchuva" :}
 
 #class {'ganglia':
 #    controller => true,
 #    require => Class['epel']
 #}
+
+## Torque https://forge.puppet.com/deric/torque
+# mod 'deric-torque', '0.3.0'
+# class { 'torque::server': }
+# class { 'torque::client': }
+## Slurm: https://forge.puppet.com/chwilk/slurm
+# mod 'chwilk-slurm', '0.1.0'
