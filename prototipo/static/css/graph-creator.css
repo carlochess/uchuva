@@ -235,3 +235,6 @@ path.link.hidden{
 path.link.selected {
     stroke: rgb(229, 172, 247);
 }
+.infoo {
+    text-align: left;
+}
