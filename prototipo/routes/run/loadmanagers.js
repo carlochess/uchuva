@@ -12,7 +12,6 @@ function nodeAClassAd(nodo, workloader) {
     var res = "";
     if (nodo.configurado) {
         var configuracion = nodo.configurado;
-        configuracion.useDocker = configuracion.useDocker === "true";
         var obj = {
             config: configuracion,
             nodo: nodo,
