@@ -357,7 +357,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                 },
                 success: function(data, textStatus, jqXHR) {
                     $('#myModal').modal('toggle');
-                    $('#infoo').text(data);
+                    $('#infoo').html(data.split("\n").join("<br/>"));
                     var title = graph.state.selectedNode.title;
                     var titleUrl = encodeURIComponent(title);
                     var id = graph.state.selectedNode.id;
