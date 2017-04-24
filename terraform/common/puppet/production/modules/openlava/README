@@ -1,0 +1,35 @@
+# puppet-openlava
+
+Puppet module for Openlava client and server
+
+## Usage
+
+To use this module simply include `openlava` class for the hosts on which you wish to install openlava.
+
+```
+class { openlava:
+	version => '2.0',
+	download_location => '/opt/',
+}
+```
+
+###Parameters
+
+This is not exhaustive but will cover most of the parameters you can set for this class.
+
+## Development
+
+### Testing
+
+Testing requires the following dependencies:
+
+* rake
+* bundler
+
+Install gem dependencies
+
+    bundle install
+
+Run unit tests
+
+    bundle exec rake test

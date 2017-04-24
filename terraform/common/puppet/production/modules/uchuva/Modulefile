@@ -1,0 +1,6 @@
+name    'carlochess-uchuva'
+version '0.0.1'
+source 'http://github.com/carlochess/uchuva'
+author 'carlochess'
+license 'Apache License, Version 2.0'
+summary 'Install and setup uchuva'

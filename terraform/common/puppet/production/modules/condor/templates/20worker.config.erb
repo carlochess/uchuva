@@ -1,0 +1,43 @@
+## Permanent way of stopping jobs from starting
+STARTD.SETTABLE_ATTRS_ADMINISTRATOR = TRUE
+ENABLE_PERSISTENT_CONFIG = TRUE
+PERSISTENT_CONFIG_DIR = /etc/condor/persistent
+
+START = TRUE
+SUSPEND = FALSE
+CONTINUE = TRUE
+WANT_SUSPEND = $(SUSPEND)
+KILL = FALSE
+
+## When to nicely stop a job?
+## (as opposed to killing it instantaneously)
+PREEMPT = FALSE
+
+## Disable preemption by machine RANK by ranking all jobs equally
+RANK = 0
+
+## Niceness of user jobs
+JOB_RENICE_INCREMENT = 10
+
+## Since we don't use preemption, make sure slots aren't permanently taken by specific users
+CLAIM_WORKLIFE = 0
+
+## Allow jobs time to finish if they need to be preempted (should be same as max walltime allowed)
+MAXJOBRETIREMENTTIME = 24 * 3
+
+## Update collector at random intervals
+UPDATE_INTERVAL = $RANDOM_INTEGER(230, 370)
+MASTER_UPDATE_INTERVAL = $RANDOM_INTEGER(230, 370)
+
+
+## Make sure jobs have independent PID namespaces
+USE_PID_NAMESPACES = true
+
+## If the binaries are updated, let any running jobs finish before restarting
+MASTER_NEW_BINARY_RESTART=PEACEFUL
+
+## Logs
+MAX_MASTER_LOG = 104857600
+MAX_NUM_MASTER_LOG = 10
+MAX_STARTD_LOG = 104857600
+MAX_NUM_STARTD_LOG = 10
