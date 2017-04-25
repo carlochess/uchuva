@@ -238,3 +238,7 @@ path.link.selected {
 .infoo {
     text-align: left;
 }
+ul#lateralMenu{
+     color: #f2f2f2;
+     text-decoration:none;
+}

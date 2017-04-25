@@ -62,6 +62,8 @@ function solicitarPrograma(programa, nombre){
       }
 
       function rederizarFormulario(nodo, buscado) {
+          if (typeof render === 'undefined')
+             return;
           $('#plantillaPrograma').show();
           $('#plantillaPrograma').val("").change();
           if(!nodo.configurado && buscado === ""){
@@ -80,11 +82,13 @@ function solicitarPrograma(programa, nombre){
       function rederizarProyecto(){
         var opciones = $("#opciones");
         var selectedwl = workloader;
-        var values = workloaders.reduce(function(init, wl){
-          return init+'<option value="'+wl+'">'+wl+'</option>';
-        },"");
-         opciones.append('<li><select id="loadManager" name="loadmanager">'+values+'</select></li></br>');
-        $("#loadManager").val(selectedwl).change();
+        if (typeof workloaders != 'undefined'){
+            var values = workloaders && workloaders.reduce(function(init, wl){
+                return init+'<option value="'+wl+'">'+wl+'</option>';
+            },"");
+            opciones.append('<li><select id="loadManager" name="loadmanager">'+values+'</select></li></br>');
+            $("#loadManager").val(selectedwl).change();
+        }
         $('#plantillaPrograma').hide();
       }
 
@@ -196,8 +200,9 @@ $(function(){
     $('#archivos').val("");
 	rederizarFormulario(graph.nodes[id], "");
   }
-  $('#archivos').keypress(function(ev) {
-    ev.stopPropagation();
+  $('#archivos').on("keypress", function(ev) {
+     //ev.stopPropagation();
+     //return false;
   });
   $('#opciones').on('click', '.glyphicon.glyphicon-menu-up',function(ev){
     var elem = $(this).parent();
