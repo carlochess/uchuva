@@ -1,0 +1,6 @@
+# Tiene buenos sh para packer  
+https://github.com/dublx/packer-terraform-docker-aws-test
+# Has interestings tips and many solutions to common problems
+http://blog.laouji.net/2016/10/using-packer-and-terraform-on-digital.html
+# Can create a virtualbox image
+https://github.com/geerlingguy/packer-centos-7
