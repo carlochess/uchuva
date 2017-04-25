@@ -43,7 +43,7 @@ var config = function(){
         SERVER_HOST : process.env.HOST || 'http://0.0.0.0',
         DATABASE_URI : process.env.DATABASE_URI || 'mongodb://localhost/uchuva',
         IS_DEVELOPMENT : process.env.NODE_ENV !== 'production',
-        IS_TESTING : true, //process.env.NODE_ENV === 'test',
+        IS_TESTING : process.env.NODE_ENV === 'testing',
         BMANAGER : process.env.BMANAGER || 0,
         APPSDIR : path.join(__dirname,'static','appframework'),
         LOGDIR : logdir,

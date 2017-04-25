@@ -54,6 +54,8 @@ vagrant/digitalocean/puppet/production/Puppetfile.lock
 # OS-specific
 .DS_Store
 
+terraform/digitalocean/terraform.tfstate*
+
 # Editor swapfiles
 .*.sw?
 *~

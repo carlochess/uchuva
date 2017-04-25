@@ -96,7 +96,7 @@ var enviarHTC = function(envio, nombreDir, cb) {
       var nombresSalida = [];
       if (nodo.configurado && nodo.configurado.file) {
           nodo.configurado.file.map(function(o) {
-              if (o.entrada == "true") {
+              if (o.entrada) {
                   nombresEntrada.push(o.filename);
                 } else {
                   nombresSalida.push(o.filename);

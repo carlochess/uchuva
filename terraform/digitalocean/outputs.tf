@@ -1,5 +1,5 @@
 output "Use this link to access to uchuva" {
-  value = "http://${digitalocean_record.uchuva.id}:3000/"
+  value = "http://${digitalocean_record.uchuva.fqdn}:3000/"
 }
 
 output "controller_address" {
