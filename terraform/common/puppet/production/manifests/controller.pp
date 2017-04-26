@@ -16,6 +16,7 @@ class { 'firewall':
 class { openlava:
   version => '2.2',
   download_location => '/opt/',
+  hostNameList => ['controller','server1','server2'],
 }->
 class {"condor":
     master => true

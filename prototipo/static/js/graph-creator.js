@@ -886,7 +886,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                     }
                 });
                 thisGraph.updateGraph();
-            }, 1000 * 60 * 60);
+            }, 5000);
         }
     };
 

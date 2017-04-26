@@ -200,9 +200,18 @@ $(function(){
     $('#archivos').val("");
 	rederizarFormulario(graph.nodes[id], "");
   }
+  function atomica(ev){
+    ev.stopPropagation();
+    return false;
+  }
   $('#archivos').on("keypress", function(ev) {
-     //ev.stopPropagation();
-     //return false;
+    atomica(ev);
+  });
+  $('#archivos').on("keyup", function(ev) {
+    atomica(ev);
+  });
+  $('#archivos').on("keydown", function(ev) {
+     atomica(ev);
   });
   $('#opciones').on('click', '.glyphicon.glyphicon-menu-up',function(ev){
     var elem = $(this).parent();

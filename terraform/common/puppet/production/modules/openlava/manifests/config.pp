@@ -2,7 +2,7 @@ class openlava::config {
   include '::openlava'
   $openlavaDir = "${openlava::openlava_location}openlava-${openlava::version}"
   $download_location= "${openlava::download_location}openlava-${openlava::version}"
-  $hosts = ['controller','server1']
+  $hosts = $openlava::hostNameList
   group { 'openlava':
     ensure => 'present',
   }->
