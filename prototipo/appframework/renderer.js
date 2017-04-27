@@ -1,7 +1,5 @@
 function render(programa, node) {
-    //programa = programa || Cat();
     var i = 0;
-    //var node = document.getElementById("formulario");
     while (node.hasChildNodes()) {
         node.removeChild(node.lastChild);
     }
@@ -169,6 +167,7 @@ function accion(ruta, eliminar, nodo) {
         }
     }
     rederizarFormulario(nodo,"");
+    //render(nodo.configurado,document.getElementById("opciones"))
 }
 
 function cambiar(ruta, valor, nodo) {

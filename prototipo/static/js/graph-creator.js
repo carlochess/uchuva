@@ -165,7 +165,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                         $.notify(data, {
                             placement: {
                                 from: "bottom",
-                                align: "left"
+                                align: "right"
                             }
                         });
                         NProgress.remove();
@@ -174,7 +174,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                         $.notify("Error al intentar guardar", {
                             placement: {
                                 from: "bottom",
-                                align: "left"
+                                align: "right"
                             }
                         });
                         NProgress.remove();
@@ -324,7 +324,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                     $.notify(respuesta, {
                       placement: {
                         from: "bottom",
-                        align: "left"
+                        align: "right"
                       }
                     });
                     NProgress.remove();
@@ -333,7 +333,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                     $.notify("Error del servidor", {
                       placement: {
                         from: "bottom",
-                        align: "left"
+                        align: "right"
                       }
                     });
                     NProgress.remove();
@@ -369,7 +369,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                     $.notify("Error al intentar obtener " + tipo, {
                         placement: {
                             from: "bottom",
-                            align: "left"
+                            align: "right"
                         }
                     });
                 }
@@ -928,7 +928,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
         .attr("id", "grafo");
     graph = new GraphCreator(svg, nodes, edges);
     graph.updateGraph();
-    graph.estado();
+    //graph.estado();
 
     $("#plantillaPrograma").on('change', function() {
         $("#opciones").empty();
@@ -938,6 +938,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
         rederizarFormulario(graph.nodes[buscar(id)], this.value);
         graph.updateGraph();
     });
+    /// Listeners
     $('#opciones').on('keydown', 'textarea', function(ev) {
       ev.stopPropagation();
     });
@@ -962,19 +963,6 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
         cambiar($(this).attr('id').split("."), $(this).val(), nodo);
     });
 
-    $('#opciones').on('keydown', '#times', function(ev) {
-        ev.stopPropagation();
-    });
-    $('#opciones').on('change', '#times', function(ev) {
-        ev.stopPropagation();
-        if (!graph.state.selectedNode)
-            return;
-        var id = graph.state.selectedNode.id;
-        var nodo = graph.nodes[buscar(id)];
-        nodo.configurado.times = $(this).val();
-    });
-
-    //input.checkbox,
     $('#opciones').on("change", "input:checkbox", function() {
         if (!graph.state.selectedNode)
             return;
@@ -1007,6 +995,19 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
         }
     });
 
+    $('#opciones').on('keydown', '#times', function(ev) {
+        ev.stopPropagation();
+    });
+
+    $('#opciones').on('change', '#times', function(ev) {
+        ev.stopPropagation();
+        if (!graph.state.selectedNode)
+            return;
+        var id = graph.state.selectedNode.id;
+        var nodo = graph.nodes[buscar(id)];
+        nodo.configurado.times = $(this).val();
+    });
+/*
     $('#opciones').on('click', '#raw', function(ev) {
       ev.stopPropagation();
       $("#opciones").empty();
@@ -1018,5 +1019,5 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
       nodo.configurado.raw = !nodo.configurado.raw;
       rederizarFormulario(nodo, value);
     });
-
+*/
 })(window.d3, window.saveAs, window.Blob);

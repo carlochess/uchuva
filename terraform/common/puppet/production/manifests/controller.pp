@@ -51,3 +51,12 @@ package { 'pm2':
   provider => 'npm',
 }->
 class {"uchuva" :}
+->
+class { 'nginx': }
+nginx::resource::server { 'uchuva.diversidadfaunistica.com':
+  listen_port => 80,
+  proxy       => 'http://localhost:3000/',
+}->
+exec { 'setsebool -P httpd_can_network_connect 1':
+  path   => '/usr/bin:/usr/sbin:/bin',
+}

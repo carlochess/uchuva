@@ -16,3 +16,4 @@ mod 'puppetlabs-ntp', '6.1.0'
 #exclusion 'treydock-munge'
 #mod 'treydock-slurm', :path => './slurm'
 #mod 'puppet-slurm', :github_tarball => "hmsrc/puppet-slurm"
+mod 'puppet-nginx', '0.6.0'

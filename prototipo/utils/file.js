@@ -111,6 +111,30 @@ function copiarArchivo(origen, destino, cb){
     }
   }
 }
+
+function copiarArchivoOpts(origen, destino, opts, cb){
+  var cbCalled = false;
+  var rd = fs.createReadStream(origen, opts);
+  rd.on("error", function(err) {
+    done(err);
+  });
+  var wr = (typeof destino == "string")? fs.createWriteStream(destino) : destino;
+  wr.on("error", function(err) {
+    done(err);
+  });
+  wr.on("close", function(ex) {
+    done();
+  });
+  rd.pipe(wr);
+
+  function done(err) {
+    if (!cbCalled) {
+      cb(err);
+      cbCalled = true;
+    }
+  }
+}
+
 exports.crearDirectorio = crearDirectorio;
 exports.crearArchivo = crearArchivo;
 exports.crearArchivoSync = crearArchivoSync;
@@ -118,3 +142,4 @@ exports.leerArchivo = leerArchivo;
 exports.generarNombre = generarNombre;
 exports.copiarArchivo = copiarArchivo;
 exports.randomChars = randomChars;
+exports.copiarArchivoOpts = copiarArchivoOpts;

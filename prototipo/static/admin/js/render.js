@@ -186,6 +186,20 @@ function cambiar(ruta, valor, nodo) {
     }
 }
 /// Listeners
+$('#opciones').on('keydown', 'textarea', function(ev) {
+  ev.stopPropagation();
+});
+$('#opciones').on('keydown', 'input', function(ev) {
+  ev.stopPropagation();
+});
+$('#opciones').on('keyup', 'textarea', function(ev) {
+  cambiar($(this).attr('id').split("."), $(this).val(), nodo);
+});
+
+$('#opciones').on('keyup', 'input', function(ev) {
+  cambiar($(this).attr('id').split("."), $(this).val(), nodo);
+});
+
 $('#opciones').on("change", "input:checkbox", function() {
   cambiar($(this).attr('id').split("."), this.checked, nodo);
 });
@@ -204,20 +218,6 @@ $("#opciones").on("click", "label", function() {
       accion(para.split("."), true, nodo);
     }
   }
-});
-
-$('#opciones').on('keydown', 'textarea', function(ev) {
-  ev.stopPropagation();
-});
-$('#opciones').on('keydown', 'input', function(ev) {
-  ev.stopPropagation();
-});
-$('#opciones').on('keyup', 'textarea', function(ev) {
-  cambiar($(this).attr('id').split("."), $(this).val(), nodo);
-});
-
-$('#opciones').on('keyup', 'input', function(ev) {
-  cambiar($(this).attr('id').split("."), $(this).val(), nodo);
 });
 
 function display(){
