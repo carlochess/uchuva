@@ -7,7 +7,7 @@
     {
       "type": "digitalocean",
       "api_token": "{{user `do_token`}}",
-      "region": "ny3", 
+      "region": "ny3",
       "size": "1gb",
       "image": "centos-7-2-x64",
       "droplet_name": "uchuvachine",
@@ -27,18 +27,14 @@
     },
     {
       "type": "file",
-	  "source" : "../common/puppet",
+      "source" : "../common/puppet",
       "destination" : "/tmp"
-	},
+    },
     {
       "type": "shell",
       "inline": [
         "bash /tmp/installpuppet.sh '# 127.0.0.1' node.pp"
       ]
-    },
-    {
-      "type": "puppet-masterless",
-      "manifest_file": "site.pp"
     }
   ]
 }

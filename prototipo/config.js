@@ -61,7 +61,7 @@ var config = function(){
       SSHHOSTS : 'openlava,torque,slurm'.split(","),
       SSHPORTS : '22,'.repeat(4).split(","),
       SSHUSERS : 'testuser,'.repeat(4).split(","),
-      SOFTWAREA : ["rawdocker", "raw", "cat", "head" , "rscript", "alex", "docker", "echo", "ghc", "happy", "nodejs", "racket", "sleep"].map(function(e){return {name : e, filename: e+".js"};})
+      SOFTWAREA : "rawdocker,raw,cat,head,rscript,alex,docker,echo,ghc,happy,nodejs,racket,sleep,tar,curl,git,mv,mkdir".split(",").map(function(e){return {name : e, filename: e+".js"};})
     };
 };
 
