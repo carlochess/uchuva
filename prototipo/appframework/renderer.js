@@ -166,8 +166,8 @@ function accion(ruta, eliminar, nodo) {
             nodo.configurado.render[parseInt(ruta[0])].value.splice(parseInt(ruta[1]), 1);
         }
     }
-    rederizarFormulario(nodo,"");
-    //render(nodo.configurado,document.getElementById("opciones"))
+    //rederizarFormulario(nodo,"");
+    render(nodo.configurado,document.getElementById("opciones"))
 }
 
 function cambiar(ruta, valor, nodo) {
