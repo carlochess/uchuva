@@ -9,7 +9,15 @@ case $::osfamily {
 }
 
 include '::ntp'
-
+group { 'uchuva': ensure => present, gid => 1010,}->
+user  { 'uchuva':
+  name   => 'uchuva',
+  ensure => present,
+  groups => 'uchuva',
+  shell => '/bin/false',
+  uid => 1010,
+  gid => 1010,
+}->
 class { 'firewall': 
     ensure => 'stopped'
 }->
@@ -38,7 +46,7 @@ class {"condor":
     master => false
 }->
 class { 'docker':
-  docker_users => ['condor','openlava'],
+  docker_users => ['condor','openlava','uchuva'],
   version => '1.11.0-1.el7.centos',#1.12.6-1.el7.centos
 }->
 exec { "condor restart":
@@ -46,13 +54,5 @@ exec { "condor restart":
   path    => "/usr/bin:/bin:/usr/sbin:/sbin",
   cwd     => "/tmp",
   user    => 'root',
-  }->
-group { 'uchuva': ensure => present, gid => 1010,}->
-user  { 'uchuva':
-  name   => 'uchuva',
-  ensure => present,
-  groups => 'uchuva',
-  shell => '/bin/false',
-  uid => 1010,
-  gid => 1010,
-}
+  }
+

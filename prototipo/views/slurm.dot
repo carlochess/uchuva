@@ -8,7 +8,7 @@
 {{? it.nodo.dependencia && it.nodo.dependencia.length > 0 }}#SBATCH --dependency=afterok:{{= it.nodo.dependencia.join(":")}}{{?}}
 
 {{? it.config.useDocker }}
-docker run -d -v {{= it.dagdir}}/{{= it.nodo.directorio}}:{{= it.dagdir}}/{{= it.nodo.directorio}} --workdir {{= it.dagdir}}/{{= it.nodo.directorio}} {{= it.config.image }} {{= it.config.argumento.trim() }}
+docker run -it -v {{= it.dagdir}}/{{= it.nodo.directorio}}:{{= it.dagdir}}/{{= it.nodo.directorio}} --workdir {{= it.dagdir}}/{{= it.nodo.directorio}} {{= it.config.image }} {{= it.config.location && it.config.location.trim() }} {{= it.config.argumento.trim() }}
 {{??}}
 {{= it.config.location && it.config.location.trim() }} {{= it.config.argumento.trim() }}
 {{?}}
