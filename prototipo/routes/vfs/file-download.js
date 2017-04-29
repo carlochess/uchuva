@@ -40,7 +40,15 @@ module.exports = function(app){
                       res.send({code:2, message: err+""});
                       return;
                   }
-                  res.download(directorio, path.basename(item));
+                  if(stats.isDirectory()){
+                      var dir = path.basename(item).replace(/[^a-z0-9]/gi, '_');
+                      res.setHeader('Content-disposition', 'attachment; filename='+dir+'.tar');
+                      res.setHeader('Content-type', 'application/octet-stream');
+
+                      tar.pack(directorio).pipe(res);
+                  }else{
+                      res.download(directorio, path.basename(item));
+                  }
               });
           }
           else {

@@ -26,9 +26,9 @@
                       'y  0
                       'configurado
                          (hasheq
-                            'file  (list (hasheq 'id idArchivo 'filename "main.rkt" 'type "file" 'entrada "true")
-                                         (hasheq 'id idArchivo2 'filename "maze.rkt" 'type "file" 'entrada "true")
-                                         (hasheq 'id idArchivo3 'filename "generadores.rkt" 'type "file" 'entrada "true"))
+                            'file  (list (hasheq 'id idArchivo 'filename "main.rkt" 'type "file" 'entrada #t)
+                                         (hasheq 'id idArchivo2 'filename "maze.rkt" 'type "file" 'entrada #t)
+                                         (hasheq 'id idArchivo3 'filename "generadores.rkt" 'type "file" 'entrada #t))
                             'location "/usr/bin/racket"
                             'argumento "main.rkt -m"))))]
     )

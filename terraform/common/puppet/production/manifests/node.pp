@@ -38,7 +38,7 @@ class {"condor":
     master => false
 }->
 class { 'docker':
-  docker_users => ['condor'],
+  docker_users => ['condor','openlava'],
   version => '1.11.0-1.el7.centos',#1.12.6-1.el7.centos
 }->
 exec { "condor restart":

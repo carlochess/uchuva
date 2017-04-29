@@ -195,10 +195,11 @@ $(function(){
   function cambiarSentido(elem){
     var idArchivo = elem.data("id");
     var id = graph.state.selectedNode.id;
-    graph.nodes[id].configurado.file[idArchivo].entrada = !graph.nodes[id].configurado.file[idArchivo].entrada;
+    var realId = buscar(id);
+    graph.nodes[realId].configurado.file[idArchivo].entrada = !graph.nodes[realId].configurado.file[idArchivo].entrada;
     $("#opciones").empty();
     $('#archivos').val("");
-	rederizarFormulario(graph.nodes[id], "");
+    rederizarFormulario(graph.nodes[realId], "");
   }
   function atomica(ev){
     ev.stopPropagation();
@@ -227,10 +228,11 @@ $(function(){
     var elemento = $(this).parent();
     var idArchivo = elemento.data("id");
     var id = graph.state.selectedNode.id; //idSeleccionado;
-    graph.nodes[id].configurado.file.splice(idArchivo,1);
+    var realId = buscar(id);
+    graph.nodes[realId].configurado.file.splice(idArchivo,1);
     $("#opciones").empty();
     $('#archivos').val("");
-	rederizarFormulario(graph.nodes[id], "");
+    rederizarFormulario(graph.nodes[realId], "");
   });
   $('#filemB').on('click', function (e) {
       var pestanna = $("ul#pestanas li.active").text();
@@ -243,6 +245,7 @@ $(function(){
 		});
 	  }
           var id = graph.state.selectedNode.id;//idSeleccionado;
+          var realId = buscar(id);
 
 	  if(elementos && elementos.length > 0){
   		var target = boton;
@@ -251,12 +254,12 @@ $(function(){
           var corbata = elementos.map(function(o){
 					return { filename : o.model.name , id : o.model.id , type : o.model.type , entrada: true };
 		  });
-		  graph.nodes[id].configurado.file = graph.nodes[id].configurado.file.concat(corbata);
+		  graph.nodes[realId].configurado.file = graph.nodes[realId].configurado.file.concat(corbata);
       }
 
       $("#opciones").empty();
       $('#archivos').val("");
-	  rederizarFormulario(graph.nodes[id], "");
+      rederizarFormulario(graph.nodes[realId], "");
   });
   rederizarProyecto();
 });

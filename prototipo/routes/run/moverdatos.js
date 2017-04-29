@@ -87,7 +87,8 @@ function trasteo(envio, nombreDir, cb) {
         envio.nodes.forEach(function(nodo) {
             if (nodo.configurado && nodo.configurado.file) {
                 nodo.configurado.file.map(function(o) {
-                    if (o.entrada && o.id && o.type === 'file') {
+                    if (o.entrada && o.id &&
+                        (o.type === 'file'|| o.type === 'dir')) {
                         if (noEsta(o, ficheros)) {
                             ficheros.push(o);
                         }

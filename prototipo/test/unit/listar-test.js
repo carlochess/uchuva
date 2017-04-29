@@ -50,7 +50,7 @@ describe('POST /listar', function () {
       .post('/listar')
       .expect('Content-Type', /json/)
       .expect(200, function (err, res) {
-        expect(res.body).to.deep.equal({"result": []});
+          expect(res.body).to.deep.equal({"result": []});
         done();
       });
   });

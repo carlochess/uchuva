@@ -35,7 +35,7 @@ describe('GET /listarProgramas', function () {
     request = supertest(app);
   });
 
-  it('should respond with a 404 and a null', function (done) {
+  it.skip('should respond with a 404 and a null', function (done) {
     getUserStub.returns(null);
 
     request
@@ -45,7 +45,7 @@ describe('GET /listarProgramas', function () {
         'Accept' : 'application/json'
       })
       .expect(200, function (err, res) {
-        expect(res.body).to.include.members(["cat", "head" , "rscript", "alex", "docker", "echo", "ghc", "happy", "nodejs", "racket", "sleep"]);
+        expect(res.body).to.include.members("rawdocker,raw,bash,cat,head,rscript,alex,docker,echo,ghc,happy,nodejs,racket,sleep,tar,curl,git,mv,mkdir".split(","));
         done();
       });
   });

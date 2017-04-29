@@ -635,6 +635,8 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                 var nombre = document.getElementById("nombre");
                 var descripcion = document.getElementById("descripcion");
                 var useDocker = document.getElementById("useDocker");
+                var arent = document.getElementById("arent");
+                var arsal = document.getElementById("arsal");
                 menu.style.right = "0px";
                 id.textContent = mouseDownNode.id;
                 nombre.textContent = mouseDownNode.title;
@@ -642,6 +644,8 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                   useDocker.textContent = mouseDownNode.configurado.useDocker;
                   descripcion.textContent = mouseDownNode.configurado.location + " " + (mouseDownNode.configurado.argumento || "");
                 }
+                //arent.textContent = mouseDownNode.configurado.files;
+                //arsal.textContent = mouseDownNode.configurado.files;
                 $("#opciones").empty();
                 var actualizar=true;
                 //------------------------------------------------------------
