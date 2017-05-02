@@ -3,41 +3,21 @@ html
   head
     link(rel='stylesheet', href='css/graph-creator.css')
     link(rel='stylesheet', href='css/tesis.css')
-    link(rel='stylesheet', href='css/style.css')
     link(rel='stylesheet', href='vendor/introjs/introjs.min.css')
     link(rel='stylesheet', href='vendor/nprogress/nprogress.css')
+    // block cssinc
     title= title
   body
     nav#menu
-      ul
-        li#id
-        li#nombre
-        li
-          h5 Ejecutable
-          h2= proyecto
-          select#plantillaPrograma
-      ul#opciones
+      .divscroll
+        // block menu
+        p
+          select#plantillaPrograma.form-control.input-lg
+        ul#opciones
+        ul#mopciones
+    // block leftpanel
     #back
       a(href="/user") < Ir atras
-      //a(href="#openModal") < Modal
-
-    //div(id="openModal",  class="modalDialog")
-      a(href="#close" title="Close" class="close") X
-      ul.nav.nav-tabs(role='tablist')
-                li.active(role='presentation')
-                    a(href='#home', aria-controls='home', role='tab', data-toggle='tab') Seleccionar
-                li(role='presentation')
-                    a(href='#profile', aria-controls='profile', role='tab', data-toggle='tab') Indicar
-      .tab-content
-            #home.tab-pane.active(role='tabpanel')
-                div(ng-app='FileManagerApp')
-                    angular-filemanager
-            #profile.tab-pane(role='tabpanel')
-                .container
-                    .form-group
-                        label(for='inputFile') Archivos de entrada
-                        h5 (Separados por comas)
-                        input#archivos.form-control(type='text', placeholder='Archivos')
     #toolbox
       input#hidden-file-upload(type='file')
       input#upload-input(type='image', title='Subir', src='images/upload.png', alt='upload graph')
@@ -46,16 +26,15 @@ html
       input#download-input(type='image', title='Descargar', src='images/download.png', alt='download graph')
       input#delete-graph(type='image', title='Borrar', src='images/trash.png', alt='delete graph')
       input#openMenu(type='image', title='Menu', src='images/menu.png', alt='menu')
-      //input#open(type='image', title='Consola', src='console.png', alt='console')
+      input#doc(type='image', title='Doc', src='images/doc.png', alt='documentation')
 
-
+    // block modals
     #filem.modal.bs-example-modal-lg(tabindex='-1', role='dialog', aria-labelledby='myLargeModalLabel', aria-hidden='true')
       .modal-dialog.modal-lg
         .modal-content
           .modal-content
             .modal-header
                 div
-                  // Nav tabs
                   ul#pestanas.nav.nav-tabs(role='tablist')
                     li.active(role='presentation')
                       a(href='#home2', aria-controls='home2', role='tab', data-toggle='tab') Seleccionar
@@ -71,15 +50,12 @@ html
                     #profile2.tab-pane(role='tabpanel')
                         .container
                             .form-group
-                                label(for='inputFile') Indique los archivos
-                                h5 (Separados por comas)
+                                label(for='inputFile') Indique los archivos (Separados por comas)
                                 input#archivos.form-control(type='text', placeholder='Archivos')
 
             .modal-footer
                 button.btn(data-dismiss='modal', aria-hidden='true') Cancelar
                 button#filemB.btn.btn-primary Seleccionar
-
-
 
     script(src='vendor/d3.v3.js', charset='utf-8')
     script(src='vendor/FileSaver.min.js')
@@ -115,9 +91,9 @@ html
     script(src='vendor/async.min.js')
     script(src='js/r.js')
     script(src='renderer.js')
+    script(src='vendor/introjs/intro.min.js')
 
 // third party
-script(src='vendor/introjs/intro.min.js')
 script(src='vendor/saveSvgAsPng.js')
 script(src='vendor/angular-filemanager/bower_components/angular/angular.min.js')
 script(src='vendor/angular-filemanager/bower_components/angular-translate/angular-translate.min.js')
@@ -168,6 +144,7 @@ script(type='text/javascript').
   tplPath: 'vendor/angular-filemanager/src/templates'
   });
   }]);
+// block jsinc
 script(type='text/javascript').
   showTutorial= !{showTutorial};
   function startIntro(){

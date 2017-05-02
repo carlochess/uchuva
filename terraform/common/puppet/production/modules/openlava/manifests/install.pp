@@ -4,57 +4,62 @@
 #
 class openlava::install() {
   include '::openlava'
-
+  include openlava::pkgs
+  
   $version = $openlava::version
-  $openlava_unpack_folder = "${openlava::openlava_location}/openlava-${version}"
+  $openlava_unpack_folder = "${openlava::decompress_location}/openlava-${version}"
+  $openlava_filename = "openlava-${version}.tar.gz"
+  
+  if($openlava::url != ""){
+    $urlLoc = $openlava::url
+  }else{
+    $urlLoc = "http://www.openlava.org/tarball/${openlava_filename}"
+  }
 
   if $openlava::ensure == 'true' {
   
-    $openlava_filename = "openlava-${::openlava::params::version}.tar.gz"
-
-    ensure_resource('file', 'openlava_location', {
+    ensure_resource('file', 'decompress_location', {
       ensure => 'directory',
-      path   => "$::openlava::params::openlava_location/openlava-${version}",
+      path   => "${openlava::decompress_location}",
       owner  => 'root',
       group  => 'root',
       mode   => '0644',
     })
 
-    openlava::download { 'openlava-download-${::openlava::params::version}' :
-      source      => "http://www.openlava.org/tarball/${openlava_filename}",
+    openlava::download { "openlava-download-${version}" :
+      source      => $urlLoc,
       destination => "${openlava::download_location}/${openlava_filename}",
-      require     => File['openlava_location'],
-      timeout     => $::openlava::params::timeout,
-    }->
-    file { 'openlava-check-tar-${version}':
-      ensure  => 'file',
-      path    => "${::openlava::params::openlava_location}/${openlava_filename}",
-      owner   => 'root',
-      group   => 'root',
-      mode    => '0644',
-      #require => openlava::download['openlava-download-${::openlava::params::version}'],
+      require     => File['decompress_location'],
+      timeout     => $openlava::timeout,
     }
-
+    
+    ensure_resource('file', 'openlava-unpack-dir', {
+      ensure => 'directory',
+      path   => "${openlava_unpack_folder}",
+      owner  => 'root',
+      group  => 'root',
+      mode   => '0644',
+    })
+    
     exec { 'openlava-unpack-${version}':
-      command => "tar -xzvf ${::openlava::params::openlava_location}/${openlava_filename} -C ${::openlava::params::openlava_location}/openlava-${version} --strip-components=1",
+      command => "tar -xzvf ${openlava::download_location}/${openlava_filename} -C ${openlava_unpack_folder} --strip-components=1",
       path    => '/usr/bin:/bin:/usr/sbin:/sbin',
       cwd     => $::openlava::params::download_location,
       user    => 'root',
-      unless  => 'test -f ${::openlava::params::openlava_location}/openlava-${version}',
+      unless  => "test -f ${$openlava_unpack_folder} && test -f ${openlava_unpack_folder}",
       require => [
-        File['openlava-check-tar-${version}'],
-        #Package['tar'],
+        ::Openlava::Download["openlava-download-${version}"],
+        File['openlava-unpack-dir'],
+        Package['tar'],
       ],
     }
-    include openlava::pkgs
-    ## --prefix=${::openlava::params::openlava_location}
+    
     exec { 'openlava-make-install-${version}':
       command => './configure && make -j ${cpu_cores} && make -j ${cpu_cores} install',
-      path    => "${::openlava::params::openlava_location}/openlava-${version}:/usr/bin:/bin:/usr/sbin:/sbin",
-      cwd     => "$::openlava::params::openlava_location/openlava-${version}",
+      path    => "$openlava_unpack_folder:/usr/bin:/bin:/usr/sbin:/sbin",
+      cwd     => "$openlava_unpack_folder",
       user    => 'root',
-      #unless  => 'test -f ${node_symlink_target}',
-      timeout => 0,
+      unless  => "test -f ${openlava_unpack_folder}/Makefile",
       require => [
         Exec['openlava-unpack-${version}'],
         Class["openlava::pkgs"]

@@ -1,6 +1,7 @@
 var express = require('express');
 var async = require('async');
 var path = require('path');
+var logger = require('../../utils/logger.js');
 var File = require('../../models/file.js');
 var router = express.Router();
 var fs = require('fs');
@@ -44,10 +45,11 @@ module.exports = function(app) {
                 });
             } else if (fichero.type === "file") {
                 remover(fichero, function(err) {
-                    if (err) {
+                    /*if (err) {
                         callback(err);
                         return;
-                    }
+                        }*/
+                    logger.error("deleting file "+err);
                     fichero.remove(callback);
                 });
             }

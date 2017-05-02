@@ -145,7 +145,7 @@ module.exports = function(app) {
                                     callback(null, {
                                         originalname: item,
                                         size: stats.size + "",
-                                        uploadDate: new Date(),
+                                        uploadDate: stats.birthtime,
                                         type: isd,
                                         _id: "/_Runs/" + directorio + "/" + item + (isd ? "/" : ""),
                                         veneno: ""
@@ -157,6 +157,14 @@ module.exports = function(app) {
                                     return cb(err);
                                 }
                                 if(files){
+                                  files.unshift({
+                                    originalname: "_",
+                                    size: "0",
+                                    uploadDate: new Date(),
+                                    type: "dir",
+                                    _id: "/_Runs/",
+                                    veneno: ""
+                                  });
                                   files = files.map(function(f) {
                                     return front(f);
                                   });

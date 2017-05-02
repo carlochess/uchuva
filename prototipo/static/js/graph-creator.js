@@ -629,24 +629,15 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                 // dragged, not clicked
                 state.justDragged = false;
             } else {
-                // OTRA PARTE
                 var menu = document.getElementById("menu");
-                var id = document.getElementById("id");
-                var nombre = document.getElementById("nombre");
-                var descripcion = document.getElementById("descripcion");
-                var useDocker = document.getElementById("useDocker");
-                var arent = document.getElementById("arent");
-                var arsal = document.getElementById("arsal");
+                /*var id = document.getElementById("id");*/
                 menu.style.right = "0px";
-                id.textContent = mouseDownNode.id;
-                nombre.textContent = mouseDownNode.title;
-                if(useDocker && descripcion){
+                /*if(useDocker && descripcion){
                   useDocker.textContent = mouseDownNode.configurado.useDocker;
                   descripcion.textContent = mouseDownNode.configurado.location + " " + (mouseDownNode.configurado.argumento || "");
-                }
-                //arent.textContent = mouseDownNode.configurado.files;
-                //arsal.textContent = mouseDownNode.configurado.files;
+                }*/
                 $("#opciones").empty();
+                $("#mopciones").empty();
                 var actualizar=true;
                 //------------------------------------------------------------
                 // clicked, not dragged
@@ -999,11 +990,11 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
         }
     });
 
-    $('#opciones').on('keydown', '#times', function(ev) {
+    $('#mopciones').on('keydown', '#times', function(ev) {
         ev.stopPropagation();
     });
 
-    $('#opciones').on('change', '#times', function(ev) {
+    $('#mopciones').on('change', '#times', function(ev) {
         ev.stopPropagation();
         if (!graph.state.selectedNode)
             return;
@@ -1011,17 +1002,40 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
         var nodo = graph.nodes[buscar(id)];
         nodo.configurado.times = $(this).val();
     });
-/*
-    $('#opciones').on('click', '#raw', function(ev) {
-      ev.stopPropagation();
-      $("#opciones").empty();
-      if (!graph.state.selectedNode)
-          return;
-      var id = graph.state.selectedNode.id;
-      var nodo = graph.nodes[buscar(id)];
-      var value = "";//$("#plantillaPrograma").value;
-      nodo.configurado.raw = !nodo.configurado.raw;
-      rederizarFormulario(nodo, value);
+
+    $('#mopciones').on('keyup', '#wd', function(ev) {
+        ev.stopPropagation();
+        if (!graph.state.selectedNode)
+            return;
+        var id = graph.state.selectedNode.id;
+        var nodo = graph.nodes[buscar(id)];
+        nodo.configurado.wd = $(this).val();
     });
-*/
+
+  $('#mopciones').on('click', '#gencmd', function(ev) {
+    ev.stopPropagation();
+    if (!graph.state.selectedNode)
+      return;
+    var id = graph.state.selectedNode.id;
+    var nodo = graph.nodes[buscar(id)];
+    var nombre = nodo.configurado.name;
+    var validador = window[nombre]();
+    var cmd = "Node invalid";
+    if (validador.validation(nodo.configurado.render)) {
+      cmd = nodo.configurado.location + " " +validador.transformation(nodo.configurado.render);
+      /*if(nombre ==="raw"){
+        var raw = nodo.configurado.argumento;
+        nodo.configurado.location = raw.shift();
+        nodo.configurado.argumento = raw.join(" ");
+      }
+      else if(nombre ==="rawdocker"){
+        var rawdocker = nodo.configurado.argumento;
+        nodo.configurado.image = rawdocker.shift();
+        nodo.configurado.location = rawdocker.shift();
+        nodo.configurado.argumento = rawdocker.join(" ");
+      }*/
+    }
+    console.log(cmd);
+  });
+
 })(window.d3, window.saveAs, window.Blob);

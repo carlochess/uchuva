@@ -1,14 +1,19 @@
 #!/bin/bash
 #BSUB -q normal             # queue
-#BSUB -W 00:06              # tiempo (hrs:mins)
+#BSUB -W 24:00              # tiempo (hrs:mins)
 #BSUB -P {{= it.nodo.directorio}}
 #BSUB -o {{= it.dagdir}}/{{= it.nodo.directorio}}/{{= it.nodo.nombre}}{{? it.config.times > 1 }}.%I{{?}}.out    # out
 #BSUB -e {{= it.dagdir}}/{{= it.nodo.directorio}}/{{= it.nodo.nombre}}{{? it.config.times > 1 }}.%I{{?}}.err    # err
 #BSUB -J {{= it.nodo.directorio}}_{{= it.nodo.nombre}}{{? it.config.times && it.config.times > 1 }}[1-{{= it.config.times}}]{{?}} # nombre
-{{? it.nodo.dependencia && it.nodo.dependencia.length > 0 }}#BSUB -w {{= it.nodo.dependencia.join("&&")}}{{?}} # dependencia
+{{? it.nodo.dependencia && it.nodo.dependencia.length > 0 }}#BSUB -w {{= it.nodo.dependencia.join("&&")}} # dependencia {{?}}
 
 {{? it.config.useDocker }}
-docker run -it -v {{= it.dagdir}}/{{= it.nodo.directorio}}:{{= it.dagdir}}/{{= it.nodo.directorio}} --workdir {{= it.dagdir}}/{{= it.nodo.directorio}} {{= it.config.image }} {{= it.config.location && it.config.location.trim() }} {{= it.config.argumento.trim() }}
+docker run \
+  -v {{= it.dagdir}}/{{= it.nodo.directorio}}:{{= it.dagdir}}/{{= it.nodo.directorio}} \
+  --workdir {{= it.dagdir}}/{{= it.nodo.directorio}}{{? it.config.wd }}/{{= it.config.wd }}{{?}} \
+  {{= it.config.image }} \
+  {{= it.config.location && it.config.location.trim() }} {{= it.config.argumento.trim() }}
 {{??}}
+{{? it.config.wd }}cd {{= it.config.wd }}{{?}}
 {{= it.config.location && it.config.location.trim() }} {{= it.config.argumento.trim() }}
 {{?}}

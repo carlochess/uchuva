@@ -3,6 +3,7 @@ var path = require('path');
 var async = require('async');
 var logger = require('../../utils/logger.js');
 var graphalg = require('../../utils/graphalg.js');
+var utils = require('../../utils/path.js');
 var controladorArchivos = require('../../utils/file.js');
 var config = require('../../config.js');
 var DagExe = require('../../models/dagExe.js');
@@ -12,6 +13,7 @@ function nodeAClassAd(nodo, workloader) {
     var res = "";
     if (nodo.configurado) {
         var configuracion = nodo.configurado;
+        configuracion.wd = utils.normalizePath(configuracion.wd);
         var obj = {
             config: configuracion,
             nodo: nodo,
@@ -133,7 +135,7 @@ var submitNode = function(posDeps, item, edges, ordenado, callback) {
     try{
         var nodeOut = nodeAClassAd(item, item.workloader);
     } catch(ex){
-        callback("Error filling template");
+        return callback("Error filling template");
     }
     var nombreArchivo = path.join(config.DAG_DIR, item.directorio, item.nombre + ".bash");
     controladorArchivos.crearArchivo(nombreArchivo, nodeOut, function(err, cb) {

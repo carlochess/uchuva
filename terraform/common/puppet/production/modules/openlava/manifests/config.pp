@@ -1,8 +1,10 @@
 class openlava::config {
   include '::openlava'
-  $openlavaDir = "${openlava::openlava_location}openlava-${openlava::version}"
-  $download_location= "${openlava::download_location}openlava-${openlava::version}"
+  $version = $openlava::version
+  $openlavaDir= "${openlava::decompress_location}/openlava-${version}"
   $hosts = $openlava::hostNameList
+  $nodes = $hosts[1,-1]
+  
   group { 'openlava':
     ensure => 'present',
   }->
@@ -11,23 +13,32 @@ class openlava::config {
     ensure               => 'present',
     comment              => 'Openlava workload manager',
     gid                  => 'openlava',
-      groups               => ['openlava'],
+    groups               => ['openlava'],
     home                 => '/home/openlava',
     managehome           => true,
     shell                => '/bin/bash',
   }
 
   file { "$openlavaDir/etc/lsf.cluster.openlava":
-    notify => Service['openlava'],
     ensure => present,
     content => template("${module_name}/lsf.cluster.openlava.config.erb"),
   }
 
-  $files = ['lsb.hosts','lsb.params','lsb.queues','lsb.users','lsf.conf','lsf.shared']
+  file { "$openlavaDir/etc/lsb.queues":
+    ensure => present,
+    content => template("${module_name}/lsb.queues.erb"),
+  }
+  
+  file { "$openlavaDir/etc/lsb.hosts":
+    ensure => present,
+    content => template("${module_name}/lsb.hosts.erb"),
+  }
+
+  $files = ['lsb.params','lsb.users','lsf.conf','lsf.shared']
   $files.each |String $s| {
     file { "$openlavaDir/etc/${s}":
       path         => "$openlavaDir/etc/${s}",
-      source       => "$download_location/config/${s}",
+      source       => "$openlavaDir/config/${s}",
     }
   }
 
@@ -59,19 +70,21 @@ class openlava::config {
 
 
   file { '/etc/init.d/openlava':
-    source       => "$openlavaDir/etc/openlava",
+    source => "$openlavaDir/etc/openlava",
     mode => '755'
   }
-
+  
   exec { "openlava source openlava":
     command => "echo \"[ -f $openlavaDir/etc/openlava.sh ] && source $openlavaDir/etc/openlava.sh\" >> /home/openlava/.bashrc",
     path    => "/usr/bin:/bin:/usr/sbin:/sbin",
     user    => 'root',
+    unless => "grep -qFx \"source $openlavaDir/etc/openlava.sh\" /home/openlava/.bashrc",
   }
   exec { "openlava source root":
     command => "echo \"[ -f $openlavaDir/etc/openlava.sh ] && source $openlavaDir/etc/openlava.sh\" >> /root/.bashrc",
     path    => "/usr/bin:/bin:/usr/sbin:/sbin",
     user    => 'root',
+    unless => "grep -qFx \"source $openlavaDir/etc/openlava.sh\" /root/.bashrc",
   }
   exec { "root source":
     command => "[ -f $openlavaDir/etc/openlava.sh ] && source $openlavaDir/etc/openlava.sh",
