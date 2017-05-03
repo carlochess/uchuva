@@ -1021,19 +1021,22 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
     var nombre = nodo.configurado.name;
     var validador = window[nombre]();
     var cmd = "Node invalid";
+    var image = "";
     if (validador.validation(nodo.configurado.render)) {
-      cmd = nodo.configurado.location + " " +validador.transformation(nodo.configurado.render);
-      /*if(nombre ==="raw"){
-        var raw = nodo.configurado.argumento;
-        nodo.configurado.location = raw.shift();
-        nodo.configurado.argumento = raw.join(" ");
+      var raw = validador.transformation(nodo.configurado.render);
+      cmd = "";
+      if(nombre ==="rawdocker"){
+        image = raw.shift();
+        cmd = "Image: "+ image+", ";
       }
-      else if(nombre ==="rawdocker"){
-        var rawdocker = nodo.configurado.argumento;
-        nodo.configurado.image = rawdocker.shift();
-        nodo.configurado.location = rawdocker.shift();
-        nodo.configurado.argumento = rawdocker.join(" ");
-      }*/
+      else if (nodo.configurado.useDocker){
+        image = nodo.configurado.image;
+        cmd = "Image: "+ image+", ";
+      }
+      if (nombre !=="raw"){
+        cmd += "Command: "+ nodo.configurado.location+ " ";
+      }
+      cmd += (typeof raw === "string")? raw : raw.join(" ");
     }
     console.log(cmd);
   });
