@@ -35,7 +35,6 @@ function mv(){
       var argumentos = data[0];
       var argumento  = data[1];
       if(argumentos.value){
-        console.log(argumentos.value)
         argumentos.value.forEach(function(arg){
           salida += arg + " ";
         });

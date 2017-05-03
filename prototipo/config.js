@@ -36,7 +36,7 @@ var upload = argv.upload || process.env.UPLOAD_DIR || path.join(share,'uploads')
 var condorUrl = process.env.CONDOR_URL || 'http://localhost:8080/';
 var condorJobOwner = argv.owner || process.env.CONDOR_JOB_OWNER || process.env.USER || "carlos";
 var key = fs.readFileSync(path.join(__dirname,'keys','id_rsa'));
-var logdir = argv.logdir ||process.env.LOGDIR || path.join(__dirname,'logs');
+var logdir = argv.logdir ||process.env.LOGDIR || path.join(__dirname,'logs/');
 var config = function(){
     return {
         SERVER_PORT : process.env.PORT || 3000,

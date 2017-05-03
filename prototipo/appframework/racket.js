@@ -68,20 +68,23 @@ var redirOut = [["--array","Instructs Happy to generate a parser using an array-
     };
   });
 
-var optsargs = [["--info","Directs Happy to produce an info file containing detailed information about the grammar, parser states, parser actions, and conflicts. Info files are vital during the debugging of grammars.The filename argument is optional, and if omitted the info file will be written to FILE.info (where FILE is the input file name with any extension removed)."],
-  ["--outfile","Specifies the destination of the generated parser module. If omitted, the parser will be placed in FILE.hs, where FILE is the name of the input file with any extension removed. If FILE is - the generated parser is sent to the standard output."],
-  ["--magic-name","Happy prefixes all the symbols it uses internally with either happy or Happy. To use a different string, for example if the use of happy is conflicting with one of your own functions, specify the prefix using the -m option."],
-  ["--template","Instructs Happy to use this directory when looking for template files: these files contain the static code that Happy includes in every generated parser. You shouldn’t need to use this option if Happy is properly configured for your computer."]]
+var opcionesArgs = {
+  "--info":"Directs Happy to produce an info file containing detailed information about the grammar, parser states, parser actions, and conflicts. Info files are vital during the debugging of grammars.The filename argument is optional, and if omitted the info file will be written to FILE.info (where FILE is the input file name with any extension removed).",
+  "--outfile":"Specifies the destination of the generated parser module. If omitted, the parser will be placed in FILE.hs, where FILE is the name of the input file with any extension removed. If FILE is - the generated parser is sent to the standard output.",
+  "--magic-name":"Happy prefixes all the symbols it uses internally with either happy or Happy. To use a different string, for example if the use of happy is conflicting with one of your own functions, specify the prefix using the -m option.",
+  "--template":"Instructs Happy to use this directory when looking for template files: these files contain the static code that Happy includes in every generated parser. You shouldn’t need to use this option if Happy is properly configured for your computer."
+}
 
-  var optsArgs = optsargs.map(function(opt){
-    return {
-      type : "text", // text,bool,area,domain
-      nombroOpt : opt[0].substring(2),
-      description : opt[1],
-      representation: opt[0],
-      value : "" // text(""),bool(t/f),area(""),domain([0..]),multiple([])
-    };
-  });
+    var optsArgs = []
+    for (var prop in opcionesArgs) {
+      optsArgs.push({
+        type : "text", // text,bool,area,domain
+        nombroOpt : prop.substring(2),
+        description : opcionesArgs[prop],
+        representation: prop,
+        value : "" // text(""),bool(t/f),area(""),domain([0..]),multiple([])
+      })
+    }
 
     var optsmultiples = {
     	opts : optsredirOut.concat(optsArgs),
@@ -108,8 +111,7 @@ var optsargs = [["--info","Directs Happy to produce an info file containing deta
         argumento : "",
         render: [
             optsmultiples,
-            argumentos,
-            optsmultiples
+            argumentos
         ],
         validation: function(data){
             return true;
@@ -120,7 +122,10 @@ var optsargs = [["--info","Directs Happy to produce an info file containing deta
             var argumentos  = data[1];
             if(optsmultiples.value){
               optsmultiples.value.forEach(function(opt){
-                if(opt.value){
+                if(opcionesArgs[opt.representation]){
+                  salida += opt.representation + " " + opt.value+ " ";
+                }
+                else if(opt.value){
                   salida += opt.representation + " ";
                 }
               });
