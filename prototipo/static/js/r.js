@@ -1,4 +1,5 @@
 var plantillas = {};
+var cambios = false;
 function solicitarPrograma(programa, nombre){
   $.getScript(programa)
     .done(function( script, textStatus ) {
@@ -36,6 +37,7 @@ $('#plantillaPrograma').append($('<option>', {
 $('#menu').on('keyup', '#argss',function(ev){
   var id = graph.state.selectedNode.id;
   graph.nodes[id].configurado.argumento = $(this).val();
+  cambios = true;
   ev.stopPropagation();
 });
 
@@ -163,13 +165,13 @@ var abrirMenu = function(event, abrir){
   }
 }
 $('#openMenu').click(function(event) {
-  event.stopPropagation();
+  //event.stopPropagation();
   abrirMenu(event, true);
 });
 
 
 $('#menu').click(function(event) {
-  event.stopPropagation();
+  //event.stopPropagation();
   abrirMenu(event, false);
 });
 
@@ -195,7 +197,12 @@ $('#mopciones').on('click', '.nada', function(ev) {
 $('#opciones').on('change', '#loadManager', function(ev) {
   ev.stopPropagation();
   workloader = $(this).val();
+  cambios = true;
 });
+
+$("#doc").click(function(){
+    startIntro();
+})
 
 $(function(){
   function cambiarSentido(elem){
@@ -207,8 +214,15 @@ $(function(){
     $("#mopciones").empty();
     $('#archivos').val("");
     rederizarFormulario(graph.nodes[realId], "");
+    cambios = true;
   }
-  function atomica(ev){
+  $("#back").click(function(){
+    if(cambios){
+        return confirm("¿Seguro que quieres salir sin guardar?")
+    }
+    return true;
+  });
+  /*function atomica(ev){
     ev.stopPropagation();
   }
   var otherOpts = ["#archivos","#wd"];
@@ -222,21 +236,21 @@ $(function(){
     $('#mopciones').on("keydown", opt, function(ev) {
       atomica(ev);
     });
-  });
+  });*/
   $('#mopciones').on('click', '.glyphicon.glyphicon-menu-up',function(ev){
     var elem = $(this).parent();
     cambiarSentido(elem);
-    ev.stopPropagation();
+    //ev.stopPropagation();
   });
   $('#mopciones').on('click', '.glyphicon.glyphicon-menu-down',function(ev){
     var elem = $(this).parent();
     cambiarSentido(elem);
-    ev.stopPropagation();
+    //ev.stopPropagation();
   });
   $('#mopciones').on('click', '.glyphicon.glyphicon-remove',function(ev){
     var elemento = $(this).parent();
     var idArchivo = elemento.data("id");
-    var id = graph.state.selectedNode.id; //idSeleccionado;
+    var id = graph.state.selectedNode.id;
     var realId = buscar(id);
     graph.nodes[realId].configurado.file.splice(idArchivo,1);
     $("#mopciones").empty();
@@ -253,7 +267,7 @@ $(function(){
         return { model : { name : o.trim() , id : o.trim() , type : "indicado" }} ;
       });
     }
-    var id = graph.state.selectedNode.id;//idSeleccionado;
+    var id = graph.state.selectedNode.id;
     var realId = buscar(id);
 
     if(elementos && elementos.length > 0){
@@ -269,6 +283,7 @@ $(function(){
     $("#mopciones").empty();
     $('#archivos').val("");
     rederizarFormulario(graph.nodes[realId], "");
+    cambios = true;
   });
   rederizarProyecto();
 });

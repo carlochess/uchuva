@@ -39,12 +39,12 @@ nfs::server::export { '/scratch':
 }->
 class {'::mongodb::globals':
   manage_package_repo => true,
+  manage_package      => true,
 }->
 class {'::mongodb::server': }->
 class { '::nodejs':
-  nodejs_dev_package_ensure => 'present',
   npm_package_ensure        => 'present',
-  repo_class                => '::epel',
+  /*repo_class                => '::epel',*/
 }->
 package { 'pm2':
   ensure   => 'present',

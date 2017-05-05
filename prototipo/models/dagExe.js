@@ -20,6 +20,7 @@ var DagExeSchema = mongoose.Schema({
       raw: Number,
       times: Number,
       wd : String,
+      module : String,
       file: [mongoose.Schema.Types.Mixed]
     }
   }],

@@ -2,9 +2,11 @@ include stdlib
 case $::osfamily {
   'RedHat': {
     include epel
+    $condor_v = '1.11.0-1.el7.centos'    
   }
   'Debian': {
     include apt
+    $condor_v = '1.11.1-0~trusty'
   }
 }
 
@@ -47,12 +49,12 @@ class {"condor":
 }->
 class { 'docker':
   docker_users => ['condor','openlava','uchuva'],
-  version => '1.11.0-1.el7.centos',#1.12.6-1.el7.centos
+  version => $condor_v,
 }->
 exec { "condor restart":
   command => "service condor restart",
   path    => "/usr/bin:/bin:/usr/sbin:/sbin",
   cwd     => "/tmp",
   user    => 'root',
-  }
+}
 

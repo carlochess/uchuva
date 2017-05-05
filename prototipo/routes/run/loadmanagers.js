@@ -142,7 +142,9 @@ var submitNode = function(posDeps, item, edges, ordenado, callback) {
         if (err) {
             return callback(err);
         }
-        var sendToWLM = config.USESSH[item.workloader] ? enviarssh : enviar;
+        var sendToWLM = function(i, cwd, workloader, cb) {
+          return cb(null, 1);
+        }//config.USESSH[item.workloader] ? enviarssh : enviar;
         return sendToWLM(nombreArchivo,
              path.join(config.DAG_DIR, item.directorio), item.workloader,
              function(err, jobid) {

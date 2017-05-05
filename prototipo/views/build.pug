@@ -7,18 +7,18 @@ html
   body
     nav#menu
       ul#lateralMenu
+        li
+          h2= proyecto
+        li#useDocker
         li#id
         li#nombre
-        li#useDocker
-        li#descripcion
+        li#comando
+        li#workingdir
+        li#ntimes
         li Archivos entrada
         li#arent
         li Archivos salida
         li#arsal
-        li
-          h5 Ejecutable
-          h2= proyecto
-          select#plantillaPrograma
         li
           h5#log Log_nodo
         li
@@ -26,8 +26,11 @@ html
         li
           h5#out Out_nodo
       ul#opciones
+      ul#mopciones
+        button.nada(data-toggle='modal', data-target='.bs-example-modal-lg') check files
     #back
-      a(href="/builds?id="+proyecto) < Ir atras
+      li
+        a(href="/builds?id="+proyecto) < Ir atras
 
     // Modal
     #myModal.modal.fade(tabindex='-1', role='dialog', aria-labelledby='myModalLabel')

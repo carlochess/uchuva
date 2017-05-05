@@ -5,6 +5,7 @@ class condor ($master = false, $submitter = false) {
 	'7': {
           $major_release = "7"
 	  yumrepo { 'htcondor-stable':
+	    before   => Package['condor'],
 	    descr => "HTCondor Stable RPM Repository for Redhat Enterprise Linux ${major_release}",
 	    baseurl => "http://research.cs.wisc.edu/htcondor/yum/stable/rhel${major_release}",
 	    enabled => 1,
@@ -17,20 +18,18 @@ class condor ($master = false, $submitter = false) {
     }
     'Debian': {
       case $::lsbdistcodename {
-	default: {
-	  apt::source { 'condor':
-	    comment  => 'HTCondor repo',
-	    location => 'http://research.cs.wisc.edu/htcondor/ubuntu/stable/',
-	    release  => 'trusty',
-	    repos    => 'contrib',
-	    pin      => '-10',
-	    key      => {
-	      'server' => 'http://research.cs.wisc.edu/htcondor/ubuntu/HTCondor-Release.gpg.key',
-	    },
-	  include  => {
-	    'deb' => true,
-	  },
-	  }
+	    default: {
+	      apt::source { 'condor':
+        before   => Package['condor'],
+        comment  => 'HTCondor repo',
+        location => 'http://research.cs.wisc.edu/htcondor/ubuntu/stable/',
+        release  => 'trusty', /*"$::lsbdistcodename",*/
+        repos    => 'contrib'/*,
+        key      => {
+          id       => '973FC7D2670079F6',
+          server => 'http://research.cs.wisc.edu/htcondor/ubuntu/HTCondor-Release.gpg.key',
+        },*/
+    }
 	}
       }
     }
@@ -38,7 +37,6 @@ class condor ($master = false, $submitter = false) {
 
   package { "condor":
     ensure => present,
-    #require => Yumrepo['htcondor-stable'],
     root => true,
     name    =>  'condor',
   }

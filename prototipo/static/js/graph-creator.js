@@ -1,4 +1,5 @@
 graph = undefined;
+var numRend = 0;
 document.onload = (function(d3, saveAs, Blob, undefined) {
     "use strict";
 
@@ -169,6 +170,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                             }
                         });
                         NProgress.remove();
+                        cambios = false;
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         $.notify("Error al intentar guardar", {
@@ -720,6 +722,8 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
             consts = thisGraph.consts;
         // make sure repeated key presses don't register for each keydown
         if (state.lastKeyDown !== -1) return;
+        var obj = d3.event.target;
+        if(obj instanceof HTMLInputElement && obj.type == 'text') return;
 
         state.lastKeyDown = d3.event.keyCode;
         var selectedNode = state.selectedNode,
@@ -852,6 +856,10 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
 
         // remove old nodes
         thisGraph.circles.exit().remove();
+        if(numRend>0){
+            cambios = true;
+        }
+        numRend++;
     };
 
     GraphCreator.prototype.estado = function() {
@@ -932,6 +940,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
         var id = graph.state.selectedNode.id;
         rederizarFormulario(graph.nodes[buscar(id)], this.value);
         graph.updateGraph();
+        cambios = true;
     });
     /// Listeners
     $('#opciones').on('keydown', 'textarea', function(ev) {
@@ -947,6 +956,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
         var id = graph.state.selectedNode.id;
         var nodo = graph.nodes[buscar(id)];
         cambiar($(this).attr('id').split("."), $(this).val(), nodo);
+        cambios = true;
     });
 
     $('#opciones').on('keyup', 'input', function(ev) {
@@ -956,6 +966,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
         var id = graph.state.selectedNode.id;
         var nodo = graph.nodes[buscar(id)];
         cambiar($(this).attr('id').split("."), $(this).val(), nodo);
+        cambios = true;
     });
 
     $('#opciones').on("change", "input:checkbox", function() {
@@ -964,6 +975,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
         var id = graph.state.selectedNode.id;
         var nodo = graph.nodes[buscar(id)];
         cambiar($(this).attr('id').split("."), this.checked, nodo);
+        cambios = true;
     });
 
     $('#opciones').on('change', 'select', function() {
@@ -972,6 +984,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
         var id = graph.state.selectedNode.id;
         var nodo = graph.nodes[buscar(id)];
         cambiar($(this).attr('id').split("."), $(this).val(), nodo);
+        cambios = true;
     });
 
     $("#opciones").on("click", "label", function() {
@@ -988,6 +1001,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                 accion(para.split("."), true, nodo);
             }
         }
+        cambios = true;
     });
 
     $('#mopciones').on('keydown', '#times', function(ev) {
@@ -1001,6 +1015,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
         var id = graph.state.selectedNode.id;
         var nodo = graph.nodes[buscar(id)];
         nodo.configurado.times = $(this).val();
+        cambios = true;
     });
 
     $('#mopciones').on('keyup', '#wd', function(ev) {
@@ -1010,6 +1025,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
         var id = graph.state.selectedNode.id;
         var nodo = graph.nodes[buscar(id)];
         nodo.configurado.wd = $(this).val();
+        cambios = true;
     });
 
   $('#mopciones').on('click', '#gencmd', function(ev) {
@@ -1038,6 +1054,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
       }
       cmd += (typeof raw === "string")? raw : raw.join(" ");
     }
+    //$("#menu").css("position", "static");
     console.log(cmd);
   });
 

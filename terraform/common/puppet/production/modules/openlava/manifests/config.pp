@@ -75,19 +75,19 @@ class openlava::config {
   }
   
   exec { "openlava source openlava":
-    command => "echo \"[ -f $openlavaDir/etc/openlava.sh ] && source $openlavaDir/etc/openlava.sh\" >> /home/openlava/.bashrc",
+    command => "echo \"[ -f $openlavaDir/etc/openlava.sh ] && . $openlavaDir/etc/openlava.sh\" >> /home/openlava/.bashrc",
     path    => "/usr/bin:/bin:/usr/sbin:/sbin",
     user    => 'root',
     unless => "grep -qFx \"source $openlavaDir/etc/openlava.sh\" /home/openlava/.bashrc",
   }
   exec { "openlava source root":
-    command => "echo \"[ -f $openlavaDir/etc/openlava.sh ] && source $openlavaDir/etc/openlava.sh\" >> /root/.bashrc",
+    command => "echo \"[ -f $openlavaDir/etc/openlava.sh ] && . $openlavaDir/etc/openlava.sh\" >> /root/.bashrc",
     path    => "/usr/bin:/bin:/usr/sbin:/sbin",
     user    => 'root',
     unless => "grep -qFx \"source $openlavaDir/etc/openlava.sh\" /root/.bashrc",
   }
   exec { "root source":
-    command => "[ -f $openlavaDir/etc/openlava.sh ] && source $openlavaDir/etc/openlava.sh",
+    command => "[ -f $openlavaDir/etc/openlava.sh ] && . $openlavaDir/etc/openlava.sh",
     path    => "/usr/bin:/bin:/usr/sbin:/sbin",
     user    => 'root',
   }

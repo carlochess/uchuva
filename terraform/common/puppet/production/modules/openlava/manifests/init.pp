@@ -27,11 +27,13 @@
 class openlava (
   $version                = $openlava::params::version,
   $download_location      = $openlava::params::download_location,
+  $decompress_location    = $openlava::params::decompress_location,
   $openlava_location      = $openlava::params::openlava_location,
   $timeout                = $openlava::params::timeout,
   $cpu_cores              = $openlava::params::cpu_cores,
   $ensure                 = $openlava::params::ensure,
   $hostNameList           = $openlava::params::hostNameList,
+  $url                    = ""
 ) inherits openlava::params {
   validate_string($version)
   validate_string($download_location)

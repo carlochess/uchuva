@@ -1,12 +1,15 @@
 class uchuva::download {
   include '::uchuva'
   $uchuvadir = $uchuva::uchuvadir
-  
+  package { 'git':
+    ensure => 'installed',
+  }
   exec {'uchuva download':
     command => "git clone --depth=1 https://github.com/carlochess/uchuva",
     path => ['/usr/bin', '/usr/sbin', '/bin'],
     cwd => "$uchuvadir",
     unless  => "test -d $uchuvadir/uchuva",
+    require => Package['git'],
   }
   group { 'uchuva': 
     ensure => present
