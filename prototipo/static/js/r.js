@@ -163,13 +163,13 @@ var abrirMenu = function(event, abrir){
   }
 }
 $('#openMenu').click(function(event) {
-  event.stopPropagation();
+  //event.stopPropagation();
   abrirMenu(event, true);
 });
 
 
 $('#menu').click(function(event) {
-  event.stopPropagation();
+  //event.stopPropagation();
   abrirMenu(event, false);
 });
 
@@ -208,7 +208,7 @@ $(function(){
     $('#archivos').val("");
     rederizarFormulario(graph.nodes[realId], "");
   }
-  function atomica(ev){
+  /*function atomica(ev){
     ev.stopPropagation();
   }
   var otherOpts = ["#archivos","#wd"];
@@ -222,21 +222,21 @@ $(function(){
     $('#mopciones').on("keydown", opt, function(ev) {
       atomica(ev);
     });
-  });
+  });*/
   $('#mopciones').on('click', '.glyphicon.glyphicon-menu-up',function(ev){
     var elem = $(this).parent();
     cambiarSentido(elem);
-    ev.stopPropagation();
+    //ev.stopPropagation();
   });
   $('#mopciones').on('click', '.glyphicon.glyphicon-menu-down',function(ev){
     var elem = $(this).parent();
     cambiarSentido(elem);
-    ev.stopPropagation();
+    //ev.stopPropagation();
   });
   $('#mopciones').on('click', '.glyphicon.glyphicon-remove',function(ev){
     var elemento = $(this).parent();
     var idArchivo = elemento.data("id");
-    var id = graph.state.selectedNode.id; //idSeleccionado;
+    var id = graph.state.selectedNode.id;
     var realId = buscar(id);
     graph.nodes[realId].configurado.file.splice(idArchivo,1);
     $("#mopciones").empty();
@@ -253,7 +253,7 @@ $(function(){
         return { model : { name : o.trim() , id : o.trim() , type : "indicado" }} ;
       });
     }
-    var id = graph.state.selectedNode.id;//idSeleccionado;
+    var id = graph.state.selectedNode.id;
     var realId = buscar(id);
 
     if(elementos && elementos.length > 0){

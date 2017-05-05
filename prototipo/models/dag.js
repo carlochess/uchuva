@@ -20,6 +20,7 @@ var DagSchema = mongoose.Schema({
             raw: Number,
             times: Number,
             wd : String,
+            module : String,
             file: [mongoose.Schema.Types.Mixed],
             render: [mongoose.Schema.Types.Mixed]
         }

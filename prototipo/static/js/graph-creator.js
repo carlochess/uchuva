@@ -720,6 +720,8 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
             consts = thisGraph.consts;
         // make sure repeated key presses don't register for each keydown
         if (state.lastKeyDown !== -1) return;
+        var obj = d3.event.target;
+        if(obj instanceof HTMLInputElement && obj.type == 'text') return;
 
         state.lastKeyDown = d3.event.keyCode;
         var selectedNode = state.selectedNode,
@@ -1038,6 +1040,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
       }
       cmd += (typeof raw === "string")? raw : raw.join(" ");
     }
+    $("#menu").css("position", "static");
     console.log(cmd);
   });
 

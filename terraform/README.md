@@ -17,6 +17,10 @@ This is the infraestructure wanted
 
 ```
 
+## Using with docker
+
+docker run -v .:/data --workdir /data hashicorp/terraform plan
+
 ## (Optional) Packer
 
 Don't use this, i've no tested yet
