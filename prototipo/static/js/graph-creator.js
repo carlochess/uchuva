@@ -1054,7 +1054,11 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
       }
       cmd += (typeof raw === "string")? raw : raw.join(" ");
     }
+<<<<<<< HEAD
     //$("#menu").css("position", "static");
+=======
+    $("#menu").css("position", "static");
+>>>>>>> 3c2b937588d9537eccb10d9644d23ce16067a5a6
     console.log(cmd);
   });
 

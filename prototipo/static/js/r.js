@@ -216,12 +216,15 @@ $(function(){
     rederizarFormulario(graph.nodes[realId], "");
     cambios = true;
   }
+<<<<<<< HEAD
   $("#back").click(function(){
     if(cambios){
         return confirm("¿Seguro que quieres salir sin guardar?")
     }
     return true;
   });
+=======
+>>>>>>> 3c2b937588d9537eccb10d9644d23ce16067a5a6
   /*function atomica(ev){
     ev.stopPropagation();
   }
