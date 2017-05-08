@@ -12,6 +12,7 @@ sudo apt install -y python-pip python-dev build-essential
 sudo apt install -y wget patch python-keyring zlib1g-dev libssl-dev libibverbs-dev unzip
 sudo apt install -y libx11-dev # for node
 echo "export PATH=$PATH:/usr/share/lmod/5.8/libexec/" >> ~/.bashrc
+echo ". /usr/share/lmod/5.8/init/bash" >> ~/.bashrc
 
 ## Seguir aquí...
 
