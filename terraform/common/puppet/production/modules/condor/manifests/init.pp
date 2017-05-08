@@ -24,11 +24,11 @@ class condor ($master = false, $submitter = false) {
         comment  => 'HTCondor repo',
         location => 'http://research.cs.wisc.edu/htcondor/ubuntu/stable/',
         release  => 'trusty', /*"$::lsbdistcodename",*/
-        repos    => 'contrib'/*,
+        repos    => 'contrib',
         key      => {
-          id       => '973FC7D2670079F6',
+          id       => '4B9D355DF3674E0E272D2E0A973FC7D2670079F6',
           server => 'http://research.cs.wisc.edu/htcondor/ubuntu/HTCondor-Release.gpg.key',
-        },*/
+        },
     }
 	}
       }
