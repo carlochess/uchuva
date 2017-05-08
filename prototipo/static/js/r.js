@@ -216,15 +216,14 @@ $(function(){
     rederizarFormulario(graph.nodes[realId], "");
     cambios = true;
   }
-<<<<<<< HEAD
+
   $("#back").click(function(){
     if(cambios){
         return confirm("¿Seguro que quieres salir sin guardar?")
     }
     return true;
   });
-=======
->>>>>>> 3c2b937588d9537eccb10d9644d23ce16067a5a6
+
   /*function atomica(ev){
     ev.stopPropagation();
   }
@@ -289,4 +288,26 @@ $(function(){
     cambios = true;
   });
   rederizarProyecto();
+  fileListener && fileListener.subscribe(function(event) { 
+      /*
+      graph.nodes
+      switch(event.action) {
+      case "remove":
+          console.log(event.items);
+          break;
+      case "move":
+          console.log(event.items, event.newPath);
+          break;
+      case "rename":
+          console.log(event.item, event.newPath);
+          break;
+      default:
+          console.log("Unknown action")
+      }
+      var id = graph.state.selectedNode.id;
+      var realId = buscar(id);
+      rederizarFormulario(graph.nodes[realId], "");
+      */
+      console.log(event)
+  });
 });

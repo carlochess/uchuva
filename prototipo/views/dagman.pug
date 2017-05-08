@@ -28,6 +28,17 @@ html
       input#openMenu(type='image', title='Menu', src='images/menu.png', alt='menu')
       input#doc(type='image', title='Doc', src='images/doc.png', alt='documentation')
 
+    #cmdModal.modal.fade(role='dialog')
+      .modal-dialog
+        .modal-content
+          .modal-header
+            button.close(type='button', data-dismiss='modal') ×
+            h4.modal-title Comand
+          .modal-body
+            p#cmd
+          .modal-footer
+            button.btn.btn-default(type='button', data-dismiss='modal') Cerrar
+
     // block modals
     #filem.modal.bs-example-modal-lg(tabindex='-1', role='dialog', aria-labelledby='myLargeModalLabel', aria-hidden='true')
       .modal-dialog.modal-lg
@@ -60,6 +71,7 @@ html
     script(src='vendor/d3.v3.js', charset='utf-8')
     script(src='vendor/FileSaver.min.js')
     script(type='text/javascript', src='vendor/jquery/jquery-1.11.3.min.js')
+    script(type='text/javascript', src='js/filelistener.js')
     script(type='text/javascript').
       proyecto= "#{proyecto}";
       nodes= !{nodes} || [];
@@ -83,6 +95,7 @@ html
             edges.push({source : nodes[buscar(edgesTpm[j].source.id)], target : nodes[buscar(edgesTpm[j].target.id)]});
           }
       }
+      fileListener = new FileListener();
     script(src='js/khanalg.js')
     script(src='vendor/dagre.min.js')
     script(src='vendor/nprogress/nprogress.js')

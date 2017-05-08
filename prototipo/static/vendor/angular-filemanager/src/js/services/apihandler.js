@@ -1,4 +1,4 @@
-(function(angular, $) {
+(function(angular, $, fl) {
     'use strict';
     angular.module('FileManagerApp').service('apiHandler', ['$http', '$q', '$window', '$translate', 
         function ($http, $q, $window, $translate) {
@@ -82,9 +82,11 @@
                 items: items,
                 newPath: path
             };
+            var dataOrigin = data;
             self.inprocess = true;
             self.error = '';
             $http.post(apiUrl, data).success(function(data) {
+                fl.dispatch(dataOrigin);
                 self.deferredHandler(data, deferred);
             }).error(function(data) {
                 self.deferredHandler(data, deferred, $translate.instant('error_moving'));
@@ -101,10 +103,11 @@
                 action: 'remove',
                 items: items,
             };
-
+            var dataOrigin = data;
             self.inprocess = true;
             self.error = '';
             $http.post(apiUrl, data).success(function(data) {
+                fl.dispatch(dataOrigin);
                 self.deferredHandler(data, deferred);
             }).error(function(data) {
                 self.deferredHandler(data, deferred, $translate.instant('error_deleting'));
@@ -185,9 +188,11 @@
                 item: itemPath,
                 newItemPath: newPath
             };
+            var dataOrigin = data;
             self.inprocess = true;
             self.error = '';
             $http.post(apiUrl, data).success(function(data) {
+                fl.dispatch(dataOrigin);
                 self.deferredHandler(data, deferred);
             }).error(function(data) {
                 self.deferredHandler(data, deferred, $translate.instant('error_renaming'));
@@ -213,7 +218,7 @@
                 !$window.saveAs && $window.console.error('Your browser dont support ajax download, downloading by default');
                 return !!$window.open(url, '_blank', '');
             }
-            
+            console.log(fl());
             var deferred = $q.defer();
             self.inprocess = true;
             $http.get(url).success(function(data) {
@@ -347,4 +352,4 @@
         return ApiHandler;
 
     }]);
-})(angular, jQuery);
+})(angular, jQuery, fileListener);

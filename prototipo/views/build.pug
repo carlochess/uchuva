@@ -7,18 +7,28 @@ html
   body
     nav#menu
       ul#lateralMenu
-        li
-          h2= proyecto
-        li#useDocker
-        li#id
-        li#nombre
-        li#comando
-        li#workingdir
+        li proyecto
+        li= proyecto
+        li Imagen Docker
+        li#nimage
+        li Ambiente LMOD
+        li#nmodule
+        li Node ID
+        li#nid
+        li Node Name
+        li#ntitle
+        li Command
+        li#ncomando
+        li Working dir
+        li#nwd
+        li Times
         li#ntimes
         li Archivos entrada
         li#arent
         li Archivos salida
         li#arsal
+        li
+          button.nada(data-toggle='modal', data-target='.bs-example-modal-lg') FileManager
         li
           h5#log Log_nodo
         li
@@ -39,7 +49,7 @@ html
           .modal-header
             button.close(type='button', data-dismiss='modal', aria-label='Close')
               span(aria-hidden='true') ×
-            h4#myModalLabel.modal-title Modal title
+            h4#myModalLabel.modal-title Info
           .modal-body
             p.infoo#infoo(align="left",text-align="left")
           .modal-footer
@@ -52,26 +62,12 @@ html
         .modal-content
           .modal-content
             .modal-header
-                div
-                  // Nav tabs
-                  ul.nav.nav-tabs(role='tablist')
-                    li.active(role='presentation')
-                      a(href='#home2', aria-controls='home2', role='tab', data-toggle='tab') Seleccionar
-                    li(role='presentation')
-                      a(href='#profile2', aria-controls='profile2', role='tab', data-toggle='tab') Indicar
-                    li(role='presentation')
+               button.close(type='button', data-dismiss='modal', aria-label='Close')
+                 span(aria-hidden='true') ×
+               h4#myModalLabel.modal-title Filemanager
             .modal-body
-                div
-                  .tab-content
-                    #home2.tab-pane.active(role='tabpanel')
-                        div(ng-app='FileManagerApp')
-                            angular-filemanager
-                    #profile2.tab-pane(role='tabpanel')
-                        .container
-                            .form-group
-                                label(for='inputFile') Archivo generado
-                                input#inputFile.form-control(type='text', placeholder='Nombre archivo')
-
+                div(ng-app='FileManagerApp')
+                  angular-filemanager
             .modal-footer
                 button.btn(data-dismiss='modal', aria-hidden='true') Cancelar
                 button#filemB.btn.btn-primary Seleccionar
@@ -81,6 +77,7 @@ html
     script(src='vendor/d3.v3.js', charset='utf-8')
     script(src='vendor/FileSaver.min.js')
     script(src='vendor/jquery/jquery-1.11.3.min.js')
+    script(type='text/javascript', src='js/filelistener.js')
     script(type='text/javascript').
       proyecto= "#{proyecto}";
       ejecucion= "#{title}";
@@ -102,6 +99,7 @@ html
             edges.push({source : nodes[buscar(edgesTpm[j].source.id)], target : nodes[buscar(edgesTpm[j].target.id)]});
           }
       }
+      fileListener = new FileListener();
     script(src='js/khanalg.js')
     script(src='js/graph-creator.js')
     script(src='js/r.js')

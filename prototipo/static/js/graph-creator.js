@@ -631,13 +631,30 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                 // dragged, not clicked
                 state.justDragged = false;
             } else {
-                var menu = document.getElementById("menu");
+                var nid = $("#nid");
+                if(nid){
+                    var nimage = $("#nimage");
+                    var nmodule = $("#nmodule");
+                    var ntittle = $("#ntitle");
+                    var ncommando = $("#ncomando");
+                    var nwd = $("#nwd");
+                    var ntimes = $("#ntimes");
+                    var arent = $("#arent");
+                    var arsal = $("#arsal");
+                    var nnode = mouseDownNode;
+                    nid.text(nnode.id);
+                    nimage.text(nnode.configurado.image);
+                    nmodule.text(nnode.configurado.module);
+                    ntittle.text(nnode.tittle);
+                    ncommando.text(nnode.configurado.location + " " + (nnode.configurado.argumento || ""));
+                    nwd.text(nnode.configurado.wd);
+                    ntimes.text(nnode.configurado.times);
+                    arent.text(nnode.configurado.file.filter(function(f){return f.entrada;}).map(function(f){return f.filename;}).join("\n"));
+                    arsal.text(nnode.configurado.file.filter(function(f){return !f.entrada;}).map(function(f){return f.filename;}));
+                }
+
                 /*var id = document.getElementById("id");*/
                 menu.style.right = "0px";
-                /*if(useDocker && descripcion){
-                  useDocker.textContent = mouseDownNode.configurado.useDocker;
-                  descripcion.textContent = mouseDownNode.configurado.location + " " + (mouseDownNode.configurado.argumento || "");
-                }*/
                 $("#opciones").empty();
                 $("#mopciones").empty();
                 var actualizar=true;
@@ -1054,12 +1071,9 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
       }
       cmd += (typeof raw === "string")? raw : raw.join(" ");
     }
-<<<<<<< HEAD
-    //$("#menu").css("position", "static");
-=======
-    $("#menu").css("position", "static");
->>>>>>> 3c2b937588d9537eccb10d9644d23ce16067a5a6
-    console.log(cmd);
+      //$("#menu").css("position", "static");
+      $("#cmd").text(cmd);
+      $('#cmdModal').modal('show');
   });
 
 })(window.d3, window.saveAs, window.Blob);
