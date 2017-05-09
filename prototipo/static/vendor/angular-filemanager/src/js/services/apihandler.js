@@ -1,3 +1,8 @@
+if(typeof fileListener === 'undefined' || fileListener == null){
+    fileListener = {
+        dispatch : function(){}
+    }
+}
 (function(angular, $, fl) {
     'use strict';
     angular.module('FileManagerApp').service('apiHandler', ['$http', '$q', '$window', '$translate', 
