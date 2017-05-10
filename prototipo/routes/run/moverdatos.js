@@ -16,14 +16,23 @@ var noEsta = function(obj, arr) {
     return true;
 };
 
-function validarArchivos(items, cb) {
+function validarArchivos(items, userId, cb) {
     var arrIds = items.map(function(o) {
         return mongoose.Types.ObjectId(o.id);
     });
     File.find({
-        _id: {
-            $in: arrIds
-        }
+        $and: [{
+            _id: {
+              $in: arrIds
+            }
+          },{
+            $or: [{
+              owner : userId
+            },{
+              public : true
+            }]
+          }
+        ]
     }, function(err, files) {
         if (err) {
             logger.error("No encontrados");
@@ -81,13 +90,14 @@ function moverArchivos(destFolder, f, cb) {
     });
 }
 
-function trasteo(envio, nombreDir, cb) {
+function trasteo(envio, nombreDir, userid,  cb) {
     var ficheros = [];
     if (envio.nodes) {
         envio.nodes.forEach(function(nodo) {
             if (nodo.configurado && nodo.configurado.file) {
                 nodo.configurado.file.map(function(o) {
-                    if (o.entrada == "true" && o.id) {
+                    if (o.entrada && o.id &&
+                        (o.type === 'file'|| o.type === 'dir')) {
                         if (noEsta(o, ficheros)) {
                             ficheros.push(o);
                         }
@@ -96,18 +106,16 @@ function trasteo(envio, nombreDir, cb) {
             }
         });
     }
-    logger.info(ficheros,{ funcion: 'trasteo'});
-    validarArchivos(ficheros, function(err, ficherosbd) {
+    validarArchivos(ficheros, userid, function(err, ficherosbd) {
         if (err) {
-            cb(err);
-            return;
+            return cb(err);
         }
+        logger.info(ficherosbd,{ funcion: 'trasteo'});
         moverArchivos(path.join(config.DAG_DIR, nombreDir), ficherosbd, function() {
             if (err) {
-                cb(err);
-                return;
+                return cb(err);
             }
-            cb();
+            return cb();
         });
     });
 }

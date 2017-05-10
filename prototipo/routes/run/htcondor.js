@@ -12,7 +12,6 @@ function nodeAClassAd(nodo, filese, filess, cm) {
     if (nodo.configurado) {
         var configuracion = nodo.configurado;
         configuracion.queue = configuracion.queue || 1;
-        configuracion.useDocker = configuracion.useDocker === "true";
         configuracion.universe = configuracion.useDocker ? "docker" : configuracion.universe || "vanilla";
         res = config.JOB_TEMPLATE.htcondor({
             config: configuracion,
@@ -97,7 +96,7 @@ var enviarHTC = function(envio, nombreDir, cb) {
       var nombresSalida = [];
       if (nodo.configurado && nodo.configurado.file) {
           nodo.configurado.file.map(function(o) {
-              if (o.entrada == "true") {
+              if (o.entrada) {
                   nombresEntrada.push(o.filename);
                 } else {
                   nombresSalida.push(o.filename);

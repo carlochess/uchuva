@@ -70,6 +70,11 @@
     "workflows",
     "htcondor"
   ],
+  "node_deb": {
+    "entrypoints": {
+      "daemon": "NODE_ENV=production node main.js"
+    }
+  },
   "author": "Carlos Roman",
   "license": "ISC"
 }

@@ -41,6 +41,7 @@ Vagrant.configure("2") do |global_config|
           puppet.manifests_path = "puppet/manifests"
           puppet.module_path = "puppet/modules"
           puppet.options = "--verbose --debug"
+          # puppet.hiera_config_path = "hiera.yaml"
         end
       elsif options[:type] == "node"
         config.vm.provision :puppet do |puppet|

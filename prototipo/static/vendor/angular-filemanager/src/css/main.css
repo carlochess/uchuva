@@ -316,9 +316,9 @@ table th > a:focus {
   }
 
   .container-fluid {
-    height: -webkit-calc(100% - 55px);
+    /*height: -webkit-calc(0% + 55px);*/
     height: -moz-calc(100% - 55px);
-    height: calc(100% - 55px);
+    /*height: calc(0% + 55px);*/
   }
 
   .sidebar {

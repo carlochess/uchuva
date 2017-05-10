@@ -36,7 +36,7 @@
                       'y  20
                       'configurado
                          (hasheq
-                            'file  (list (hasheq 'id idArchivo 'filename "main.rkt" 'type "file" 'entrada "true"))
+                            'file  (list (hasheq 'id idArchivo 'filename "main.rkt" 'type "file" 'entrada true))
                             'location "/bin/cat"
                             'argumento "main.rkt" )))
                 'edges (list (hasheq

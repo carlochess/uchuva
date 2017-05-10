@@ -23,6 +23,7 @@ module.exports = function(app) {
                return cb("File doesn't exists");
             }
             var newName = path.basename(newItemPath);
+            // file.vpath = path.dirname(file.vpath)+newName;
             file.originalname = newName;
             file.save(cb);
         });
@@ -79,6 +80,13 @@ module.exports = function(app) {
             return fs.writeFile(file.path, content, cb);
         });
     }
+
+    router.post("/cambiarVisibilidad", isAuthenticated, function(req, res, next) {
+      console.log(req.body.items);
+      res.send({
+        code: 0
+      });
+    });
 
     router.post("/editarArchivo", isAuthenticated, function(req, res, next) {
         req.checkBody('item.id', 'Invalid cwd').optional().isMongoId();

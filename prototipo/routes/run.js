@@ -105,7 +105,7 @@ module.exports = function(app){
       });
   });
 
-  router.post('/datanodedag', isAuthenticated, function(req, res) {
+  router.post('/datanodedag', isAuthenticated, function(req, res, next) {
       /*req.checkBody('idEjecucion', 'Invalid id exe').notEmpty();
       req.checkBody('nodo.title', 'Invalid node title').notEmpty();
       req.checkBody('nodo.id', 'Invalid node id').notEmpty();
@@ -129,11 +129,6 @@ module.exports = function(app){
       var nombre = (nodo.title + "_" + nodo.id).replace(/[^a-z0-9]/gi, '_').toLowerCase();
       var tipo = envio.tipo; // log, err, out
       var archivo = path.join(config.DAG_DIR, dag, nombre+ (envio.index>1?"."+envio.index:"") + "." + tipo);
-      controladorArchivos.leerArchivo(archivo, function(err, data) {
-        if (err) {
-          return res.send("Sin informacion");
-        }
-        res.send(data);
-      });
+      controladorArchivos.copiarArchivoOpts(archivo, res, {start: 0, end: 500}, next);
   });
 };

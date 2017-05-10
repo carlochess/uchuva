@@ -1,11 +1,9 @@
 forge "https://forgeapi.puppetlabs.com"
 
-# mod 'puppetlabs-apt', '2.3.0'
 mod 'puppetlabs-concat', '2.2.0'
 mod 'garethr-docker', '5.3.0'
 mod 'stahnma-epel', '1.2.2'
 mod 'puppetlabs-firewall', '1.8.2'
-# mod 'fix/manifests'
 mod 'jhoblitt-ganglia', '2.2.0'
 mod 'treydock-gpg_key', '0.0.4'
 mod 'puppetlabs-mongodb', '0.17.0'

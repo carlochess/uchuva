@@ -1,7 +1,5 @@
 function render(programa, node) {
-    //programa = programa || Cat();
     var i = 0;
-    //var node = document.getElementById("formulario");
     while (node.hasChildNodes()) {
         node.removeChild(node.lastChild);
     }
@@ -137,13 +135,17 @@ function renderizarArgumento(options) {
     return contenedor;
 }
 
+function clonar(opt){
+    return JSON.parse(JSON.stringify(opt));
+}
+
 function accion(ruta, eliminar, nodo) {
     var widget = nodo.configurado.render[parseInt(ruta[0])];
     if (widget.opciones) {
         if (ruta.length == 1) {
             // lvl 1 agregar una opcion, opciones.value.//add(K)
             var nopt = document.getElementById(ruta).selectedIndex;
-            var optdom = nodo.configurado.render[parseInt(ruta[0])].opts[nopt];
+            var optdom = clonar(nodo.configurado.render[parseInt(ruta[0])].opts[nopt]);
             nodo.configurado.render[parseInt(ruta[0])].value.push(optdom);
         } else if (ruta.length == 2) {
             // lvl 2 eliminar una opcion, agregar dentro de una opcion
@@ -168,7 +170,8 @@ function accion(ruta, eliminar, nodo) {
             nodo.configurado.render[parseInt(ruta[0])].value.splice(parseInt(ruta[1]), 1);
         }
     }
-    rederizarFormulario(nodo,"");
+    //rederizarFormulario(nodo,"");
+    render(nodo.configurado,document.getElementById("opciones"))
 }
 
 function cambiar(ruta, valor, nodo) {

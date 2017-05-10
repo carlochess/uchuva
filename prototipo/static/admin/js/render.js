@@ -135,13 +135,17 @@ function renderizarArgumento(options) {
     return contenedor;
 }
 
+function clonar(opt){
+    return JSON.parse(JSON.stringify(opt));
+}
+
 function accion(ruta, eliminar, nodo) {
     var widget = nodo.configurado.render[parseInt(ruta[0])];
     if (widget.opciones) {
         if (ruta.length == 1) {
             // lvl 1 agregar una opcion, opciones.value.//add(K)
             var nopt = document.getElementById(ruta).selectedIndex;
-            var optdom = nodo.configurado.render[parseInt(ruta[0])].opts[nopt];
+            var optdom = clonar(nodo.configurado.render[parseInt(ruta[0])].opts[nopt]);
             nodo.configurado.render[parseInt(ruta[0])].value.push(optdom);
         } else if (ruta.length == 2) {
             // lvl 2 eliminar una opcion, agregar dentro de una opcion
@@ -186,6 +190,20 @@ function cambiar(ruta, valor, nodo) {
     }
 }
 /// Listeners
+$('#opciones').on('keydown', 'textarea', function(ev) {
+  ev.stopPropagation();
+});
+$('#opciones').on('keydown', 'input', function(ev) {
+  ev.stopPropagation();
+});
+$('#opciones').on('keyup', 'textarea', function(ev) {
+  cambiar($(this).attr('id').split("."), $(this).val(), nodo);
+});
+
+$('#opciones').on('keyup', 'input', function(ev) {
+  cambiar($(this).attr('id').split("."), $(this).val(), nodo);
+});
+
 $('#opciones').on("change", "input:checkbox", function() {
   cambiar($(this).attr('id').split("."), this.checked, nodo);
 });
@@ -204,20 +222,6 @@ $("#opciones").on("click", "label", function() {
       accion(para.split("."), true, nodo);
     }
   }
-});
-
-$('#opciones').on('keydown', 'textarea', function(ev) {
-  ev.stopPropagation();
-});
-$('#opciones').on('keydown', 'input', function(ev) {
-  ev.stopPropagation();
-});
-$('#opciones').on('keyup', 'textarea', function(ev) {
-  cambiar($(this).attr('id').split("."), $(this).val(), nodo);
-});
-
-$('#opciones').on('keyup', 'input', function(ev) {
-  cambiar($(this).attr('id').split("."), $(this).val(), nodo);
 });
 
 function display(){

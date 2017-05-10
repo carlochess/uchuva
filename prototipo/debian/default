@@ -18,9 +18,9 @@ CONDOR_URL=http://localhost:8080/
 # HTCondor owner of job
 CONDOR_JOB_OWNER=rooot
 # App portt
-SERVER_PORT=3000
+PORT=3000
 # App listen adress
-SERVER_HOST=http://0.0.0.0
+HOST=http://0.0.0.0
 # Database URI
 DATABASE_URI=mongodb://localhost/{{ node_deb_package_name }}
 # Is development?
@@ -30,3 +30,5 @@ NODE_ENV=production
 # 2 : Torque
 # 3 : Slurm
 BMANAGER=0
+
+export SHARE LOGDIR CONDOR_URL CONDOR_JOB_OWNER PORT HOST DATABASE_URI NODE_ENV BMANAGER

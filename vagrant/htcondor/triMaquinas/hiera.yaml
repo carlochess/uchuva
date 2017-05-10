@@ -1,0 +1,6 @@
+---
+ntp::autoupdate: true
+ntp::enable: true
+ntp::servers:
+  - grover.example.com iburst
+  - kermit.example.com iburst

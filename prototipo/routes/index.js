@@ -38,6 +38,7 @@ function createRootFolder(userId, cb){
         destination: "/",
         uploadDate: fechaActual(),
         path: "/",
+        vpath: "",
         type: "dir",
         owner: userId
     });

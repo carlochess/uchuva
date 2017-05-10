@@ -39,7 +39,7 @@ function echo(){
       multiple : true,
       argumento : true,
       nombroOpt : "args",
-      value : [],
+      value : [""],
     };
 
     return {

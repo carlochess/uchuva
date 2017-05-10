@@ -76,7 +76,7 @@ diff book.txt file.txt
                       'y  0
                       'configurado
                          (hasheq
-                            'file  (list (hasheq 'id idArchivo 'filename "main.rkt" 'type "file" 'entrada "true"))
+                            'file  (list (hasheq 'id idArchivo 'filename "main.rkt" 'type "file" 'entrada true))
                             'location "cd carpeta &&"
                             'argumento "npm install && npm start" ))
                        (hasheq

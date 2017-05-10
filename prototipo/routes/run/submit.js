@@ -44,6 +44,7 @@ module.exports = function(app) {
         var proyecto = envio.proyecto;
         var workloader = "htcondor,openlava,torque,slurm".split(",").indexOf(envio.workloader);
         workloader = (workloader == -1 ? 0 : workloader);
+        var userid = req.user._id;
 
         controladorArchivos.crearDirectorio(config.DAG_DIR, function(err, nombreDir) {
             if (err) {
@@ -58,7 +59,7 @@ module.exports = function(app) {
             if (config.USEQUEUE) {
                 notificarBlaBla(null, null);
             } else {
-                datos.trasteo(envio, nombreDir, function(err) {
+                datos.trasteo(envio, nombreDir, userid, function(err) {
                     if (err) {
                         logger.error("/run Moviendo los ficheros a " + nombreDir);
                         res.send({
@@ -90,7 +91,7 @@ module.exports = function(app) {
                     proyecto: envio.proyecto,
                     nodes: nodes || envio.nodes,
                     edges: envio.edges,
-                    userid: req.user._id,
+                    userid: userid,
                     ejecuciones: [],
                     imagen: envio.imagen,
                     tipo: workloader

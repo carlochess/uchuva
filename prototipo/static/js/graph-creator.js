@@ -1,4 +1,5 @@
 graph = undefined;
+var numRend = 0;
 document.onload = (function(d3, saveAs, Blob, undefined) {
     "use strict";
 
@@ -165,16 +166,17 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                         $.notify(data, {
                             placement: {
                                 from: "bottom",
-                                align: "left"
+                                align: "right"
                             }
                         });
                         NProgress.remove();
+                        cambios = false;
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
                         $.notify("Error al intentar guardar", {
                             placement: {
                                 from: "bottom",
-                                align: "left"
+                                align: "right"
                             }
                         });
                         NProgress.remove();
@@ -324,7 +326,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                     $.notify(respuesta, {
                       placement: {
                         from: "bottom",
-                        align: "left"
+                        align: "right"
                       }
                     });
                     NProgress.remove();
@@ -333,7 +335,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                     $.notify("Error del servidor", {
                       placement: {
                         from: "bottom",
-                        align: "left"
+                        align: "right"
                       }
                     });
                     NProgress.remove();
@@ -357,7 +359,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                 },
                 success: function(data, textStatus, jqXHR) {
                     $('#myModal').modal('toggle');
-                    $('#infoo').text(data);
+                    $('#infoo').html(data.split("\n").join("<br/>"));
                     var title = graph.state.selectedNode.title;
                     var titleUrl = encodeURIComponent(title);
                     var id = graph.state.selectedNode.id;
@@ -369,7 +371,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                     $.notify("Error al intentar obtener " + tipo, {
                         placement: {
                             from: "bottom",
-                            align: "left"
+                            align: "right"
                         }
                     });
                 }
@@ -629,20 +631,32 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                 // dragged, not clicked
                 state.justDragged = false;
             } else {
-                // OTRA PARTE
-                var menu = document.getElementById("menu");
-                var id = document.getElementById("id");
-                var nombre = document.getElementById("nombre");
-                var descripcion = document.getElementById("descripcion");
-                var useDocker = document.getElementById("useDocker");
-                menu.style.right = "0px";
-                id.textContent = mouseDownNode.id;
-                nombre.textContent = mouseDownNode.title;
-                if(useDocker && descripcion){
-                  useDocker.textContent = mouseDownNode.configurado.useDocker;
-                  descripcion.textContent = mouseDownNode.configurado.location + " " + (mouseDownNode.configurado.argumento || "");
+                var nid = $("#nid");
+                if(nid){
+                    var nimage = $("#nimage");
+                    var nmodule = $("#nmodule");
+                    var ntittle = $("#ntitle");
+                    var ncommando = $("#ncomando");
+                    var nwd = $("#nwd");
+                    var ntimes = $("#ntimes");
+                    var arent = $("#arent");
+                    var arsal = $("#arsal");
+                    var nnode = mouseDownNode;
+                    nid.text(nnode.id);
+                    nimage.text(nnode.configurado.image);
+                    nmodule.text(nnode.configurado.module);
+                    ntittle.text(nnode.tittle);
+                    ncommando.text(nnode.configurado.location + " " + (nnode.configurado.argumento || ""));
+                    nwd.text(nnode.configurado.wd);
+                    ntimes.text(nnode.configurado.times);
+                    arent.text(nnode.configurado.file.filter(function(f){return f.entrada;}).map(function(f){return f.filename;}).join("\n"));
+                    arsal.text(nnode.configurado.file.filter(function(f){return !f.entrada;}).map(function(f){return f.filename;}));
                 }
+
+                /*var id = document.getElementById("id");*/
+                menu.style.right = "0px";
                 $("#opciones").empty();
+                $("#mopciones").empty();
                 var actualizar=true;
                 //------------------------------------------------------------
                 // clicked, not dragged
@@ -725,6 +739,8 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
             consts = thisGraph.consts;
         // make sure repeated key presses don't register for each keydown
         if (state.lastKeyDown !== -1) return;
+        var obj = d3.event.target;
+        if(obj instanceof HTMLInputElement && obj.type == 'text') return;
 
         state.lastKeyDown = d3.event.keyCode;
         var selectedNode = state.selectedNode,
@@ -857,6 +873,10 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
 
         // remove old nodes
         thisGraph.circles.exit().remove();
+        if(numRend>0){
+            cambios = true;
+        }
+        numRend++;
     };
 
     GraphCreator.prototype.estado = function() {
@@ -886,7 +906,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                     }
                 });
                 thisGraph.updateGraph();
-            }, 1000 * 60 * 60);
+            }, 5000);
         }
     };
 
@@ -928,7 +948,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
         .attr("id", "grafo");
     graph = new GraphCreator(svg, nodes, edges);
     graph.updateGraph();
-    graph.estado();
+    //graph.estado();
 
     $("#plantillaPrograma").on('change', function() {
         $("#opciones").empty();
@@ -937,7 +957,9 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
         var id = graph.state.selectedNode.id;
         rederizarFormulario(graph.nodes[buscar(id)], this.value);
         graph.updateGraph();
+        cambios = true;
     });
+    /// Listeners
     $('#opciones').on('keydown', 'textarea', function(ev) {
       ev.stopPropagation();
     });
@@ -951,6 +973,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
         var id = graph.state.selectedNode.id;
         var nodo = graph.nodes[buscar(id)];
         cambiar($(this).attr('id').split("."), $(this).val(), nodo);
+        cambios = true;
     });
 
     $('#opciones').on('keyup', 'input', function(ev) {
@@ -960,27 +983,16 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
         var id = graph.state.selectedNode.id;
         var nodo = graph.nodes[buscar(id)];
         cambiar($(this).attr('id').split("."), $(this).val(), nodo);
+        cambios = true;
     });
 
-    $('#opciones').on('keydown', '#times', function(ev) {
-        ev.stopPropagation();
-    });
-    $('#opciones').on('change', '#times', function(ev) {
-        ev.stopPropagation();
-        if (!graph.state.selectedNode)
-            return;
-        var id = graph.state.selectedNode.id;
-        var nodo = graph.nodes[buscar(id)];
-        nodo.configurado.times = $(this).val();
-    });
-
-    //input.checkbox,
     $('#opciones').on("change", "input:checkbox", function() {
         if (!graph.state.selectedNode)
             return;
         var id = graph.state.selectedNode.id;
         var nodo = graph.nodes[buscar(id)];
         cambiar($(this).attr('id').split("."), this.checked, nodo);
+        cambios = true;
     });
 
     $('#opciones').on('change', 'select', function() {
@@ -989,6 +1001,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
         var id = graph.state.selectedNode.id;
         var nodo = graph.nodes[buscar(id)];
         cambiar($(this).attr('id').split("."), $(this).val(), nodo);
+        cambios = true;
     });
 
     $("#opciones").on("click", "label", function() {
@@ -1005,18 +1018,62 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                 accion(para.split("."), true, nodo);
             }
         }
+        cambios = true;
     });
 
-    $('#opciones').on('click', '#raw', function(ev) {
-      ev.stopPropagation();
-      $("#opciones").empty();
-      if (!graph.state.selectedNode)
-          return;
-      var id = graph.state.selectedNode.id;
-      var nodo = graph.nodes[buscar(id)];
-      var value = "";//$("#plantillaPrograma").value;
-      nodo.configurado.raw = !nodo.configurado.raw;
-      rederizarFormulario(nodo, value);
+    $('#mopciones').on('keydown', '#times', function(ev) {
+        ev.stopPropagation();
     });
+
+    $('#mopciones').on('change', '#times', function(ev) {
+        ev.stopPropagation();
+        if (!graph.state.selectedNode)
+            return;
+        var id = graph.state.selectedNode.id;
+        var nodo = graph.nodes[buscar(id)];
+        nodo.configurado.times = $(this).val();
+        cambios = true;
+    });
+
+    $('#mopciones').on('keyup', '#wd', function(ev) {
+        ev.stopPropagation();
+        if (!graph.state.selectedNode)
+            return;
+        var id = graph.state.selectedNode.id;
+        var nodo = graph.nodes[buscar(id)];
+        nodo.configurado.wd = $(this).val();
+        cambios = true;
+    });
+
+  $('#mopciones').on('click', '#gencmd', function(ev) {
+    ev.stopPropagation();
+    if (!graph.state.selectedNode)
+      return;
+    var id = graph.state.selectedNode.id;
+    var nodo = graph.nodes[buscar(id)];
+    var nombre = nodo.configurado.name;
+    var validador = window[nombre]();
+    var cmd = "Node invalid";
+    var image = "";
+    if (validador.validation(nodo.configurado.render)) {
+      var raw = validador.transformation(nodo.configurado.render);
+      cmd = "";
+      if(nombre ==="rawdocker"){
+        image = raw.shift();
+        cmd = "Image: "+ image+", ";
+      }
+      else if (nodo.configurado.useDocker){
+        image = nodo.configurado.image;
+        cmd = "Image: "+ image+", ";
+      }
+      if (nombre !=="raw"){
+        cmd += "Command: "+ nodo.configurado.location+ " ";
+      }
+      cmd += (typeof raw === "string")? raw : raw.join(" ");
+    }
+      //$("#menu").css("position", "static");
+      $("#cmd").text(cmd);
+      $('#cmdModal').modal('show');
+  });
 
 })(window.d3, window.saveAs, window.Blob);

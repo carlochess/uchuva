@@ -1,0 +1,40 @@
+{
+  "variables": {
+    "do_token": "{{env `do_token`}}",
+    "ssh_private_key" : "{{env `ssh_private_key`}}"
+  },
+  "builders": [
+    {
+      "type": "digitalocean",
+      "api_token": "{{user `do_token`}}",
+      "region": "ny3",
+      "size": "1gb",
+      "image": "centos-7-2-x64",
+      "droplet_name": "uchuvachine",
+      "snapshot_name": "uchuvachine-img-{{timestamp}}",
+      "ssh_pty" : true,
+      "private_networking" : true,
+      "ssh_private_key_file" : "{{user `ssh_private_key`}}",
+      "ssh_username" : "root",
+      "ssh_timeout" : "2m"
+    }
+  ],
+  "provisioners": [
+    {
+      "type": "file",
+      "source": "../common/scripts/installpuppet.sh",
+      "destination": "/tmp/installpuppet.sh"
+    },
+    {
+      "type": "file",
+      "source" : "../common/puppet",
+      "destination" : "/tmp"
+    },
+    {
+      "type": "shell",
+      "inline": [
+        "bash /tmp/installpuppet.sh '# 127.0.0.1' node.pp"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+Begin   ClusterAdmins
+Administrators = openlava
+End    ClusterAdmins
+
+Begin   Host
+HOSTNAME          model          type  server  r1m  RESOURCES
+<% for @host in @hosts %>
+<%= @host %>               !              !     1       -       -
+<% end %>
+End     Host
+
+Begin ResourceMap
+RESOURCENAME  LOCATION
+End ResourceMap
+EOF

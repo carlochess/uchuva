@@ -244,6 +244,32 @@ module.exports = function(app) {
             });
         });
 
+  function contenidoArchivoExe(archivo, userId, cb) {
+    var p = archivo.split(path.sep).filter(function(elem) {
+      return elem !== "" && elem !== ".." && elem !== ".";
+    });///_Runs/DeQKt/dagman.dag.dagman.out
+    if (p.length > 1) {
+      var directorio = path.join(config.DAG_DIR, p.slice(1).join(path.sep));
+      fs.stat(directorio, function(err, stats) {
+        if (err) {
+          return cb(err);
+        }
+        if(stats.isFile()){
+          fs.readFile(directorio, 'utf8', function(err, data) {
+            if (err) {
+              return cb(err);
+            }
+            return cb(null, data);
+          });
+        }else{
+          return cb("Unknown file");
+        }
+      });
+    }else{
+      return cb("Unknown path");
+    }
+  }
+
     function contenidoArchivo(archivo, userId, cb) {
         File.findOne({
             _id: archivo,
@@ -266,7 +292,8 @@ module.exports = function(app) {
     }
 
     router.post("/contenidoArchivo", isAuthenticated, function(req, res, next) {
-        req.checkBody('item.id', 'Invalid cwd').notEmpty().isMongoId();
+       //req.checkBody('item.id', 'Invalid cwd').notEmpty().isMongoId();
+       req.checkBody('item.id', 'Invalid cwd').notEmpty();
         var errors = req.validationErrors();
         if (errors) {
             var asStr = errors.map(function(e) {
@@ -278,7 +305,12 @@ module.exports = function(app) {
         if (req.body.item.id)
             item = req.body.item.id;
         var userId = req.user._id;
-        contenidoArchivo(item, userId, function(err, data) {
+        if (item.indexOf("/") > -1) {
+          contenidoArchivoExe(item, userId, responder);
+        }else{
+          contenidoArchivo(item, userId, responder);
+        }
+        function responder(err, data) {
             if (err) {
                 logger.error("/contenidoArchivo " + err + ", user: " + userId);
                 return res.send({code:2, message: err+""});
@@ -286,7 +318,7 @@ module.exports = function(app) {
             return res.send({
                 result: data
             });
-        });
+        };
     });
 
     function crearCarpeta(cwd, nombre, userId, cb) {

@@ -43,7 +43,7 @@ function nodejs(){
 
     return {
         name: "nodejs",
-        location: "nodejs",
+        location: "/usr/bin/node",
         version : "0.0.1",
         description : "node - Server-side JavaScript",
         file: [],
@@ -58,11 +58,17 @@ function nodejs(){
             return true;
         },
         transformation: function(data){
-            var salida = "cat ";
+            var salida = "";
             var optsmultiples = data[0];
             var argumentos  = data[1];
-            salida += opcion1.nombroOpt+" "+opcion1.value+" ";
-            salida += argumento.value.join(" ")+" ";
+          	if(optsmultiples.value){
+              optsmultiples.value.forEach(function(opt){
+                if(opt.value){
+                  salida += opt.representation + " "+opcion1.value;
+                }
+              });
+            }
+            salida += argumentos.value.join(" ")+" ";
             return salida;
         }
     };

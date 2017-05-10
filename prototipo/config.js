@@ -36,14 +36,14 @@ var upload = argv.upload || process.env.UPLOAD_DIR || path.join(share,'uploads')
 var condorUrl = process.env.CONDOR_URL || 'http://localhost:8080/';
 var condorJobOwner = argv.owner || process.env.CONDOR_JOB_OWNER || process.env.USER || "carlos";
 var key = fs.readFileSync(path.join(__dirname,'keys','id_rsa'));
-var logdir = argv.logdir ||process.env.LOGDIR || './logs/';
+var logdir = argv.logdir ||process.env.LOGDIR || path.join(__dirname,'logs/');
 var config = function(){
     return {
         SERVER_PORT : process.env.PORT || 3000,
         SERVER_HOST : process.env.HOST || 'http://0.0.0.0',
         DATABASE_URI : process.env.DATABASE_URI || 'mongodb://localhost/uchuva',
         IS_DEVELOPMENT : process.env.NODE_ENV !== 'production',
-        IS_TESTING : true, //process.env.NODE_ENV === 'test',
+        IS_TESTING : process.env.NODE_ENV === 'testing',
         BMANAGER : process.env.BMANAGER || 0,
         APPSDIR : path.join(__dirname,'static','appframework'),
         LOGDIR : logdir,
@@ -61,7 +61,7 @@ var config = function(){
       SSHHOSTS : 'openlava,torque,slurm'.split(","),
       SSHPORTS : '22,'.repeat(4).split(","),
       SSHUSERS : 'testuser,'.repeat(4).split(","),
-      SOFTWAREA : ["rawdocker", "raw", "cat", "head" , "rscript", "alex", "docker", "echo", "ghc", "happy", "nodejs", "racket", "sleep"].map(function(e){return {name : e, filename: e+".js"};})
+      SOFTWAREA : "wget,rawdocker,raw,bash,cat,head,rscript,alex,echo,ghc,happy,nodejs,racket,sleep,tar,curl,git,mv,mkdir".split(",").map(function(e){return {name : e, filename: e+".js"};})
     };
 };
 
