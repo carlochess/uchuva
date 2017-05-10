@@ -91,7 +91,7 @@ if(typeof fileListener === 'undefined' || fileListener == null){
             self.inprocess = true;
             self.error = '';
             $http.post(apiUrl, data).success(function(data) {
-                fl.dispatch(dataOrigin);
+                fl && fl.dispatch(dataOrigin);
                 self.deferredHandler(data, deferred);
             }).error(function(data) {
                 self.deferredHandler(data, deferred, $translate.instant('error_moving'));
@@ -223,7 +223,6 @@ if(typeof fileListener === 'undefined' || fileListener == null){
                 !$window.saveAs && $window.console.error('Your browser dont support ajax download, downloading by default');
                 return !!$window.open(url, '_blank', '');
             }
-            console.log(fl());
             var deferred = $q.defer();
             self.inprocess = true;
             $http.get(url).success(function(data) {
