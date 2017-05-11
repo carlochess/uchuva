@@ -37,7 +37,7 @@ nfs::client::mount { '/scratch':
   server => 'controller',
   owner => 'nobody',
   group => 'nobody',
-  mode => '777',
+  mode =>  '777',
 }->
 class { openlava:
   version => '2.2',

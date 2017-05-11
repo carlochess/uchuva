@@ -35,7 +35,7 @@ nfs::server::export { '/scratch':
   clients => '*(rw,insecure,async,no_root_squash,no_subtree_check)',
   owner => 'nobody',
   group => 'nobody',
-  mode => '777',
+  mode =>  '777',
 }->
 class {'::mongodb::globals':
   manage_package_repo => true,

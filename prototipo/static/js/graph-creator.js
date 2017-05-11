@@ -632,7 +632,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                 state.justDragged = false;
             } else {
                 var nid = $("#nid");
-                if(nid){
+                if(nid.length > 0){
                     var nimage = $("#nimage");
                     var nmodule = $("#nmodule");
                     var ntittle = $("#ntitle");

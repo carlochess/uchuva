@@ -2,7 +2,7 @@ class uchuva::service {
   include '::uchuva'
   $uchuvadir = $uchuva::uchuvadir
     exec {'UchuStart':
-        command => "/bin/bash -c 'source /etc/profile ; source env ; pm2 start main.js --name=\"uchuva\"'",
+        command => "/bin/bash -c 'source /etc/profile ; source ambiente ; pm2 start main.js --name=\"uchuva\"'",
         path => ['/usr/bin', '/usr/sbin', '/bin'],
         cwd => "$uchuvadir/uchuva/prototipo",
         user => 'uchuva',
@@ -11,7 +11,7 @@ class uchuva::service {
    }
    
    exec {'UchuReStart':
-        command => "/bin/bash -c 'source /etc/profile ; source env ; pm2 restart uchuva'",
+        command => "/bin/bash -c 'source /etc/profile ; source ambiente ; pm2 restart --update-env uchuva'",
         path => ['/usr/bin', '/usr/sbin', '/bin'],
         cwd => "$uchuvadir/uchuva/prototipo",
         user => 'uchuva',
