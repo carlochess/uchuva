@@ -181,7 +181,8 @@ $(document).ready(function() {
   $('#filem').on('show.bs.modal', function (e) {
     holaMundo =true;
     elementos = [];
-    idSeleccionado = graph.state.selectedNode.id;
+    if(graph.state.selectedNode)
+      idSeleccionado = graph.state.selectedNode.id;
     boton = e.relatedTarget;
   });
 });

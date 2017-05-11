@@ -873,7 +873,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
 
         // remove old nodes
         thisGraph.circles.exit().remove();
-        if(numRend>0){
+        if(numRend>0 && ejecucion === null){
             cambios = true;
         }
         numRend++;
@@ -885,7 +885,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
         //
         var estados = ["notready", "ready", "prerun", "submitted", "postrun", "done", "error"];
         if (ejecucion !== null) {
-            setInterval(function() {
+            function consultar(){
                 $.ajax({
                     type: "POST",
                     url: "/statusdag",
@@ -906,7 +906,9 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
                     }
                 });
                 thisGraph.updateGraph();
-            }, 5000);
+            }
+            consultar();
+            setInterval(consultar, 5000);
         }
     };
 
@@ -948,7 +950,7 @@ document.onload = (function(d3, saveAs, Blob, undefined) {
         .attr("id", "grafo");
     graph = new GraphCreator(svg, nodes, edges);
     graph.updateGraph();
-    //graph.estado();
+    graph.estado();
 
     $("#plantillaPrograma").on('change', function() {
         $("#opciones").empty();
