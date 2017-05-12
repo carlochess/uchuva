@@ -30,7 +30,7 @@ $.ajax({
 
 $('#plantillaPrograma').append($('<option>', {
   value: "",
-  text: ""
+  text: "Elige un programa"
 }));
 
 

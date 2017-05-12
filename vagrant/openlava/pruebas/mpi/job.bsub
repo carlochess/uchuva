@@ -1,0 +1,7 @@
+#BSUB-q normal                  # Job queue
+#BSUB-J myfirstjob              # name of the job
+#BSUB -o lava-%J.out
+#BSUB -e lava-%J.err
+#BSUB -n 2
+
+/opt/openlava-4.0/bin/mpich2-mpiexec -np /vagrant/mpi/mpi_hello

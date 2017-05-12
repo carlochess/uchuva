@@ -11,8 +11,11 @@
     cursor: pointer;
 }
 
-#plantillaPrograma, .divscroll p, .divscroll h1, .divscroll h5, .divscroll li, .divscroll label{
+.divscroll p, .divscroll h1, .divscroll h5, .divscroll li, .divscroll label{
     color : #FFF;
+}
+#plantillaPrograma {
+    background-color: white;
 }
 .divscroll input{
     color : #000;
