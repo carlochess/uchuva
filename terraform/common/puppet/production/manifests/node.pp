@@ -16,7 +16,9 @@ user  { 'uchuva':
   name   => 'uchuva',
   ensure => present,
   groups => 'uchuva',
-  shell => '/bin/false',
+  home => '/home/uchuva/',
+  shell => '/bin/bash',
+  managehome => true,
   uid => 1010,
   gid => 1010,
 }->
@@ -56,5 +58,12 @@ exec { "condor restart":
   path    => "/usr/bin:/bin:/usr/sbin:/sbin",
   cwd     => "/tmp",
   user    => 'root',
+}->
+exec { 'copySSHConfig':
+    command => 'cp -r /scratch/ssh ~/.ssh && chmod -R 700 ~/.ssh && chmod go-w ~ && chmod go-rwx ~/.ssh/id_rsa',
+    path => ['/usr/bin', '/usr/sbin', '/bin'],
+    cwd => "/home/uchuva",
+    user => 'uchuva',
+    unless => 'test -d /home/uchuva/.ssh/'
 }
 

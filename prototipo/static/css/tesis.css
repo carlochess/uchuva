@@ -1,16 +1,30 @@
-#menu
-{
-    position: fixed;
-    right: -16em;
+#menu {
+    right: 0;
     top: 0;
     bottom: 0;
-    background-color: #654;
-    border-left: 50px solid #765;
-    box-shadow: 4px 0 5px rgba(0,0,0,0.2);
-    z-index: 1;
+    width: 20%;
+    background: #654;
+    z-index: 4;
+    position: fixed;
+}
+#handle {
+    position: absolute;
+    left: -4px;
+    top: 0;
+    bottom: 0;
+    width: 10px;
+    background: #330C00;
+    cursor: w-resize;
+}
+#autohandle {
+    position: absolute;
+    left: 6px;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    background: #765;
     cursor: pointer;
 }
-
 .divscroll p, .divscroll h1, .divscroll h5, .divscroll li, .divscroll label{
     color : #FFF;
 }
@@ -20,43 +34,11 @@
 .divscroll input{
     color : #000;
 }
-
+.nada {
+    color : #000;
+}
 div.divscroll {
     overflow-y:auto;
     height:100%;
+    column-gap: 2em;
 }
-
-nav:after
-{
-    position: absolute;
-    content: ' ';
-    width: 0;
-    height: 0;
-    right: -70px;
-    top: 50%;
-    border-width: 15px 10px;
-    border-style: solid;
-    border-color: transparent transparent transparent #765;
-}
-
-nav ul
-{
-    width: 14em;
-    list-style-type: none;
-    padding: 1em;
-}
-
-article, article:after, #menu
-{
-    -webkit-transition: all 600ms ease;
-    -moz-transition: all 600ms ease;
-    -ms-transition: all 600ms ease;
-    -o-transition: all 600ms ease;
-    transition: all 600ms ease;
-}
-
-/*nav:hover
-{
-	right: 0;
-}
-*/

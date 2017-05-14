@@ -57,6 +57,17 @@ nginx::resource::server { 'uchuva.diversidadfaunistica.com':
   listen_port => 80,
   proxy       => 'http://localhost:3000/',
 }->
-exec { 'setsebool -P httpd_can_network_connect 1':
-  path   => '/usr/bin:/usr/sbin:/bin',
+exec { 'createSSHConfig':
+    command => 'mkdir /scratch/ssh && ssh-keygen -f /scratch/ssh/id_rsa -q -N "" && cat /scratch/ssh/id_rsa.pub >> /scratch/ssh/authorized_keys && cat /scratch/ssh/id_rsa.pub >> /scratch/ssh/authorized_keys2 && echo "StrictHostKeyChecking no" >> /scratch/ssh/config && chmod -R 777 /scratch/ssh',
+    path => ['/usr/bin', '/usr/sbin', '/bin'],
+    cwd => "/home",
+    user => 'root',
+    unless => 'test -d /scratch/ssh'
+}->
+exec { 'copySSHConfig':
+    command => 'cp -r /scratch/ssh ~/.ssh && chmod -R 700 ~/.ssh && chmod go-w ~ && chmod go-rwx ~/.ssh/id_rsa',
+    path => ['/usr/bin', '/usr/sbin', '/bin'],
+    cwd => "/home/uchuva",
+    user => 'uchuva',
+    unless => 'test -d /home/uchuva/.ssh/'
 }
