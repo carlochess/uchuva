@@ -20,7 +20,7 @@ module.exports = function(app){
           userid: req.user._id
       };
       DagExe.findOne(where, function(err, d) {
-          if (err) {
+          if (err ||  !d) {
               res.send({
                   error: "Dag no encontrado"
               });

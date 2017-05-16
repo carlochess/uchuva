@@ -1,10 +1,10 @@
 var mongoose = require('mongoose');
-var datos = require("../../routes/run/moverdatos");
-var htcondor = require("../../routes/run/htcondor");
-var loadmanagers = require("../../routes/run/loadmanagers.js");
-var controladorArchivos = require('../../utils/file.js');
-var config = require('../../config.js');
-var DagExe = require('../../models/dagExe.js');
+var datos = require("../routes/run/moverdatos");
+var htcondor = require("../routes/run/htcondor");
+var loadmanagers = require("../routes/run/loadmanagers.js");
+var controladorArchivos = require('../utils/file.js');
+var config = require('../config.js');
+var DagExe = require('../models/dagExe.js');
 
 var logger = console;
 
@@ -29,7 +29,8 @@ function ejecutar(dagExeId, cb){
       }
       var nombreDir = envio.nombre;
       var workloader = envio.tipo;
-      datos.trasteo(envio, nombreDir, function(err) {
+      var userid = envio.userid;
+      datos.trasteo(envio, nombreDir, userid, function(err) {
 	if (err) {
 	  logger.error("/run Moviendo los ficheros a "+nombreDir);
 	  return cb(err);
