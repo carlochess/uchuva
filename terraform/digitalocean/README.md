@@ -8,14 +8,13 @@
 
 # Usage
 
+> Remember to create a ssh key pair: ssh-keygen -t rsa
+
 ## As-is
 $ terraform validate
 
 ```
 export TF_VAR_do_token=xxxxxxxxx
-export TF_VAR_ssh_public_key=$HOME/.ssh/id_rsa.pub
-export TF_VAR_ssh_private_key=$HOME/.ssh/id_rsa
-export TF_VAR_ssh_fingerprint=$(ssh-keygen -lf ~/.ssh/id_rsa.pub | awk '{print $2}')
 ```
 Then get the plan that terraform is going to apply
 ```
@@ -23,20 +22,15 @@ terraform plan
 ```
 If everything is okay, apply it:
 ```
-terraform apply \
-  -var "number_of_nodes=1"
+terraform apply
 ```
 
 ## As a module
-  
+
 module "uchuva" {
   source = "github.com/carlochess/uchuva/terraform/digitalocean"
-  
   do_token        = "DO_TOKEN"
-  ssh_public_key  = "$HOME/.ssh/id_rsa.pub"
-  ssh_private_key = "$HOME/.ssh/id_rsa"
-  ssh_fingerprint = "$SSH_FINGERPRINT"
-  number_of_nodes = "3"
+  number_of_nodes = "1"
 }
 
 terraform get
@@ -48,3 +42,13 @@ terraform graph | dot -Tpng > graph.png
 # Stop and destroy
 terraform plan -destroy
 terraform destroy
+
+## Trouble
+if you already have a key, import it using
+```
+terraform import digitalocean_ssh_key.default ID
+```
+To get the id, execute
+```
+curl -X GET -H "Content-Type: application/json" -H "Authorization: Bearer $TF_VAR_do_token" "https://api.digitalocean.com/v2/account/keys"
+```
