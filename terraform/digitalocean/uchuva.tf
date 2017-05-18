@@ -26,11 +26,11 @@ resource "digitalocean_droplet" "controller" {
     }
     provisioner "remote-exec" {
    	inline = [
-	  "bash /tmp/installpuppet.sh ${digitalocean_droplet.controller.ipv4_address_private} controller.pp ${join(" ", digitalocean_droplet.node.*.ipv4_address_private)}",
+	  "bash /tmp/installpuppet.sh ${digitalocean_droplet.controller.ipv4_address} controller.pp",
 	]
     }
 }
-# ${join(" ", digitalocean_droplet.node.*.ipv4_address)}
+
 resource "digitalocean_droplet" "node" {
     name   = "server${count.index + 1}"
     image  = "${var.do_image}"
@@ -52,10 +52,21 @@ resource "digitalocean_droplet" "node" {
     }
     provisioner "remote-exec" {
        inline = [
-  	  "bash /tmp/installpuppet.sh ${digitalocean_droplet.controller.ipv4_address_private} node.pp",
+  	  "bash /tmp/installpuppet.sh ${digitalocean_droplet.controller.ipv4_address} node.pp",
 	]
     }
 }
+
+#resource "null_resource" "config-host-ips" {
+#    count = "${var.number_of_nodes}"
+#    connection {
+#        user = "root"
+#        host = "${element(digitalocean_droplet.node.*.ipv4_address, count.index)}"
+#    }
+#    provisioner "local-exec" {
+#        command = "bash /tmp/updatehost.sh ${digitalocean_droplet.controller.ipv4_address} ${join(" ", digitalocean_droplet.node.*.ipv4_address_private)}"
+#    }
+#}
 
 resource "digitalocean_record" "uchuva" {
   count  = "${var.domain ? 1 : 0}"

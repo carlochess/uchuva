@@ -30,7 +30,7 @@ function renderizarOpciones(opc) {
     opc.opts.forEach(function(programa) {
         var programadom = document.createElement("option");
         programadom.text = programa.nombroOpt;
-        programadom.id = id++;
+        //programadom.id = id++;
         programas.appendChild(programadom);
     });
     contenedor.appendChild(programas);
