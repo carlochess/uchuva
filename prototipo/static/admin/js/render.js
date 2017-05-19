@@ -30,7 +30,7 @@ function renderizarOpciones(opc) {
     opc.opts.forEach(function(programa) {
         var programadom = document.createElement("option");
         programadom.text = programa.nombroOpt;
-        programadom.id = id++;
+        //programadom.id = id++;
         programas.appendChild(programadom);
     });
     contenedor.appendChild(programas);
@@ -144,7 +144,7 @@ function accion(ruta, eliminar, nodo) {
     if (widget.opciones) {
         if (ruta.length == 1) {
             // lvl 1 agregar una opcion, opciones.value.//add(K)
-            var nopt = document.getElementById(ruta).selectedIndex;
+            var nopt = document.getElementById(ruta[0]).selectedIndex;
             var optdom = clonar(nodo.configurado.render[parseInt(ruta[0])].opts[nopt]);
             nodo.configurado.render[parseInt(ruta[0])].value.push(optdom);
         } else if (ruta.length == 2) {

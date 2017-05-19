@@ -1,10 +1,11 @@
 apt-get update --fix-missing
 curl -sL https://deb.nodesource.com/setup_6.x | sudo -E bash -
 apt-get install -y build-essential wget autoconf libncurses5-dev itcl3-dev tcl gfortran mpich2 nodejs mongodb
-VERSION=2.2
+#VERSION=2.2
+VERSION=4.0
 cd ~/
-wget http://www.openlava.org/tarball/openlava-${VERSION}.tar.gz
-#cp /vagrant/openlava-${VERSION}.tar.gz ~
+#wget http://www.openlava.org/tarball/openlava-${VERSION}.tar.gz
+cp /vagrant/openlava-${VERSION}.tar.gz ~
 tar -xzvf openlava-${VERSION}.tar.gz
 cd openlava-${VERSION}/
 

@@ -1,5 +1,5 @@
 var amqp = require('amqplib/callback_api');
-var execute = require('./run/submit');
+var execute = require('./submit');
 var logger = console;
 var newmask = 0000;
 var oldmask = process.umask(newmask);

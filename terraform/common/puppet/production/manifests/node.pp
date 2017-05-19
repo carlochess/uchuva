@@ -16,7 +16,9 @@ user  { 'uchuva':
   name   => 'uchuva',
   ensure => present,
   groups => 'uchuva',
-  shell => '/bin/false',
+  home => '/home/uchuva/',
+  shell => '/bin/bash',
+  managehome => true,
   uid => 1010,
   gid => 1010,
 }->
@@ -37,7 +39,7 @@ nfs::client::mount { '/scratch':
   server => 'controller',
   owner => 'nobody',
   group => 'nobody',
-  mode => '777',
+  mode =>  '777',
 }->
 class { openlava:
   version => '2.2',
@@ -57,4 +59,3 @@ exec { "condor restart":
   cwd     => "/tmp",
   user    => 'root',
 }
-

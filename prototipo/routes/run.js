@@ -3,6 +3,7 @@ var router = express.Router();
 var parser = require('../utils/classadparser/classAdParser.js');
 var controladorArchivos = require('../utils/file.js');
 var config = require('../config.js');
+var logger = require('../utils/logger.js');
 var path = require('path');
 var DagExe = require('../models/dagExe.js');
 var passport = require('passport');
@@ -18,8 +19,8 @@ module.exports = function(app){
           nombre: dag,
           userid: req.user._id
       };
-      DagExe.find(where, function(err, d) {
-          if (err) {
+      DagExe.findOne(where, function(err, d) {
+          if (err ||  !d) {
               res.send({
                   error: "Dag no encontrado"
               });
@@ -38,7 +39,7 @@ module.exports = function(app){
                   var envio = parser.classAdToJson(data);
                   res.send(envio);
               });
-          } else if (d.tipo == 1) { // openlava
+          }/* else if (d.tipo == 1) { // openlava
               var comm = spawn("bjobs", ["-noheader", "-a", "-o", "JOBID", "-o", "STAT", d.nodos.map(function(n) {
                   return n.id;
               }).join(" ")]);
@@ -54,18 +55,12 @@ module.exports = function(app){
                   return n.id;
               }).join(","), "-n", "-p", "--format=" + col.join(",")]);
               var salida = comm.stdout.toString(); //+comm.stderr.toString();
-              /*
-              envio...
-              forEachLine(salida, s){
-                valores = s.split("|")
-                obj = {}
-                for i in len(valores):
-                  obj[col[i]] = (i==2)? estadoCondor(valores[i]) : valores[i]
-                envio.push(obj)
-              }
-              */
               res.send({
                   data: salida
+              });
+          }*/else{
+              res.send({
+                  error: "Not found"
               });
           }
       });

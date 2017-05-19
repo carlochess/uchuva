@@ -30,7 +30,7 @@ $.ajax({
 
 $('#plantillaPrograma').append($('<option>', {
   value: "",
-  text: ""
+  text: "Elige un programa"
 }));
 
 
@@ -94,95 +94,58 @@ function rederizarProyecto(){
     var values = workloaders && workloaders.reduce(function(init, wl){
       return init+'<option value="'+wl+'">'+wl+'</option>';
     },"");
-    opciones.append('<li><select id="loadManager" name="loadmanager">'+values+'</select></li></br>');
+    opciones.append('<select class="form-control.input-lg" id="loadManager" name="loadmanager">'+values+'</select></br>');
     $("#loadManager").val(selectedwl).change();
   }
   $('#plantillaPrograma').hide();
 }
 
-var abrirMenu = function(event, abrir){
-  var $box = $(event.target);
-  var cti = event.target.id;
-  if(cti !== "menu" && cti !== "openMenu"){
-    return;
-  }
-  var boxName = $box.attr('class');
-  var box = {
-    offset: $box.offset(),
-    pos: $box.position(),
-    normal: {
-      // excludes padding
-      width: $box.width(),
-      height: $box.height(),
-    },
-    inner: {
-      // includes padding
-      width: $box.innerWidth(),
-      height: $box.innerHeight(),
-    },
-    outer: {
-      // includes border
-      width: $box.outerWidth(),
-      height: $box.outerHeight()
-    },
-    border: {
-      left: parseInt($box.css('border-left-width'), 10),
-      right: parseInt($box.css('border-right-width'), 10),
-      top: parseInt($box.css('border-top-width'), 10),
-      bottom: parseInt($box.css('border-bottom-width'), 10)
-    }
-  };
-
-  $.extend(box, {
-    inner: {
-      top: box.offset.top + box.border.top,
-      left: box.offset.left + box.border.left,
-      right: box.offset.left + box.border.left + box.inner.width,
-      bottom: box.offset.top + box.border.top + box.inner.height
-    }
-  });
-  $.extend(box, {
-    inner: {
-      mouse: {
-        top: event.pageY - box.inner.top,
-        left: event.pageX - box.inner.left,
-        right: event.pageX - box.inner.right,
-        bottom: event.pageY - box.inner.bottom
-      }
-    }
-  });
-  if (event.type == 'click') {
-    if (!(box.inner.mouse.top > 0 &&
-          box.inner.mouse.left > 0 &&
-          box.inner.mouse.right < 0 &&
-          box.inner.mouse.bottom < 0) || abrir) {
-      var menu = document.getElementById("menu");
-      if (menu.style.right == "0px")
-        menu.style.right = "-16em";
-      else
-        menu.style.right = "0px";
-    }
-  }
-}
-$('#openMenu').click(function(event) {
-  //event.stopPropagation();
-  abrirMenu(event, true);
-});
-
-
-$('#menu').click(function(event) {
-  //event.stopPropagation();
-  abrirMenu(event, false);
-});
-
 aa =false, elementos = [];
 var boton = undefined;
+var isResizing = false,
+    lastDownX = 0;
 $(document).ready(function() {
   $('#filem').on('show.bs.modal', function (e) {
     holaMundo =true;
     elementos = [];
-    idSeleccionado = graph.state.selectedNode.id;
+    if(graph.state.selectedNode)
+      idSeleccionado = graph.state.selectedNode.id;
     boton = e.relatedTarget;
+  });
+  var container = $('body'),
+      right = $('#menu'),
+      handle = $('#handle'),
+      autohandle = $('#autohandle');
+
+  autohandle.on('click', function (e) {
+    var twentyperc = parseInt(container.width() *0.2);
+    if(right.css('width') != twentyperc+"px")
+      right.css('width', twentyperc);
+    else
+      right.css('width', 20);
+  });
+
+  $('#openMenu').click(function(event) {
+    var twentyperc = parseInt(container.width() *0.2);
+    if(right.css('width') != twentyperc+"px")
+      right.css('width', twentyperc);
+    else
+      right.css('width', 20);
+  });
+
+  handle.on('mousedown', function (e) {
+    isResizing = true;
+    lastDownX = e.clientX;
+  });
+
+  $(document).on('mousemove', function (e) {
+    if (!isResizing)
+      return;
+    var offsetRight = container.width() - (e.clientX - container.offset().left);
+    $(".divscroll").css("column-count", parseInt(offsetRight/400)+1);
+    right.css('width', offsetRight);
+  }).on('mouseup', function (e) {
+    isResizing = false;
   });
 });
 
@@ -202,7 +165,7 @@ $('#opciones').on('change', '#loadManager', function(ev) {
 
 $("#doc").click(function(){
     startIntro();
-})
+});
 
 $(function(){
   function cambiarSentido(elem){
@@ -224,30 +187,13 @@ $(function(){
     return true;
   });
 
-  /*function atomica(ev){
-    ev.stopPropagation();
-  }
-  var otherOpts = ["#archivos","#wd"];
-  otherOpts.forEach(function(opt){
-    $('#mopciones').on("keypress",opt, function(ev) {
-      atomica(ev);
-    });
-    $('#mopciones').on("keyup", opt, function(ev) {
-      atomica(ev);
-    });
-    $('#mopciones').on("keydown", opt, function(ev) {
-      atomica(ev);
-    });
-  });*/
   $('#mopciones').on('click', '.glyphicon.glyphicon-menu-up',function(ev){
     var elem = $(this).parent();
     cambiarSentido(elem);
-    //ev.stopPropagation();
   });
   $('#mopciones').on('click', '.glyphicon.glyphicon-menu-down',function(ev){
     var elem = $(this).parent();
     cambiarSentido(elem);
-    //ev.stopPropagation();
   });
   $('#mopciones').on('click', '.glyphicon.glyphicon-remove',function(ev){
     var elemento = $(this).parent();

@@ -108,7 +108,7 @@ It may take from 10 to 60 minutes to complete (The first time).
 
 You can now visit the host page
 ```
-$ firefox localhost
+$ firefox localhost:3000
 ```
 
 ### Vagrant

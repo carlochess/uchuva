@@ -35,7 +35,7 @@ nfs::server::export { '/scratch':
   clients => '*(rw,insecure,async,no_root_squash,no_subtree_check)',
   owner => 'nobody',
   group => 'nobody',
-  mode => '777',
+  mode =>  '777',
 }->
 class {'::mongodb::globals':
   manage_package_repo => true,
@@ -56,7 +56,4 @@ class { 'nginx': }
 nginx::resource::server { 'uchuva.diversidadfaunistica.com':
   listen_port => 80,
   proxy       => 'http://localhost:3000/',
-}->
-exec { 'setsebool -P httpd_can_network_connect 1':
-  path   => '/usr/bin:/usr/sbin:/bin',
 }
