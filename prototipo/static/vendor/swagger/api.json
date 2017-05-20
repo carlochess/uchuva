@@ -678,6 +678,13 @@
                 ],
                 "parameters": [
                     {
+                        "name": "apikey",
+                        "in": "header",
+                        "description": "token to be passed as a header",
+                        "required": true,
+                        "type": "string"
+                    },
+                    {
                         "name": "filename",
                         "in": "formData",
                         "description": "File-name.",

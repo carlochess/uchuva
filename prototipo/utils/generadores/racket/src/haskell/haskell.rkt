@@ -3,18 +3,15 @@
 (require json)
 (require net/uri-codec)
 (require net/url)
-(require "maze.rkt")
-(require "lib/generadores.rkt")
+(require "../lib/generadores.rkt")
+
+(define url "http://localhost:3000/")
 
 (define (submit)
   (letrec (
-    [credd (register (string->url "http://localhost:3000/register") "carlos1629" "losa")]
-    [apikey (hash-ref credd 'apikey)]
-    [rootfolder (hash-ref credd 'rootfolder)]
-    [idArchivo (hash-ref (crearArchivo apikey (string->url "http://localhost:3000/crearArchivo") "Tokens.x") 'success)]
-    [idArchivo2 (hash-ref (crearArchivo apikey (string->url "http://localhost:3000/crearArchivo") "Grammar.y") 'success)]
-    [idArchivo3 (hash-ref (crearArchivo apikey (string->url "http://localhost:3000/crearArchivo") "Main.hs") 'success)]
-    [newdag (crearDag apikey (string->url "http://localhost:3000/crearDag"))]
+    [apikey (enterCredd url "admin" "admin")]
+    [archivos (sendFiles apikey url (list "Tokens.x" "Grammar.y" "Main.hs") "")]
+    [newdag (crearDag apikey url)]
     [idDag (hash-ref newdag 'id)]
     [nombreDag (hash-ref newdag 'nombre)]
     [dag (hasheq 'proyecto idDag
@@ -28,8 +25,8 @@
                       'y  0
                       'configurado
                          (hasheq
-                          'file  (list (hasheq 'id idArchivo 'filename "Tokens.x" 'type "file" 'entrada "true")
-                                       (hasheq 'filename "Tokens.hs" 'type "file" 'entrada "false"))
+                          'file  (list (hasheq 'id (first (hash-ref archivos "Tokens.x")) 'filename "Tokens.x" 'type "file" 'entrada true)
+                                       (hasheq 'filename "Tokens.hs" 'type "file" 'entrada false))
                           'useDocker #t
                           'image "haskell"
                             'location "alex "
@@ -41,8 +38,8 @@
                       'y  20
                       'configurado
                          (hasheq
-                          'file  (list (hasheq 'id idArchivo2 'filename "Grammar.y" 'type "file" 'entrada "true")
-                                       (hasheq 'filename "Grammar.hs" 'type "file" 'entrada "false"))
+                          'file  (list (hasheq 'id (first (hash-ref archivos "Grammar.y")) 'filename "Grammar.y" 'type "file" 'entrada true)
+                                       (hasheq 'filename "Grammar.hs" 'type "file" 'entrada false))
                           'location "happy "
                           'useDocker #t
                           'image "haskell"
@@ -54,9 +51,9 @@
                       'y  20
                       'configurado
                          (hasheq
-                          'file  (list (hasheq 'id idArchivo3 'filename "Main.hs" 'type "file" 'entrada "true")
-                                       (hasheq 'filename "Token.hs" 'type "file" 'entrada "true")
-                                       (hasheq 'filename "Grammar.hs" 'type "file" 'entrada "true"))
+                          'file  (list (hasheq 'id (first (hash-ref archivos "Main.hs")) 'filename "Main.hs" 'type "file" 'entrada true)
+                                       (hasheq 'filename "Token.hs" 'type "file" 'entrada true)
+                                       (hasheq 'filename "Grammar.hs" 'type "file" 'entrada true))
                           'location "ghc"
                           'useDocker #t
                           'image "haskell"
@@ -68,7 +65,7 @@
                               'source (hasheq 'id 1)
                               'target (hasheq 'id 2))))]
     )
-    (run apikey (string->url "http://localhost:3000/run") dag)
+    (run apikey url dag)
   )
 )
 (submit)

@@ -53,9 +53,6 @@ router.post('/register', function(req, res) {
     var apikey = archivos.randomChars(20);
     var password = req.body.password;
     var username = req.body.username;
-    if(config.IS_TESTING){
-      apikey = username;
-    }
     User.register(new User({
         username: username,
         apikey: apikey
@@ -81,7 +78,6 @@ router.post('/register', function(req, res) {
         createRootFolder(account._id, function(err, folder){
           if (err) {
               logger.error("POST /register Error trying to register: "+err);
-              // account.delete()
               res.format({
                 html: function() {
                   res.render('register', {

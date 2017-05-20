@@ -3,21 +3,18 @@
 (require json)
 (require net/uri-codec)
 (require net/url)
-(require "maze.rkt")
-(require "lib/generadores.rkt")
+(require "../lib/generadores.rkt")
+
+(define url "http://localhost:3000/")
 
 (define (submit)
   (letrec (
-    [credd (register (string->url "http://localhost:3000/register") "admin" "admin")]
-    [apikey (hash-ref credd 'apikey)]
-    [rootfolder (hash-ref credd 'rootfolder)]
-    [idArchivo (hash-ref (crearArchivo apikey (string->url "http://localhost:3000/crearArchivo") "main.rkt") 'success)]
-    [idArchivo2 (hash-ref (crearArchivo apikey (string->url "http://localhost:3000/crearArchivo") "maze.rkt") 'success)]
-    [newdag (crearDag apikey (string->url "http://localhost:3000/crearDag"))]
+    [apikey (enterCredd url "admin" "admin")]
+    [archivos (sendFiles apikey url (list "catecho.rkt") "")]
+    [newdag (crearDag apikey url)]
     [idDag (hash-ref newdag 'id)]
     [nombreDag (hash-ref newdag 'nombre)]
     [dag (hasheq 'proyecto idDag
-                'imagen  ""
                 'workloader  "htcondor"
                 'nodes
                 (list (hasheq
@@ -36,14 +33,14 @@
                       'y  20
                       'configurado
                          (hasheq
-                            'file  (list (hasheq 'id idArchivo 'filename "main.rkt" 'type "file" 'entrada true))
+                            'file  (list (hasheq 'id (first (hash-ref archivos "catecho.rkt")) 'filename "catecho.rkt" 'type "file" 'entrada #t))
                             'location "/bin/cat"
-                            'argumento "main.rkt" )))
+                            'argumento "catecho.rkt" )))
                 'edges (list (hasheq
                               'source (hasheq 'id 0)
                               'target (hasheq 'id 1))))]
     )
-    (run apikey (string->url "http://localhost:3000/run") dag)
+    (run apikey url dag)
   )
 )
 (submit)

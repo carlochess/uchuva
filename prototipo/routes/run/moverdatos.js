@@ -17,9 +17,13 @@ var noEsta = function(obj, arr) {
 };
 
 function validarArchivos(items, userId, cb) {
-    var arrIds = items.map(function(o) {
-        return mongoose.Types.ObjectId(o.id);
-    });
+    try {
+      var arrIds = items.map(function(o) {
+         return mongoose.Types.ObjectId(o.id);
+      });
+    }catch(ex){
+      return cb(ex);
+    }
     File.find({
         $and: [{
             _id: {

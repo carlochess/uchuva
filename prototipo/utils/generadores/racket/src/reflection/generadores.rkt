@@ -35,10 +35,13 @@
                  (string-join (list
                                (string-append "--" separator)
                                "Content-Disposition: form-data; name=\"cwd\""
-                               ""
                                folder) CRLF))))
   (string-join
-   (list cwd
+   (list
+    cwd
+    (string-append "--" separator)
+    "Content-Disposition: form-data; name=\"cwd\""
+    folder
     (string-append "--" separator)
     (string-append "Content-Disposition: form-data; " "name=\"file\"; " "filename=\"" l "\"")
     "Content-Type: application/octet-stream"
@@ -57,7 +60,7 @@
                   (lambda (url h)
                     (post-pure-port url (string->bytes/utf-8 (listToMP file folder)) h))
                   read-json
-                  (list (string-append "apikey: " apikey) (string-append "Content-Type: multipart/form-data" "; boundary=" separator) "Accept: application/json"))))
+                  (list (string-append "apikey:" apikey) (string-append "Content-Type: multipart/form-data" "; boundary=" separator) "Accept: application/json"))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (define (crearDag apikey urlEndPoint)
   (let ([url (string->url (string-append urlEndPoint "crearDag"))])
@@ -79,7 +82,7 @@
   (call/input-url url
                   (lambda (url h)
                     (post-pure-port url (string->bytes/utf-8 (alist->form-urlencoded
-                     (list (cons 'path path)))) h))
+                     (list (cons path path)))) h))
                   read-json
                   (list (string-append "apikey:" apikey) "Accept: application/json" "Content-Type: application/x-www-form-urlencoded"))))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;

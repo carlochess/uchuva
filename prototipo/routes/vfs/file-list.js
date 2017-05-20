@@ -51,35 +51,36 @@ function getRootFolder(userId, cb) {
 module.exports = function(app) {
     app.use('/', router);
 
-    router.post("/buscar", isAuthenticated, function(req, res, next) {
+  router.post("/buscar", isAuthenticated, function(req, res) {
         req.checkBody('filename', 'Invalid filename').notEmpty();
         var errors = req.validationErrors();
         if (errors) {
             var asStr = errors.map(function(e) {
                 return e.msg;
             }).join(",");
-            res.send({
+            return res.send({
                 code: 1,
                 message: asStr
             });
-            return;
         }
         var filename = req.body.filename;
         File.find({
             originalname: filename,
             owner: req.user._id
         }, function(err, files) {
-            if (err) return res.send({
+          if (err){
+            return res.send({
                 code: 2,
                 message: err + ""
             });
+          }
             var archivos = [];
             if(files){
                 files.forEach(function(f) {
                     archivos.push(front(f));
                 });
             }
-            res.send({
+            return res.send({
                 files: archivos
             });
         });
