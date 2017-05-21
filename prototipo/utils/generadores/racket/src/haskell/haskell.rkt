@@ -5,9 +5,9 @@
 (require net/url)
 (require "../lib/generadores.rkt")
 
-(define url "http://localhost:3000/")
+(provide submit-haskell)
 
-(define (submit)
+(define (submit-haskell url wl)
   (letrec (
     [apikey (enterCredd url "admin" "admin")]
     [archivos (sendFiles apikey url (list "Tokens.x" "Grammar.y" "Main.hs") "")]
@@ -16,7 +16,7 @@
     [nombreDag (hash-ref newdag 'nombre)]
     [dag (hasheq 'proyecto idDag
                 'imagen  ""
-                'workloader  "htcondor"
+                'workloader  wl
                 'nodes
                 (list (hasheq
                       'title  "Alex"
@@ -52,7 +52,7 @@
                       'configurado
                          (hasheq
                           'file  (list (hasheq 'id (first (hash-ref archivos "Main.hs")) 'filename "Main.hs" 'type "file" 'entrada true)
-                                       (hasheq 'filename "Token.hs" 'type "file" 'entrada true)
+                                       (hasheq 'filename "Tokens.hs" 'type "file" 'entrada true)
                                        (hasheq 'filename "Grammar.hs" 'type "file" 'entrada true))
                           'location "ghc"
                           'useDocker #t
@@ -68,4 +68,3 @@
     (run apikey url dag)
   )
 )
-(submit)

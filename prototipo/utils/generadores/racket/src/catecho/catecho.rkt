@@ -5,9 +5,8 @@
 (require net/url)
 (require "../lib/generadores.rkt")
 
-(define url "http://localhost:3000/")
-
-(define (submit)
+(provide submit-catecho)
+(define (submit-catecho url wl)
   (letrec (
     [apikey (enterCredd url "admin" "admin")]
     [archivos (sendFiles apikey url (list "catecho.rkt") "")]
@@ -15,10 +14,10 @@
     [idDag (hash-ref newdag 'id)]
     [nombreDag (hash-ref newdag 'nombre)]
     [dag (hasheq 'proyecto idDag
-                'workloader  "htcondor"
+                'workloader wl
                 'nodes
                 (list (hasheq
-                      'title  "aaa"
+                      'title  "echo"
                       'id  0
                       'x  0
                       'y  0
@@ -27,7 +26,7 @@
                             'location "/bin/echo "
                             'argumento "'Hola mundo'"))
                       (hasheq
-                      'title  "aaa"
+                      'title  "cat self"
                       'id  1
                       'x  20
                       'y  20
@@ -43,4 +42,3 @@
     (run apikey url dag)
   )
 )
-(submit)

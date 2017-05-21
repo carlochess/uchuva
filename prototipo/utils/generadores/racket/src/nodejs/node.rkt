@@ -5,9 +5,9 @@
 (require net/url)
 (require "../lib/generadores.rkt")
 
-(define url "http://localhost:3000/")
+(provide submit-nodejs)
 
-(define (submit)
+(define (submit-nodejs url wl)
   (letrec (
     [apikey (enterCredd url "admin" "admin")]
     [archivos (sendFiles apikey url (list "doodle.js" "query.js" "package.json") "")]
@@ -16,7 +16,7 @@
     [nombreDag (hash-ref newdag 'nombre)]
     [dag (hasheq 'proyecto idDag
                 'imagen  ""
-                'workloader  "htcondor"
+                'workloader  wl
                 'nodes
                 (list (hasheq
                       'title  "Node Deps"
@@ -52,4 +52,3 @@
     (run apikey url dag)
   )
 )
-(submit)

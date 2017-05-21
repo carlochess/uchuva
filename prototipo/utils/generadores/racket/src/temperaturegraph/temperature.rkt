@@ -5,9 +5,8 @@
 (require net/url)
 (require "../lib/generadores.rkt")
 
-(define url "http://localhost:3000/")
-
-(define (submit)
+(provide submit-temperature)
+(define (submit-temperature url wl)
   (letrec (
     [apikey (enterCredd url "admin" "admin")]
     [archivos (sendFiles apikey url (list "boolmatrix.c" "rlxmmthd.c" "gnuplot_1.0.sh") "")]
@@ -15,7 +14,7 @@
     [carpetaMaps (first (hash-ref folder "Maps")) ]
     [carpetaOutputData (first (hash-ref folder "OutputData")) ]
     [archivosMaps
-       (sendFiles apikey url 
+       (sendFiles apikey url
             (list "Maps/Contour_VALLE_960_Border_1.dat"
                   "Maps/Contour_VALLE_960_Border_2.dat"
                   "Maps/Contour_VALLE_960_Border_3.dat"
@@ -28,7 +27,7 @@
     [nombreDag (hash-ref newdag 'nombre)]
     [dag (hasheq 'proyecto idDag
                 'imagen  ""
-                'workloader  "htcondor"
+                'workloader  wl
                 'nodes
                 (list (hasheq
                       'title  "Compile Bool Matrix"
@@ -100,7 +99,7 @@
                                        (hasheq 'filename "RlxMthd_v1.0_2000.dat" 'type "file" 'entrada #t)
                                        (hasheq 'filename "Rlxm.png" 'type "file" 'entrada false))
                           'location "/bin/bash "
-                          'useDocker #t
+                          'useDocker #f
                           'image "wcurrie/gnuplot"
                             'argumento "gnuplot_1.0.sh" )))
                 'edges (list (hasheq
@@ -119,4 +118,3 @@
     (run apikey url dag)
   )
 )
-(submit)

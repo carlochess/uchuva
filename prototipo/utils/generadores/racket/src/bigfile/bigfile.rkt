@@ -3,52 +3,20 @@
 (require json)
 (require net/uri-codec)
 (require net/url)
-(require "maze.rkt")
-(require "lib/generadores.rkt")
+(require "../lib/generadores.rkt")
 
-#|
--> Crear el archivo (aprox 900mb)
+(define workloadervar "$(CLUSTERID)")
 
-ruby -e 'a=STDIN.readlines;10000.times do;b=[];10000.times do; b << a[rand(a.size)].chomp end; puts b.join(" "); end' < /usr/share/dict/words > file.txt
-
-cat file.txt file.txt > book.txt
-
--> Descargar  el archivo
-
-curl -L -o book.txt https://bd00860d-a-62cb3a1a-s-sites.googlegroups.com/site/the74thhungergamesbyced/download-the-hunger-games-trilogy-e-book-txt-file/%281%29%20The%20Hunger%20Games.txt?attachauth=ANoY7cokMI62vd8oYgotLNSVKjP3JCX66_M1ErcmRoufUO9dDZy4MHy1I1URKEnUus2EWNFUnRH3Eq0vOXcHqRGL3BFECkPMN4WV8b0ZIgLGpHTET0Mq5c0lkXJcvev3i7EmbGAArn8oSBqCsMU0FbHOV5s7FPXBpWmoaNjVm9vnA3SQ-DZ1DYROUic4yC5mS2CkOjMwaD7SBuZvcH-MDpCn4hq2GJ8lo8tH6at0oOsa0FnhEzQNbH2jYkqHprISSF_YlU4hoYnuTyjfcLvMxeVFQszL4u0q0mbtv5LoYjRHx4wgUu6Hqt_VHQiG3oQUf2vlHEmJJHQn&attredirects=0&d=1
-
--> splitter nPartes libro -> 25 partes
-
-split -n 25 book.txt libro
-
--> counter $parte -> k:v_$parte
-
-cat libroa$(printf "\x$(printf %x $(($PARTE+97)))") | tr ' ' '\n' | sort | uniq -c | awk '{print $2" "$1}'
-
--> join
-
-npm install && npm start
-
--> verficacion
-
-diff book.txt file.txt
-
-|#
-
-(define (submit)
+(provide submit-bigfile)
+(define (submit-bigfile url wl)
   (letrec (
-    [credd (register (string->url "http://localhost:3000/register") "carlos1614" "losa")]
-    [apikey (hash-ref credd 'apikey)]
-    [rootfolder (hash-ref credd 'rootfolder)]
-    [idArchivo (hash-ref (crearArchivo apikey (string->url "http://localhost:3000/crearArchivo") "book.txt") 'success)]
-    [idCarpeta (hash-ref (crearCarpeta apikey (string->url "http://localhost:3000/crearArchivo") (hasheq 'path "" 'cwd "")) 'success)]
-    [mainjs (hash-ref (crearArchivo apikey (string->url "http://localhost:3000/crearArchivo") "main.rkt" ... idCarpeta) 'success)]
-    [packagejson (hash-ref (crearArchivo apikey (string->url "http://localhost:3000/crearArchivo") "main.rkt" ... idCarpeta) 'success)]
-    [newdag (crearDag apikey (string->url "http://localhost:3000/crearDag"))]
+    [apikey (enterCredd url "admin" "admin")]
+    [archivos (sendFiles apikey url (list "bigfile.rkt" "main.js") "")]
+    [newdag (crearDag apikey url)]
     [idDag (hash-ref newdag 'id)]
     [nombreDag (hash-ref newdag 'nombre)]
     [dag (hasheq 'proyecto idDag
-                'workloader  "htcondor"
+                'workloader  wl
                 'nodes
                 (list (hasheq
                       'title  "splitter"
@@ -56,29 +24,40 @@ diff book.txt file.txt
                       'x  0
                       'y  0
                       'configurado
-                         (hasheq
-                            'location "split"
-                            'argumento " -n 25 book.txt libro"))
+                      (hasheq
+                            'file  (list
+                               (hasheq 'id (first (hash-ref archivos "bigfile.rkt")) 'filename "bigfile.rkt" 'type "file" 'entrada #t)
+                               ;; Colocar aquí las 25 partes: libroa[a-z]
+                             )
+                            'location "/usr/bin/split"
+                            'argumento " -n 25 libro libro"))
                       (hasheq
                       'title  "counter"
                       'id  1
                       'x  20
                       'y  0
-                      'times 25
+                      'times 1
                       'configurado
-                         (hasheq
-                            'location "cat"
-                            'argumento " libroa$(printf "\x$(printf %x $(($PARTE+97)))") | tr ' ' '\n' | sort | uniq -c | awk '{print $2" "$1}'"))
                       (hasheq
-                      'title  "join"
+                       'file  (list
+                               (hasheq 'id (first (hash-ref archivos "bigfile.rkt")) 'filename "bigfile.rkt" 'type "file" 'entrada #t)
+                               ;; Colocar aquí las 25 partes: libroa[a-z]
+                               )
+                       'location "cat"
+                       'argumento (string-append " libroa$(printf \"\\x$(printf %x $(("
+                                                 workloadervar
+                                                 +97")))\") | tr ' ' '\n' | sort | uniq -c | awk '{print $2\" \"$1}'")))
+                      (hasheq
+                      'title  "count bytes for part"
                       'id  2
                       'x  40
                       'y  0
+                      'times 25
                       'configurado
                          (hasheq
-                            'file  (list (hasheq 'id idArchivo 'filename "main.rkt" 'type "file" 'entrada true))
-                            'location "cd carpeta &&"
-                            'argumento "npm install && npm start" ))
+                            ;;; Colocar aquí las 25 partes: libroa[a-z]
+                            'location "start"
+                            'argumento "npm" ))
                        (hasheq
                       'title  "diff"
                       'id  3
@@ -98,7 +77,6 @@ diff book.txt file.txt
                               'source (hasheq 'id 2)
                               'target (hasheq 'id 3))))]
     )
-    (run apikey (string->url "http://localhost:3000/run") dag)
+    (run apikey url dag)
   )
 )
-(submit)

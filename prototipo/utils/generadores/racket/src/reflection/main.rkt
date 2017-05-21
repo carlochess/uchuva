@@ -6,9 +6,8 @@
 (require "maze.rkt")
 (require "generadores.rkt")
 
-(define url "http://localhost:3000/")
-
-(define (submit)
+(provide submit-reflection)
+(define (submit-reflection url wl)
   (letrec (
     [apikey (enterCredd url "admin" "admin")]
     [archivos (sendFiles apikey url (list "main.rkt" "maze.rkt" "generadores.rkt") "")]
@@ -17,7 +16,7 @@
     [nombreDag (hash-ref newdag 'nombre)]
     [dag (hasheq 'proyecto idDag
                 'imagen  ""
-                'workloader  "htcondor"
+                'workloader wl
                 'nodes (list (hasheq
                       'title  "Create Maze"
                       'id  0
@@ -47,5 +46,5 @@
 (if (maze-mode)
   (let ([m (build-maze 200 700)])
     (show-maze m))
-  (submit)
+  (display "")
 )
