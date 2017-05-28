@@ -5,12 +5,14 @@
 (require net/url)
 (require "../lib/generadores.rkt")
 
-(provide submit-haskell)
+(require racket/runtime-path)
+(define-runtime-path HERE ".")
 
+(provide submit-haskell)
 (define (submit-haskell url wl)
   (letrec (
     [apikey (enterCredd url "admin" "admin")]
-    [archivos (sendFiles apikey url (list "Tokens.x" "Grammar.y" "Main.hs") "")]
+    [archivos (sendFiles apikey url (getAbsPath (list "Tokens.x" "Grammar.y" "Main.hs") HERE) "")]
     [newdag (crearDag apikey url)]
     [idDag (hash-ref newdag 'id)]
     [nombreDag (hash-ref newdag 'nombre)]

@@ -12,7 +12,7 @@ class uchuva::download {
     require => Package['git'],
   }
   group { 'uchuva': 
-    ensure => present
+    ensure => present, gid => 1010
   }
   user  { 'uchuva':
     name   => 'uchuva',
@@ -23,6 +23,8 @@ class uchuva::download {
     shell => '/bin/bash',
     managehome => true,
     require => Group['uchuva'],
+    uid => 1010,
+    gid => 1010,
   }
   
   file{ '/home/uchuva' :

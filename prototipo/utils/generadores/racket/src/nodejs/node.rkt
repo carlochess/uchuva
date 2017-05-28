@@ -5,12 +5,14 @@
 (require net/url)
 (require "../lib/generadores.rkt")
 
+(require racket/runtime-path)
+(define-runtime-path HERE ".")
 (provide submit-nodejs)
 
 (define (submit-nodejs url wl)
   (letrec (
     [apikey (enterCredd url "admin" "admin")]
-    [archivos (sendFiles apikey url (list "doodle.js" "query.js" "package.json") "")]
+    [archivos (sendFiles apikey url (getAbsPath (list "doodle.js" "query.js" "package.json") HERE) "")]
     [newdag (crearDag apikey url)]
     [idDag (hash-ref newdag 'id)]
     [nombreDag (hash-ref newdag 'nombre)]

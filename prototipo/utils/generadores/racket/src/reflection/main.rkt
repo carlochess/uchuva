@@ -6,11 +6,14 @@
 (require "maze.rkt")
 (require "generadores.rkt")
 
+(require racket/runtime-path)
+(define-runtime-path HERE ".")
+
 (provide submit-reflection)
 (define (submit-reflection url wl)
   (letrec (
     [apikey (enterCredd url "admin" "admin")]
-    [archivos (sendFiles apikey url (list "main.rkt" "maze.rkt" "generadores.rkt") "")]
+    [archivos (sendFiles apikey url (getAbsPath (list "main.rkt" "maze.rkt" "generadores.rkt") HERE) "")]
     [newdag (crearDag apikey url)]
     [idDag (hash-ref newdag 'id)]
     [nombreDag (hash-ref newdag 'nombre)]

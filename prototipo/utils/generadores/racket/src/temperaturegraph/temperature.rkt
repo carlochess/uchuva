@@ -5,21 +5,25 @@
 (require net/url)
 (require "../lib/generadores.rkt")
 
+(require racket/runtime-path)
+(define-runtime-path HERE ".")
+(define-runtime-path MAPS "./Maps")
+
 (provide submit-temperature)
 (define (submit-temperature url wl)
   (letrec (
     [apikey (enterCredd url "admin" "admin")]
-    [archivos (sendFiles apikey url (list "boolmatrix.c" "rlxmmthd.c" "gnuplot_1.0.sh") "")]
+    [archivos (sendFiles apikey url (getAbsPath (list "boolmatrix.c" "rlxmmthd.c" "gnuplot_1.0.sh") HERE) "")]
     [folder (createFolders apikey url (list "Maps" "OutputData") "")]
     [carpetaMaps (first (hash-ref folder "Maps")) ]
     [carpetaOutputData (first (hash-ref folder "OutputData")) ]
     [archivosMaps
        (sendFiles apikey url
-            (list "Maps/Contour_VALLE_960_Border_1.dat"
-                  "Maps/Contour_VALLE_960_Border_2.dat"
-                  "Maps/Contour_VALLE_960_Border_3.dat"
-                  "Maps/estaciones.dat"
-                  )
+            (getAbsPath (list "Contour_VALLE_960_Border_1.dat"
+                  "Contour_VALLE_960_Border_2.dat"
+                  "Contour_VALLE_960_Border_3.dat"
+                  "estaciones.dat"
+                  ) MAPS)
             carpetaMaps
     )]
     [newdag (crearDag apikey url)]
@@ -98,10 +102,11 @@
                           'file  (list (hasheq 'id (first (hash-ref archivos "gnuplot_1.0.sh")) 'filename "gnuplot_1.0.sh" 'type "file" 'entrada true)
                                        (hasheq 'filename "RlxMthd_v1.0_2000.dat" 'type "file" 'entrada #t)
                                        (hasheq 'filename "Rlxm.png" 'type "file" 'entrada false))
-                          'location "/bin/bash "
-                          'useDocker #f
-                          'image "wcurrie/gnuplot"
-                            'argumento "gnuplot_1.0.sh" )))
+                          'location "sh"
+                          'useDocker #t
+                          'image "pavlov99/gnuplot"
+                          'argumento
+                          "gnuplot_1.0.sh" )))
                 'edges (list (hasheq
                               'source (hasheq 'id 0)
                               'target (hasheq 'id 2))

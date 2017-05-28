@@ -5,11 +5,14 @@
 (require net/url)
 (require "../lib/generadores.rkt")
 
+(require racket/runtime-path)
+(define-runtime-path HERE ".")
+
 (provide submit-catecho)
 (define (submit-catecho url wl)
   (letrec (
     [apikey (enterCredd url "admin" "admin")]
-    [archivos (sendFiles apikey url (list "catecho.rkt") "")]
+    [archivos (sendFiles apikey url (getAbsPath (list "catecho.rkt") HERE) "")]
     [newdag (crearDag apikey url)]
     [idDag (hash-ref newdag 'id)]
     [nombreDag (hash-ref newdag 'nombre)]

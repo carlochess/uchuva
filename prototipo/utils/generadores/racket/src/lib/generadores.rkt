@@ -4,8 +4,10 @@
 (require net/uri-codec)
 (require net/url)
 
-(provide createFolders register listToMP crearDag run dataNodeDag crearArchivo crearCarpeta login enterCredd sendFiles buscarArchivo)
+(provide createFolders register listToMP crearDag run dataNodeDag crearArchivo crearCarpeta login enterCredd sendFiles buscarArchivo getAbsPath)
 
+(define (getAbsPath l here)
+  (map (lambda (x)(path->string (build-path here x))) l))
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 (define (register urlEndPoint username password)
   (let ([url (string->url (string-append urlEndPoint "register"))])
@@ -31,22 +33,24 @@
 (define CRLF "\r\n")
 (define (listToMP l folder)
   (let ((cwd (if (= (string-length folder) 0)
-                 ""
-                 (string-join (list
-                               (string-append "--" separator)
-                               "Content-Disposition: form-data; name=\"cwd\""
-                               ""
-                               folder) CRLF))))
-  (string-join
-   (list cwd
-    (string-append "--" separator)
-    (string-append "Content-Disposition: form-data; " "name=\"file\"; " "filename=\"" l "\"")
-    "Content-Type: application/octet-stream"
-    ""
-    (readfile l)
-    (string-append "--" separator "--")
-    "")
-   CRLF)))
+                 (list)
+                 (list
+                  (string-append "--" separator)
+                  "Content-Disposition: form-data; name=\"cwd\""
+                  ""
+                  folder))))
+    (string-join
+     (flatten
+      (list cwd
+            (string-append "--" separator)
+            (string-append "Content-Disposition: form-data; " "name=\"file\"; " "filename=\"" l "\"")
+            "Content-Type: application/octet-stream"
+            ""
+            (readfile l)
+            (string-append "--" separator "--")
+            ""))
+      CRLF)))
+
 (define readfile
   (lambda (name)
     (port->string (open-input-file name))))
@@ -133,7 +137,7 @@
                 (let ((elemento (first resultados)))
                   (list (hash-ref elemento 'name) (hash-ref elemento 'id)))
                 (let ((carpeta (crearCarpeta apikey url folder destfolder)))
-                  (list folder (hash-ref carpeta 'success)))
+                  (list folder (hash-ref carpeta 'id)))
                 )))
         foldersList)
    )
