@@ -26,9 +26,9 @@ class condor ($master = false, $submitter = false) {
         release  => 'trusty', /*"$::lsbdistcodename",*/
         repos    => 'contrib',
         key      => {
-          id       => '4B9D355DF3674E0E272D2E0A973FC7D2670079F6',
-          server => 'http://research.cs.wisc.edu/htcondor/ubuntu/HTCondor-Release.gpg.key',
-        },
+          id       => "670079F6",
+          source => 'http://research.cs.wisc.edu/htcondor/ubuntu/HTCondor-Release.gpg.key'
+        }
     }
 	}
       }
