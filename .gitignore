@@ -25,7 +25,12 @@ prototipo/test-*-reports.xml
 *.out
 *.synctex.gz
 vagrant/sola/.vagrant
-
+prototipo/utils/generadores/racket/src/catecho/compiled/
+prototipo/utils/generadores/racket/src/haskell/compiled/
+prototipo/utils/generadores/racket/src/lib/compiled/
+prototipo/utils/generadores/racket/src/nodejs/compiled/
+prototipo/utils/generadores/racket/src/reflection/compiled/
+prototipo/utils/generadores/racket/src/temperaturegraph/compiled/
 vagrant/slurm/.vagrant/*
 vagrant/htcondor/sola/.vagrant
 vagrant/slurm/data/*

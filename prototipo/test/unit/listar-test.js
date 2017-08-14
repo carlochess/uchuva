@@ -44,8 +44,10 @@ describe('POST /listar', function () {
     request = supertest(app);
   });
 
-  it('should respond with 200 and Invalid filename', function (done) {
+  it('should respond with 200 and Invalid folder list', function (done) {
+    fileFindOneStub.onCall(0).yields(null, {_id : "KKK"});
     fileFindOneStub.yields(new Error(), []);
+
     request
       .post('/listar')
       .expect('Content-Type', /json/)
@@ -55,43 +57,46 @@ describe('POST /listar', function () {
       });
   });
 
-  it.skip('should respond with 200 and error db conn', function (done) {
-    fileFindStub.yields(new Error(), []);
+  it('should respond with 200 and default folders', function (done) {
+    fileFindOneStub.onCall(0).yields(null, {_id : "KKK"});
+    fileFindOneStub.yields(null, {
+      originalname: "/",
+      size: "0",
+      uploadDate: new Date(),
+      type: "dir",
+      _id: "/",
+      veneno: ""
+    });
+    fileFindStub.yields(null, []);
 
     request
-      .post('/buscar')
-      .set('Content-Type', 'application/x-www-form-urlencoded')
-      .set({
-        'Accept' : 'application/json'
-      })
-      .send({
-          filename: 'crearArchivo-test.js'
-      })
-      .expect(200)
-      .end(function (err, res) {
-        expect(res.body).to.deep.equal({
-          "code": 2,
-          "message": "Error"
-        });
+      .post('/listar')
+      .expect('Content-Type', /json/)
+      .expect(200, function (err, res) {
+          expect(res.body.result).to.have.lengthOf(2);
         done();
       });
   });
 
-  it.skip('should respond with 200 and the files', function (done) {
+  it('should respond with 200 and the files', function (done) {
+    fileFindStub.yields(null, []);
+
+    fileFindOneStub.onCall(0).yields(null, {_id : "KKK"});
+    fileFindOneStub.yields(null, {
+      originalname: "/",
+      size: "0",
+      uploadDate: new Date(),
+      type: "dir",
+      _id: "/",
+      veneno: ""
+    });
     fileFindStub.yields(null, []);
 
     request
-      .post('/buscar')
-      .set('Content-Type', 'application/x-www-form-urlencoded')
-      .set({
-        'Accept' : 'application/json'
-      })
-      .send({
-          filename: 'crearArchivo-test.js'
-      })
-      .expect(200)
-      .end(function (err, res) {
-        expect(res.body).to.deep.equal({files :[]});
+      .post('/listar')
+      .expect('Content-Type', /json/)
+      .expect(200, function (err, res) {
+          expect(res.body.result).to.have.lengthOf(2);
         done();
       });
   });

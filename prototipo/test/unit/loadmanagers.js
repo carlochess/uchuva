@@ -6,9 +6,6 @@ describe('NodeAClassad', function () {
   var app, fileFindStub,fileFindOneStub,dagExeFindStub, request, route;
 
   beforeEach(function () {
-    /*fileFindStub = sinon.stub();
-    fileFindOneStub = sinon.stub();
-    dagExeFindStub = sinon.stub();*/
     route = proxyquire('../../routes/run/loadmanagers.js', {
       "../../utils/logger.js": console,
       "./forkexec.js" : {
@@ -28,7 +25,7 @@ describe('NodeAClassad', function () {
     });
   });
 
-  it('should return nothing', function (done) {
+  it('should return empty string', function (done) {
     //fileFindOneStub.yields(new Error(), []);
       expect(route.nodeAClassAd({}, "")).to.be.equal("");
       done();
@@ -88,7 +85,7 @@ describe('NodeAClassad', function () {
       done();
   });
 
-  it.skip('should return an exception', function (done) {
+  it('shouldn\'t throw an exception', function (done) {
     //fileFindOneStub.yields(new Error(), []);
       expect(route.nodeAClassAd({
           directorio: "String",
@@ -102,11 +99,11 @@ describe('NodeAClassad', function () {
               image:"Image",
               //universe: ""
           }
-      }, 1)).to.throw(new Error("Cannot read property 'length' of undefined"));
+      }, 1)).to.be.a('string');
       done();
   });
 
-  it('should return exec', function (done) {
+  it('should return exec promise', function (done) {
     route.submitToLoadManagers({
       nodes : [{
         title: "String",

@@ -3,5 +3,5 @@
 #PBS -S /bin/bash
 #PBS -e JobName.err
 #PBS -o JobName.out
-
+cd $PBS_O_WORKDIR
 echo Hello World! > holamundo.txt

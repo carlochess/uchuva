@@ -25,7 +25,7 @@ Vagrant.configure("2") do |global_config|
             config.vm.network :private_network, ip: options[:ipaddress]
             
             config.vm.provider :virtualbox do |v|
-                v.customize ["modifyvm", :id, "--memory", "512"]
+                v.customize ["modifyvm", :id, "--memory", "1024"]
             end
          
             if options[:type] == "controller"

@@ -10,33 +10,28 @@ var expect = require('chai').expect;
 var express = require('express');
 
 describe('GET /listarProgramas', function () {
-  var app, getUserStub, request, route;
+  var app, softwareFindStub, request, route;
 
   beforeEach(function () {
-    // A stub we can use to control conditionals
-    getUserStub = sinon.stub();
-
-    // Create an express application object
+    softwareFindStub = sinon.stub();
     app = express();
 
-    // Get our router module, with a stubbed out users dependency
-    // we stub this out so we can control the results returned by
-    // the users module to ensure we execute all paths in our code
     route = proxyquire('../../routes/programas.js', {
       '../utils/login.js': function(req, res, next){
         next();
-      }
+      },
+      "../models/software.js": {
+        find: softwareFindStub,
+      },
     });
 
-    // Bind a route to our application
     route(app);
 
-    // Get a supertest instance so we can make requests
     request = supertest(app);
   });
 
-  it.skip('should respond with a 404 and a null', function (done) {
-    getUserStub.returns(null);
+  it('should respond with a 200 and a list of default programs', function (done) {
+    softwareFindStub.returns(Promise.resolve([]));
 
     request
       .post('/listarProgramas')
@@ -45,27 +40,8 @@ describe('GET /listarProgramas', function () {
         'Accept' : 'application/json'
       })
       .expect(200, function (err, res) {
-        expect(res.body).to.include.members("rawdocker,raw,bash,cat,head,rscript,alex,docker,echo,ghc,happy,nodejs,racket,sleep,tar,curl,git,mv,mkdir".split(","));
+        expect(res.body).to.be.an("Array");
         done();
       });
   });
-
-  /*it('should respond with 200 and a user object', function (done) {
-    var userData = {
-      username: 'nodejs'
-    };
-
-    getUserStub.returns(userData);
-
-    request
-      .get('/users/nodejs')
-      .expect('Content-Type', /json/)
-      .expect(200, function (err, res) {
-        expect(res.body).to.deep.equal({
-          status: 'ok',
-          data: userData
-        });
-        done();
-      });
-  });*/
 });

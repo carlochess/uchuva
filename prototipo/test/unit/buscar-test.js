@@ -7,7 +7,7 @@ var expect = require('chai').expect;
 
 var express = require('express');
 
-describe.skip('POST /buscar', function () {
+describe('POST /buscar', function () {
   var app, fileFindStub, request, route;
 
   beforeEach(function () {
@@ -34,7 +34,7 @@ describe.skip('POST /buscar', function () {
     request = supertest(app);
   });
 
-  it('should respond with 200 and Invalid filename', function (done) {
+  it('should respond with 200 and Invalid filename error mgs', function (done) {
     request
       .post('/buscar')
       .expect('Content-Type', /json/)
@@ -47,7 +47,7 @@ describe.skip('POST /buscar', function () {
       });
   });
 
-  it('should respond with 200 and error db conn', function (done) {
+  it('should respond with 200 and file not found', function (done) {
     fileFindStub.yields(new Error(), []);
 
     request
